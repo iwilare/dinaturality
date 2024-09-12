@@ -1,0 +1,1 @@
+# Directed equality with dinaturality
