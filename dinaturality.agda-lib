@@ -1,4 +1,4 @@
 name: dinaturality
-depend: standard-library-2.0, agda-categories, cubical
+depend: standard-library-2.0, agda-categories
 include: .
 flags:

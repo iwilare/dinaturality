@@ -7,7 +7,6 @@
           (pkgs.agda.withPackages [
             pkgs.agdaPackages.agda-categories
             pkgs.agdaPackages.standard-library
-            pkgs.agdaPackages.cubical
           ])
         ]; };
       });

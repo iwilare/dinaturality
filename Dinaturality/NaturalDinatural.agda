@@ -1,11 +1,6 @@
-
-
 module Dinaturality.NaturalDinatural where
 
 open import Level using (Level; _⊔_; Lift; lift) renaming (zero to zeroℓ; suc to sucℓ)
-
-
-
 
 import Data.Unit
 open import Categories.Category
@@ -68,17 +63,7 @@ F-reorder : Functor (op A ⊗ A ⊗ op B ⊗ C) (op (A ⊗ B) ⊗ A ⊗ C)
 F-reorder = assocʳ _ _ _ ∘F (idF ⁂ F-swap)
 
 private
-  variable
-    F G I J L : Functor (op Γᵒᵖ ⊗ Γ) (Setoids ℓ ℓ)
-
-private
   module Set {ℓ} = CartesianClosed (Setoids-CCC ℓ)
-  module SetC {ℓ} = Cartesian (Set.cartesian {ℓ})
-  module SetA {ℓ} = BinaryProducts (SetC.products {ℓ})
-  module SetT {ℓ} = Terminal (SetC.terminal {ℓ})
-  module F-⊤ {o} {ℓ} {e} = Terminal (One-⊤ {o} {ℓ} {e})
-
-pattern * = lift Data.Unit.tt
 
 dinat⇒homnat : ∀ {o} {A : Category o ℓ ℓ} {F G : Functor (op A ⊗ A) (Setoids ℓ ℓ)}
   → DinaturalTransformation F G
@@ -134,10 +119,10 @@ homnat⇒dinat {A = A} {F = F} {G = G} α = dtHelper (record
     module KS {A} = Setoid (F₀ F A)
     open module A = Reason A
 
-iso1 : ∀ {o} {A : Category o ℓ ℓ} {F G : Functor (op A ⊗ A) (Setoids ℓ ℓ)}
+dinat⇒homnat⨟homnat⇒dinat : ∀ {o ℓ} {A : Category o ℓ ℓ} {F G : Functor (op A ⊗ A) (Setoids ℓ ℓ)}
        (α : DinaturalTransformation F G)
      → homnat⇒dinat {A = A} {F = F} {G = G} (dinat⇒homnat {A = A} {F = F} {G = G} α) ≃ᵈ α
-iso1 {A = A} {F = F} {G = G} α {x} {y} eq =
+dinat⇒homnat⨟homnat⇒dinat {A = A} {F = F} {G = G} α {x} {y} eq =
   G.identity (Func.cong (α.α x) (F.identity eq))
   where
     module α = DinaturalTransformation α
@@ -146,10 +131,10 @@ iso1 {A = A} {F = F} {G = G} α {x} {y} eq =
     module KS {A} = Setoid (F₀ F A)
     open module A = Reason A
 
-iso2 : ∀ {o} {A : Category o ℓ ℓ} {F G : Functor (op A ⊗ A) (Setoids ℓ ℓ)}
+homnat⇒dinat⨟dinat⇒homnat : ∀ {o ℓ} {A : Category o ℓ ℓ} {F G : Functor (op A ⊗ A) (Setoids ℓ ℓ)}
        (α : NaturalTransformation Hom[ A ][-,-] (Set.-⇨- ∘F (Functor.op F ∘F Swap ※ G)))
      → dinat⇒homnat {A = A} {F = F} {G = G} (homnat⇒dinat {A = A} {F = F} {G = G} α) ≃ⁿ α
-iso2 {A = A} {F = F} {G = G} α {x1 , x2} {f} eq₁ eq₂ =
+homnat⇒dinat⨟dinat⇒homnat {A = A} {F = F} {G = G} α {x1 , x2} {f} eq₁ eq₂ =
   begin G.₁ (id , f) $ (α.η (x1 , x1) $ id) $ F.₁ (f , id) $ _ ≈⟨ α.sym-commute (A.id , f) A.refl eq₂ ⟩
         (α.η (x1 , x2) $ f ∘ id ∘ id) $ _ ≈⟨ Func.cong (α.η (x1 , x2)) (id-2-1 ∙ eq₁) KS.refl ⟩
         (α.η (x1 , x2) $ _) $ _ ∎

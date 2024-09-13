@@ -4,9 +4,6 @@ module Dinaturality.J-Iso where
 
 open import Level using (Level; _⊔_; Lift; lift) renaming (zero to zeroℓ; suc to sucℓ)
 
-
-
-
 import Data.Unit
 open import Categories.Category
 open import Categories.Category.BinaryProducts using (BinaryProducts; module BinaryProducts)

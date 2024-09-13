@@ -1,11 +1,25 @@
+-- NOTE: we use type-in-type since we encounter some problems in the definition of
+-- relative adjunction as it is defined in agda-categories, since it is probably
+-- too restrictive on the universe levels of the functors involved.
+
+-- Although the informal proof is obvious, the formal proof cannot be fully completed
+-- for the following reasons:
+-- - we would have to define the notion of relative adjunction between paracategories,
+-- - even typechecking this partially completed proof takes an incredible amount of time,
+-- - the informal proof is already quite detailed and should be enough to convince a reader.
+-- In particular, the development here focuses on the following points:
+-- - there *is* a functorial action between the functors involved,
+-- - the maps that need to provide are familiar.
+-- The second point is the most important one, which we check in this proof.
+-- (and the maps provided are indeed exactly the same given in Dinaturality.MuteContext.J)
+-- The first point is true since they are pretty reasonable functors: they always go *from* naturals
+-- *into* dinaturals, whereas the opposite direction could be problematic.
+
 {-# OPTIONS --type-in-type #-}
 
-module Dinaturality.HomRelativeAdjunction  {o ℓ e} where
+module Dinaturality.HomRelativeAdjunction {o ℓ e} where
 
 open import Level using (Level; _⊔_; Lift; lift) renaming (zero to zeroℓ; suc to sucℓ)
-
-
-
 
 import Data.Unit
 open import Categories.Category
@@ -125,9 +139,9 @@ Dinats C = record
   ; ∘-resp-≈ = {!   !}
   }
 
-hommer : {C : Category ℓ ℓ ℓ}
+hom×- : {C : Category ℓ ℓ ℓ}
        → Functor (CoPresheaves′ ℓ ℓ (One {o = ℓ} {ℓ = ℓ} {e = ℓ})) (CoPresheaves′ ℓ ℓ (op C ⊗ C))
-hommer {C = C} = record
+hom×- {C = C} = record
   { F₀ = λ F → SetA.-×- ∘F ((Hom[ _ ][-,-] ∘F (va ※ vb)) ※ F ∘F F-⊤.!)
   ; F₁ = λ {F} {G} α →
     let module α = NaturalTransformation α in
@@ -146,9 +160,9 @@ hommer {C = C} = record
   ; F-resp-≈ = {!   !}
   }
 
-rightsquash : {C : Category ℓ ℓ ℓ}
+Δ×- : {C : Category ℓ ℓ ℓ}
        → Functor (CoPresheaves′ ℓ ℓ (op C ⊗ C)) (Dinats C)
-rightsquash = record
+Δ×- = record
   { F₀ = λ F → F
   ; F₁ = {!   !}
   ; identity = {!   !}
@@ -156,9 +170,9 @@ rightsquash = record
   ; F-resp-≈ = {!   !}
   }
 
-relativer : {C : Category ℓ ℓ ℓ}
+π⁺⁻ : {C : Category ℓ ℓ ℓ}
        → Functor (CoPresheaves′ ℓ ℓ (One {o = ℓ} {ℓ = ℓ} {e = ℓ})) (Dinats C)
-relativer {C = C} = record
+π⁺⁻ {C = C} = record
   { F₀ = λ F → F ∘F F-⊤.!
   ; F₁ = λ {F} {G} → {!   !}
   ; identity = {!   !}
@@ -166,27 +180,12 @@ relativer {C = C} = record
   ; F-resp-≈ = {!   !}
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-aggiunzia : ∀ {o ℓ e} {C : Category o ℓ e}
+hom-relative-adjunction : ∀ {o ℓ e} {C : Category o ℓ e}
    → RelativeAdjoint
-      {C = Dinats C} ((CoPresheaves′ ℓ ℓ (op C ⊗ C))) (relativer {C = C}) --((relativer {C = C}))
-aggiunzia {C = C} = record
-  { L = hommer {C = C} --hommer {C = C}
-  ; R = rightsquash {C = C} --rightsquash {C = C}
+      {C = Dinats C} ((CoPresheaves′ ℓ ℓ (op C ⊗ C))) (π⁺⁻ {C = C})
+hom-relative-adjunction {C = C} = record
+  { L = hom×- {C = C}
+  ; R = Δ×- {C = C}
   ; Hom-NI = record
     { F⇒G =
     record
@@ -216,27 +215,3 @@ aggiunzia {C = C} = record
     ; iso = {!   !}
     }
   }
-
--- hommerBad : {C : Category ℓ ℓ ℓ}
---        → Functor (Dinats C) (Dinats (op C ⊗ C))
--- hommerBad {C = C} = record
---   { F₀ = λ F → SetA.-×- ∘F ((Hom[ _ ][-,-] ∘F (vb ∘F neg ※ va ∘F neg))
---                              ※ F ∘F (va ∘F pos ※ vb ∘F pos))
---   ; F₁ = λ {F} {G} f →
---     let module α = DinaturalTransformation f in
---     let module C = Reason C in
---     dtHelper record
---     { α = λ { (A , B) → record
---       { to = λ { (f , x) →
---         f , (
---           let kappa = α.α A $ Functor.F₁ F (Category.id C , f) $ x in
---           {!   !}
---         )  }
---       ; cong = {!   !}
---       } }
---     ; commute = {!   !}
---     }
---   ; identity = {!   !}
---   ; homomorphism = {!   !}
---   ; F-resp-≈ = {!   !}
---   }

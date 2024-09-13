@@ -1,11 +1,6 @@
-
-
 module Dinaturality.Refl where
 
 open import Level using (Level; _⊔_; Lift; lift) renaming (zero to zeroℓ; suc to sucℓ)
-
-
-
 
 import Data.Unit
 open import Categories.Category

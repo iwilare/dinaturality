@@ -4,9 +4,6 @@ open import Level using (Level; _⊔_; Lift; lift) renaming (zero to zeroℓ; su
 
 module Dinaturality.Failure.HomRelativeAdjunction {o ℓ e} where
 
-
-
-
 import Data.Unit
 open import Categories.Category
 open import Categories.Category.BinaryProducts using (BinaryProducts; module BinaryProducts)
