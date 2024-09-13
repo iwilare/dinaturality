@@ -17,7 +17,7 @@
 
 {-# OPTIONS --type-in-type #-}
 
-module Dinaturality.HomRelativeAdjunction {o ℓ e} where
+module Dinaturality.Sketch.HomRelativeAdjunction {o ℓ e} where
 
 open import Level using (Level; _⊔_; Lift; lift) renaming (zero to zeroℓ; suc to sucℓ)
 

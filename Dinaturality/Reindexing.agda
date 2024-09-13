@@ -104,53 +104,6 @@ reindexing {A = A} {Γ = Γ} {Δ = Δ} {H = H} {H′ = H′} F α = dtHelper (re
     module H′S {A} = Setoid (F₀ H′ A)
     open Reason A
 
--- derivable in terms of reindexing for F = Swap, given here for a cleaner statement
-squash :
-    DinaturalTransformation {C = A ⊗ op A} F G
-  → DinaturalTransformation {C = A} (F ∘F (idF ※ Swap)) (G ∘F (idF ※ Swap))
-squash {A = A} {F = F} {G = G} α = dtHelper record
-  { α = λ X → α.α (X , X)
-  ; commute = λ { {X} {Y} f eq → let open RS (G.F₀ ((X , Y) , Y , X)) in
-      begin    G.₁ ((A.id , f) , f , A.id)
-               $ α.α (X , X)
-               $ F.₁ ((f , A.id) , A.id , f)
-               $ _  ≈˘⟨ [ G ]-merge (A.id-0 , A.id-1) (A.id-0 , A.id-0) (Func.cong (α.α _) ([ F ]-merge (A.id-0 , A.id-0) (A.id-0 , A.id-1) FS.refl)) ⟩
-                G.₁ ((A.id , f) , A.id , A.id)
-               $ G.₁ ((A.id , A.id) , f , A.id)
-               $ α.α (X , X)
-               $ F.₁ ((f , A.id) , A.id , A.id)
-               $ F.₁ ((A.id , A.id) , A.id , f)
-               $ _ ≈⟨ Func.cong (G.₁ _) (α.commute (f , A.id) (Func.cong (F.₁ _) eq)) ⟩
-               G.₁ ((A.id , f) , A.id , A.id)
-                $ G.₁ ((f , A.id) , A.id , A.id)
-                $ α.α (Y , X)
-                $ F.₁ ((A.id , A.id) , f , A.id)
-                $ F.₁ ((A.id , A.id) , A.id , f)
-                $ _ ≈⟨ [ G ]-resp-square (((A.id-swap , A.id-swap) , A.refl , A.refl)) (Func.cong (α.α _) ([ F ]-resp-square ((A.refl , A.refl) , A.id-swap , A.id-swap) FS.refl)) ⟩
-               G.₁ ((f , A.id) , A.id , A.id)
-                $ G.₁ ((A.id , f) , A.id , A.id)
-                $ α.α (Y , X)
-                $ F.₁ ((A.id , A.id) , A.id , f)
-                $ F.₁ ((A.id , A.id) , f , A.id)
-                $ _ ≈⟨ Func.cong (G.₁ _) (α.op-commute (A.id , f) FS.refl)  ⟩
-               G.₁ ((f , A.id) , A.id , A.id)
-                $ G.₁ ((A.id , A.id) , A.id , f)
-                $ α.α (Y , Y)
-                $ F.₁ ((A.id , f) , A.id , A.id)
-                $ F.₁ ((A.id , A.id) , f , A.id)
-                $ _ ≈⟨ [ G ]-merge (A.id-0 , A.id-0) (A.id-0 , A.id-1) (Func.cong (α.α _) ([ F ]-merge (A.id-0 , A.id-1) (A.id-0 , A.id-0) FS.refl)) ⟩
-               G.₁ ((f , A.id) , A.id , f)
-                $ α.α (Y , Y)
-                $ F.₁ ((A.id , f) , f , A.id)
-                $ _ ∎ }
-  } where
-  module F = Functor F
-  module G = Functor G
-  module α = DinaturalTransformation α
-  module A = Reason A
-  module FS {A} = Setoid (F₀ F A)
-
-
 -- special case of reindexing combined with weakening
 reindexing+weakening : ∀ {o} {A Γ : Category o ℓ ℓ}
          {H : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids ℓ ℓ)}

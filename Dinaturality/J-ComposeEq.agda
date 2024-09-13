@@ -1,4 +1,4 @@
-module Dinaturality.J-Compose where
+module Dinaturality.J-ComposeEq where
 
 open import Level using (Level; _⊔_; Lift; lift) renaming (zero to zeroℓ; suc to sucℓ)
 
