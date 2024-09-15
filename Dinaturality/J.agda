@@ -44,8 +44,6 @@ import Relation.Binary.Reasoning.Setoid as RS
 
 import Reason
 
-open import Dinaturality.Product renaming (π₁ to π₁ᵈ)
-
 private
   variable
     o ℓ e : Level

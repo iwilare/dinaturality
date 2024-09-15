@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --without-K #-}
+{-# OPTIONS --safe --without-K --lossy-unification #-}
 
 module Dinaturality.Exponential where
 
@@ -78,7 +78,8 @@ private
 
 pattern * = lift Data.Unit.tt
 
-lambda : DinaturalTransformation (SetA.-×- ∘F (F ※ G)) H
+lambda : ∀ {o ℓ} {Γ : Category o ℓ ℓ} {F G H : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
+       → DinaturalTransformation (SetA.-×- ∘F (F ※ G)) H
        → DinaturalTransformation G (Set.-⇨- ∘F (Functor.op F ∘F Swap ※ H))
 lambda {G = G} α = dtHelper record
   { α = λ X → record
@@ -91,7 +92,7 @@ lambda {G = G} α = dtHelper record
   ; commute = λ f x₁≈y₁ x₂≈y₂ → α.commute f (x₂≈y₂ , x₁≈y₁)
   } where module α = DinaturalTransformation α
 
-lambda⁻¹ : ∀ {F G H : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
+lambda⁻¹ : ∀ {o ℓ} {Γ : Category o ℓ ℓ} {F G H : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
         → DinaturalTransformation G (Set.-⇨- ∘F (Functor.op F ∘F Swap ※ H))
         → DinaturalTransformation (SetA.-×- ∘F (F ※ G)) H
 lambda⁻¹ {G = G} α = dtHelper record
@@ -103,10 +104,15 @@ lambda⁻¹ {G = G} α = dtHelper record
   } where
     module α = DinaturalTransformation α
 
-lambda-iso1 : ∀ {F G H : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
-        → (α : DinaturalTransformation G (Set.-⇨- ∘F (Functor.op F ∘F Swap ※ H)))
-        → lambda (lambda⁻¹ α) ≃ᵈ α
-lambda-iso1 α = ?
+lambda-iso1 : ∀ {o ℓ} {Γ : Category o ℓ ℓ} {F G H : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
+       →  (α : DinaturalTransformation G (Set.-⇨- ∘F (Functor.op F ∘F Swap ※ H)))
+        → lambda {Γ = Γ} {F = F} {G = G} {H = H} (lambda⁻¹ {Γ = Γ} {F = F} {G = G} {H = H} α) ≃ᵈ α
+lambda-iso1 α eq₁ eq₂ = Func.cong (DinaturalTransformation.α α _) eq₁ eq₂
+
+lambda-iso2 : ∀ {o ℓ} {Γ : Category o ℓ ℓ} {F G H : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
+       →  (α : DinaturalTransformation (SetA.-×- ∘F (F ※ G)) H)
+        → lambda⁻¹ {Γ = Γ} {F = F} {G = G} {H = H} (lambda {Γ = Γ} {F = F} {G = G} {H = H} α) ≃ᵈ α
+lambda-iso2 α (eq₁ , eq₂) = Func.cong (DinaturalTransformation.α α _) (eq₁ , eq₂)
 
 ⇨-functor-dinat : ∀ {ℓ} {Γ : Category ℓ ℓ ℓ} {F G F′ G′ : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
   → DinaturalTransformation F′ F
