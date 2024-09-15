@@ -125,6 +125,20 @@ endAdjR {A = A} {Γ = Γ} {P = P} {Z = Z} α = dtHelper (record
     module Γ = Reason Γ
     open Reason A
 
+endAdjL⨟endAdjR-iso : ∀ {o ℓ e} {A Γ : Category o ℓ e}
+    {P : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
+    {Z : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
+    → (α : DinaturalTransformation P (endFunctor (Z ∘F F-reorder)))
+    → endAdjR {A = A} {Γ = Γ} {P = P} {Z = Z} (endAdjL α) ≃ᵈ α
+endAdjL⨟endAdjR-iso α = λ x₁ → Func.cong (DinaturalTransformation.α α _) x₁
+
+endAdjR⨟endAdjL-iso : ∀ {o ℓ e} {A Γ : Category o ℓ e}
+    {P : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
+    {Z : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
+    → (α : DinaturalTransformation (P ∘F (πʳ ∘F πˡ ※ πʳ ∘F πʳ)) Z)
+    → endAdjL {A = A} {Γ = Γ} {P = P} {Z = Z} (endAdjR α) ≃ᵈ α
+endAdjR⨟endAdjL-iso α = {!   !}
+
 {-
 endProjection : ∀ {o ℓ e} {A Γ : Category o ℓ e}
     {P : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}

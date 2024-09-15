@@ -100,7 +100,7 @@ v3 = πʳ ∘F πʳ
 
 ------------------------------------------------------------------------------------------
 
--- version of J where the context does not contain negative variables
+-- version of J+(equality in ctx) where the context does not contain negative variables
 J-mutectx :
   ∀ {o} {A C : Category o ℓ ℓ}
     {Γ P : Functor (op (op A ⊗ A ⊗ C) ⊗ (op A ⊗ A ⊗ C)) (Setoids ℓ ℓ)}
@@ -112,68 +112,69 @@ J-mutectx :
       (Hom[ A ][-,-] ∘F (v1 ∘F pos ※ v2 ∘F pos))
   → DinaturalTransformation {C = op A ⊗ A ⊗ C}
       Γ
-      (P ∘F ((v1 ∘F pos ※ negatives) ※ v2 ∘F pos ※ positives))
-J-mutectx {A = A} {C = C} {Γ = Γ} {P = P} h e = dtHelper record
-  { α = λ { (a , b , x) → record
-    { to = λ p →
-      P.₁ ((A.id , M.id) , (e.α (a , b , x) $ p , M.id))
-      $ h.α _
-      $ Γ.₁ ((e.α (a , b , x) $ p , M.id) , (A.id , M.id))
-      $ p
-    ; cong = λ eq →
-      P.F-resp-≈ ((A.refl , M.refl) , (Func.cong (e.α _) eq , M.refl))
-      (Func.cong (h.α _)
-      (Γ.F-resp-≈ ((Func.cong (e.α _) eq , M.refl) , (A.refl , M.refl))
-      eq))
-    } }
-  ; commute = λ { {X1 , X2 , X3} {Y1 , Y2 , Y3} (f , o , g) {x} {y} eq →
-    let open RS (P.F₀ ((Y1 , X1 , X2 , X3) , Y2 , Y1 , Y2 , Y3)) in
-    begin    P.₁ ((f , M.id) , o , f , o , g)
-           $ P.₁ ((id , M.id) , (e.α _ $ Γ.F₁ ((o , f , o , g) , f , M.id) $ x , M.id))
-           $ h.α _
-           $ Γ.₁ ((e.α (X1 , X2 , X3) $ Γ.F₁ ((o , f , o , g) , f , M.id) $ x , M.id) , (id , M.id))
-           $ Γ.₁ ((o , f , o , g) , (f , M.id))
-           $ x ≈⟨ [ P ]-resp-square ((A.refl , M.refl) , A.sym-id-0 , M.id-swap)
-                 (Func.cong (h.α _)
-                 ([ Γ ]-resp-square ((A.sym-id-0 , M.id-swap) , A.refl , M.refl)
-                 eq))
-                 ⟩
-             P.₁ ((f , M.id) , id , M.id)
-           $ P.₁ ((id , M.id) , o ∘ (e.α (X1 , X2 , X3) $ Γ.₁ ((o , f , o , g) , f , M.id) $ x) , f , o , g)
-           $ h.α (X1 , X1 , X2 , X3)
-           $ Γ.₁ ((o ∘ (e.α (X1 , X2 , X3) $ Γ.₁ ((o , f , o , g) , f , M.id) $ x) , f , o , g) , id , M.id)
-           $ Γ.₁ ((id , M.id) , f , M.id)
-           $ y ≈⟨ Func.cong (P.₁ _) (h.commute _ ΓS.refl) ⟩
-             P.F₁ ((f , M.id) , id , M.id)
-           $ P.₁ ((o ∘ (e.α (X1 , X2 , X3) $ Γ.F₁ ((o , f , o , g) , f , M.id) $ x) , f , o , g) , id , M.id)
-           $ h.α (Y2 , Y1 , Y2 , Y3)
-           $ Γ.₁ ((id , M.id) , o ∘ (e.α (X1 , X2 , X3) $ Γ.₁ ((o , f , o , g) , f , M.id) $ x) , f , o , g)
-           $ Γ.₁ ((id , M.id) , f , M.id)
-           $ y ≈⟨ [ P ]-resp-square (((assoc ∙ e.commute (f , o , g) eq ∙ id-0) , M.id-swap) , (A.refl , M.refl))
+      (P ∘F ((v2 ∘F pos ※ vb ∘F negatives) ※ v1 ∘F pos ※ vb ∘F positives))
+J-mutectx {A = A} {C = C} {Γ = Γ} {P = P} h e =
+  dtHelper record
+    { α = λ { (a , b , x) → record
+      { to = λ p →
+        P.₁ ((A.id , M.id) , (e.α (a , b , x) $ p , M.id))
+        $ h.α _
+        $ Γ.₁ ((e.α (a , b , x) $ p , M.id) , (A.id , M.id))
+        $ p
+      ; cong = λ eq →
+        P.F-resp-≈ ((A.refl , M.refl) , (Func.cong (e.α _) eq , M.refl))
+        (Func.cong (h.α _)
+        (Γ.F-resp-≈ ((Func.cong (e.α _) eq , M.refl) , (A.refl , M.refl))
+        eq))
+      } }
+    ; commute = λ { {X1 , X2 , X3} {Y1 , Y2 , Y3} (f , o , g) {x} {y} eq →
+      let open RS (P.F₀ ((Y1 , X1 , X2 , X3) , Y2 , Y1 , Y2 , Y3)) in
+      begin    P.₁ ((f , M.id) , o , f , o , g)
+            $ P.₁ ((id , M.id) , (e.α _ $ Γ.F₁ ((o , f , o , g) , f , M.id) $ x , M.id))
+            $ h.α _
+            $ Γ.₁ ((e.α (X1 , X2 , X3) $ Γ.F₁ ((o , f , o , g) , f , M.id) $ x , M.id) , (id , M.id))
+            $ Γ.₁ ((o , f , o , g) , (f , M.id))
+            $ x ≈⟨ [ P ]-resp-square ((A.refl , M.refl) , A.sym-id-0 , M.id-swap)
                   (Func.cong (h.α _)
-                  ([ Γ ]-resp-square ((A.refl , M.refl) , (assoc ∙ e.commute (f , o , g) eq ∙ id-0) , M.id-swap)
-                  ΓS.refl)) ⟩
-             P.₁ ((id , f , o , g) , id , M.id)
-           $ P.₁ ((e.α (Y1 , Y2 , Y3) $ Γ.₁ ((id , M.id) , id , f , o , g) $ y , M.id) , (id , M.id))
-           $ h.α (Y2 , Y1 , Y2 , Y3)
-           $ Γ.₁ ((id , M.id) , (e.α (Y1 , Y2 , Y3) $ Γ.₁ ((id , M.id) , id , f , o , g) $ y , M.id))
-           $ Γ.₁ ((id , M.id) , id , f , o , g)
-           $ y  ≈⟨ Func.cong (P.₁ _) (h.op-commute _ ΓS.refl)  ⟩
-             P.₁ ((id , f , o , g) , id , M.id)
-           $ P.₁ ((id , M.id) , (e.α (Y1 , Y2 , Y3) $ Γ.₁ ((id , M.id) , id , f , o , g) $ y , M.id))
-           $ h.α (Y1 , Y1 , Y2 , Y3)
-           $ Γ.₁ ((e.α (Y1 , Y2 , Y3) $ Γ.₁ ((id , M.id) , id , f , o , g) $ y , M.id) , id , M.id)
-           $ Γ.₁ ((id , M.id) , id , f , o , g)
-           $ y ∎
-           }
-  } where
-    module e = DinaturalTransformation e
-    module h = DinaturalTransformation h
-    module C = Reason C
-    module A = Reason A
-    module Γ = Functor Γ
-    module P = Functor P
-    module ΓS {A} = Setoid (F₀ Γ A)
-    module PS {A} = Setoid (F₀ P A)
-    open A
-    module M = Reason (A.op ⊗ A ⊗ C)
+                  ([ Γ ]-resp-square ((A.sym-id-0 , M.id-swap) , A.refl , M.refl)
+                  eq))
+                  ⟩
+              P.₁ ((f , M.id) , id , M.id)
+            $ P.₁ ((id , M.id) , o ∘ (e.α (X1 , X2 , X3) $ Γ.₁ ((o , f , o , g) , f , M.id) $ x) , f , o , g)
+            $ h.α (X1 , X1 , X2 , X3)
+            $ Γ.₁ ((o ∘ (e.α (X1 , X2 , X3) $ Γ.₁ ((o , f , o , g) , f , M.id) $ x) , f , o , g) , id , M.id)
+            $ Γ.₁ ((id , M.id) , f , M.id)
+            $ y ≈⟨ Func.cong (P.₁ _) (h.commute _ ΓS.refl) ⟩
+              P.F₁ ((f , M.id) , id , M.id)
+            $ P.₁ ((o ∘ (e.α (X1 , X2 , X3) $ Γ.F₁ ((o , f , o , g) , f , M.id) $ x) , f , o , g) , id , M.id)
+            $ h.α (Y2 , Y1 , Y2 , Y3)
+            $ Γ.₁ ((id , M.id) , o ∘ (e.α (X1 , X2 , X3) $ Γ.₁ ((o , f , o , g) , f , M.id) $ x) , f , o , g)
+            $ Γ.₁ ((id , M.id) , f , M.id)
+            $ y ≈⟨ [ P ]-resp-square (((assoc ∙ e.commute (f , o , g) eq ∙ id-0) , M.id-swap) , (A.refl , M.refl))
+                    (Func.cong (h.α _)
+                    ([ Γ ]-resp-square ((A.refl , M.refl) , (assoc ∙ e.commute (f , o , g) eq ∙ id-0) , M.id-swap)
+                    ΓS.refl)) ⟩
+              P.₁ ((id , f , o , g) , id , M.id)
+            $ P.₁ ((e.α (Y1 , Y2 , Y3) $ Γ.₁ ((id , M.id) , id , f , o , g) $ y , M.id) , (id , M.id))
+            $ h.α (Y2 , Y1 , Y2 , Y3)
+            $ Γ.₁ ((id , M.id) , (e.α (Y1 , Y2 , Y3) $ Γ.₁ ((id , M.id) , id , f , o , g) $ y , M.id))
+            $ Γ.₁ ((id , M.id) , id , f , o , g)
+            $ y  ≈⟨ Func.cong (P.₁ _) (h.op-commute _ ΓS.refl)  ⟩
+              P.₁ ((id , f , o , g) , id , M.id)
+            $ P.₁ ((id , M.id) , (e.α (Y1 , Y2 , Y3) $ Γ.₁ ((id , M.id) , id , f , o , g) $ y , M.id))
+            $ h.α (Y1 , Y1 , Y2 , Y3)
+            $ Γ.₁ ((e.α (Y1 , Y2 , Y3) $ Γ.₁ ((id , M.id) , id , f , o , g) $ y , M.id) , id , M.id)
+            $ Γ.₁ ((id , M.id) , id , f , o , g)
+            $ y ∎
+            }
+    } where
+      module e = DinaturalTransformation e
+      module h = DinaturalTransformation h
+      module C = Reason C
+      module A = Reason A
+      module Γ = Functor Γ
+      module P = Functor P
+      module ΓS {A} = Setoid (F₀ Γ A)
+      module PS {A} = Setoid (F₀ P A)
+      open A
+      module M = Reason (A.op ⊗ A ⊗ C)
