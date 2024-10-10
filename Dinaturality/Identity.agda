@@ -53,7 +53,7 @@ import Reason
 private
   variable
     o ℓ e : Level
-    A B C Γ Δ Γ′ Γ″ Γᵒᵖ Δᵒᵖ : Category o ℓ e
+    Γ Δ : Category o ℓ e
 
 infixr 5 _⊗_
 infixr 5 _$_
@@ -62,24 +62,9 @@ private
   _⊗_ = Product
   _$_ = _⟨$⟩_
 
-private
-  variable
-    F G H I J K L : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)
-    F′ G′ H′ I′ J′ K′ L′ : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)
-
-private
-  module Set {ℓ} = CartesianClosed (Setoids-CCC ℓ)
-
-  module SetCoC {ℓ} = Cocartesian (Setoids-Cocartesian {ℓ} {ℓ})
-  module SetC {ℓ} = Cartesian (Set.cartesian {ℓ})
-  module SetA {ℓ} = BinaryProducts (SetC.products {ℓ})
-  module SetT {ℓ} = Terminal (SetC.terminal {ℓ})
-  module F-⊤ {o} {ℓ} {e} = Terminal (One-⊤ {o} {ℓ} {e})
-
-pattern * = lift Data.Unit.tt
-
-idDT : DinaturalTransformation F F
-idDT {F = F} = dtHelper record
-  { α = λ X → record { to = λ x → x ; cong = λ x → x }
-  ; commute = λ _ → [ F ]-commute
-  }
+idDT : ∀ {F : Functor (op Γ ⊗ Γ) Δ} → DinaturalTransformation F F
+idDT {Δ = Δ} {F = F} = dtHelper record
+  { α = λ X → Category.id Δ
+  ; commute = λ _ → Δ.idm-1 Δ.∙ [ F ]-commute Δ.∙ Δ.sym-idm-1
+  } where
+    module Δ = Reason Δ
