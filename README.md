@@ -19,7 +19,7 @@ Finding a workaround to fully formalize naturality for every rule is left for fu
 
 Every file which typechecks is contained in the [All](All.agda) file.
 
-The formalization for the left relative adjunction in [Dinaturality/Sketch/HomRelativeAdjunction.agda](Dinaturality/Sketch/HomRelativeAdjunction) contains only a minimal formalization sketch. See the description at the top of the file.
+The formalization for the left relative adjunction in [Dinaturality/Sketch/HomRelativeAdjunction](Dinaturality/Sketch/HomRelativeAdjunction.agda) contains only a minimal formalization sketch. See the description at the top of the file.
 
 Files in the folder [Failure/](Dinaturality/Failure/) do not typecheck (on purpose), and they are not included in the [All](All.agda) file. They are just sanity checks to verify that something is not provable.
 
