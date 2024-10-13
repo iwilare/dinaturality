@@ -1,20 +1,25 @@
-import Dinaturality.MuteContext.J-Term
-import Dinaturality.MuteContext.NaturalDinatural
-import Dinaturality.Exponential
-import Dinaturality.Identity
-import Dinaturality.J-ComposeEq
-import Dinaturality.J-Diagonalized
-import Dinaturality.J-Full
-import Dinaturality.J-Iso
-import Dinaturality.J
-import Dinaturality.NaturalDinatural
-import Dinaturality.Product
-import Dinaturality.Refl
-import Dinaturality.Reindexing
-import Dinaturality.Weakening
+open import Dinaturality.Coend
+open import Dinaturality.CoendFunctor
+open import Dinaturality.Delta
+open import Dinaturality.DinaturalsFunctor
+open import Dinaturality.End
+open import Dinaturality.EndFunctor
+open import Dinaturality.Exponential
+open import Dinaturality.GroupoidCompose
+open import Dinaturality.Identity
+open import Dinaturality.J-Inverse
+open import Dinaturality.J-Iso
+open import Dinaturality.J-IsoA
+open import Dinaturality.J-IsoB
+open import Dinaturality.J
+open import Dinaturality.NaturalDinatural
+open import Dinaturality.NaturalityExample
+open import Dinaturality.Product
+open import Dinaturality.Refl
+open import Dinaturality.Reindexing
+open import Dinaturality.Weakening
 
 -- Files not meant for typechecking:
 
 -- import Dinaturality.Failure.ComposeReflLeft
--- import Dinaturality.Failure.ComposeReflLeftStrong
 -- import Dinaturality.Sketch.HomRelativeAdjunction
