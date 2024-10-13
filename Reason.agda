@@ -4,7 +4,7 @@ open import Categories.Category using (Category)
 open import Categories.Functor using (Functor)
 open import Function using (flip)
 
--- A custom module to *quickly* reason about morphisms in a category
+-- A custom module to *quickly* reason about morphisms in a category in the agda-categories library
 
 module Reason {o ℓ e} (C : Category o ℓ e) where
 
@@ -44,6 +44,12 @@ skip-2 eq = skip-1 (skip-1 eq)
 skip-3 : ∀ {A B C D E} {f : B ⇒ A} {g : C ⇒ B} {h : D ⇒ C} {z z′ : E ⇒ D} → z ≈ z′ → f ∘ g ∘ h ∘ z ≈ f ∘ g ∘ h ∘ z′
 skip-3 eq = skip-1 (skip-2 eq)
 
+skip-4 : ∀ {A B C D E F} {f : B ⇒ A} {g : C ⇒ B} {h : D ⇒ C} {i : E ⇒ D} {z z′ : F ⇒ E} → z ≈ z′ → f ∘ g ∘ h ∘ i ∘ z ≈ f ∘ g ∘ h ∘ i ∘ z′
+skip-4 eq = skip-1 (skip-3 eq)
+
+skip-5 : ∀ {A B C D E F G} {f : B ⇒ A} {g : C ⇒ B} {h : D ⇒ C} {i : E ⇒ D} {j : F ⇒ E} {z z′ : G ⇒ F} → z ≈ z′ → f ∘ g ∘ h ∘ i ∘ j ∘ z ≈ f ∘ g ∘ h ∘ i ∘ j ∘ z′
+skip-5 eq = skip-1 (skip-4 eq)
+
 rw : ∀ {A B C} {f f′ : B ⇒ A} {g : C ⇒ B} → f ≈ f′ → f ∘ g ≈ f′ ∘ g
 rw = ∘-resp-≈ˡ
 
@@ -58,6 +64,22 @@ rw-2-3 : ∀ {A B B′ C Z} {f : B ⇒ C} {g : A ⇒ B}   {h : B′ ⇒ C} {i : 
         → f ∘ g ≈ h ∘ i ∘ j
         → f ∘ g ∘ z ≈ h ∘ i ∘ j ∘ z
 rw-2-3 eq = sym-assoc-2 ∙ rw eq ∙ assoc-3
+
+-- A B C     A B′ B C
+rw-3-3 : ∀ {A B C D B′ C′ Z} {f : C ⇒ D} {g : B ⇒ C} {h : A ⇒ B} {i : C′ ⇒ D} {j : B′ ⇒ C′} {k : A ⇒ B′}  {z : Z ⇒ A}
+        → f ∘ g ∘ h ≈ i ∘ j ∘ k
+        → f ∘ g ∘ h ∘ z ≈ i ∘ j ∘ k ∘ z
+rw-3-3 eq = sym-assoc-3 ∙ rw eq ∙ assoc-3
+
+cancel-2 : ∀ {A B Z} {f : B ⇒ A} {g : A ⇒ B} {z : Z ⇒ A}
+         → f ∘ g ≈ id
+         → f ∘ g ∘ z ≈ z
+cancel-2 eq = rw-2-1 eq ∙ identityˡ
+
+intro-2 : ∀ {A B Z} {f : B ⇒ A} {g : A ⇒ B} {z : Z ⇒ A}
+         → f ∘ g ≈ id
+         → z ≈ f ∘ g ∘ z
+intro-2 eq = sym (cancel-2 eq)
 
 id-0 = identityˡ
 

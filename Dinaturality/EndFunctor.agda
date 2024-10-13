@@ -1,3 +1,11 @@
+{-# OPTIONS --safe --without-K #-}
+
+{-
+  We define the parametric coend of a functor F : A × Aᵒᵖ × Γ → Set, taking the coend in A.
+
+  The action on morphisms (i.e., on natural transformations) is not required in other developments.
+-}
+
 module Dinaturality.EndFunctor where
 
 open import Level using (Level; _⊔_) renaming (zero to zeroℓ; suc to sucℓ)
@@ -5,28 +13,17 @@ open import Level using (Level; _⊔_) renaming (zero to zeroℓ; suc to sucℓ)
 import Categories.Functor.Hom as Hom
 import Relation.Binary.Reasoning.Setoid as RS
 
-open import Categories.Category using (Category)
-open import Categories.Category.BinaryProducts using (BinaryProducts; module BinaryProducts)
-open import Categories.Category.Cartesian using (Cartesian)
-open import Categories.Category.CartesianClosed using (CartesianClosed)
-open import Categories.Category.Construction.Functors using (Functors; eval; curry; uncurry)
-open import Categories.Category.Instance.One using (One; One-⊤)
-open import Categories.Category.Instance.Properties.Setoids using (Setoids-CCC)
+open import Categories.Category
 open import Categories.Category.Instance.Setoids using (Setoids)
 open import Categories.Category.Product using (Product; πˡ; πʳ; _⁂_; _※_; assocˡ; assocʳ; Swap)
 open import Categories.Functor using (_∘F_; Functor) renaming (id to idF)
-open import Categories.Functor.Bifunctor.Properties using ([_]-merge)
-open import Categories.Functor.Construction.Constant using (const)
+open import Categories.Functor.Bifunctor.Properties using ([_]-decompose₁; [_]-decompose₂; [_]-merge; [_]-commute)
 open import Categories.Functor.Properties using ([_]-resp-square)
-open import Categories.Morphism as P using (_≅_)
-open import Categories.NaturalTransformation.Dinatural using (DinaturalTransformation)
-open import Categories.Object.Terminal using (Terminal)
-open import Data.List using ([]; _∷_)
-open import Data.Product using (Σ; Σ-syntax; _,_; proj₁; proj₂)
-open import Function using () renaming (id to idf; _∘_ to _∘′_)
+open import Categories.NaturalTransformation.Dinatural using (DinaturalTransformation; dtHelper) renaming (_≃_ to _≃ᵈ_)
+open import Categories.NaturalTransformation.NaturalIsomorphism using (_≃_; niHelper; NaturalIsomorphism)
+open import Data.Product using (Σ; _,_; proj₁; proj₂) renaming (_×_ to _×′_)
 open import Function.Bundles using (Func; _⟨$⟩_)
 open import Relation.Binary.Bundles using (Setoid)
-open import Relation.Binary.PropositionalEquality using (_≡_; refl; cong₂; trans)
 
 import Reason
 

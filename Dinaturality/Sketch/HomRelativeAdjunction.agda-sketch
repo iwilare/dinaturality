@@ -1,21 +1,32 @@
--- NOTE: we use type-in-type since we encounter some problems in the definition of
--- relative adjunction as it is defined in agda-categories, since it is probably
--- too restrictive on the universe levels of the functors involved.
-
--- Although the informal proof is obvious, the formal proof cannot be fully completed
--- for the following reasons:
--- - we would have to define the notion of relative adjunction between paracategories,
--- - even typechecking this partially completed proof takes an incredible amount of time,
--- - the informal proof is already quite detailed and should be enough to convince a reader.
--- In particular, the development here focuses on the following points:
--- - there *is* a functorial action between the functors involved,
--- - the maps that need to provide are familiar.
--- The second point is the most important one, which we check in this proof.
--- (and the maps provided are indeed exactly the same given in Dinaturality.MuteContext.J)
--- The first point is true since they are pretty reasonable functors: they always go *from* naturals
--- *into* dinaturals, whereas the opposite direction could be problematic.
-
 {-# OPTIONS --type-in-type #-}
+
+{-
+  This module is an `.agda-sketch` file: the purpose of this file is to loosely
+  sketch the core details of a proof, whose complete formalization would be
+  impractical or simply not worth the time investment.
+
+  NOTE: we use type-in-type since we encounter some problems in the definition of
+  relative adjunction as it is defined in `agda-categories`, since it is probably
+  too restrictive on the universe levels of the functors involved.
+
+  Although the informal proof is obvious, we do not complete the formal proof here for the
+  following reasons:
+  - We would have to define the notion of relative adjunction between *para*categories,
+  - even typechecking this partially completed proof takes an incredible amount of time,
+  - the informal proof is sufficiently spelled out in detail to convince the reader.
+
+  In particular, the development here focuses on the following points:
+  - there *is* a functorial action between the functors involved,
+  - the maps that need to provide are familiar and they are provided as in previous files.
+
+  The second point is the most important one, which we check in this proof, and the
+  maps provided are indeed exactly the same given in `Dinaturality.MuteContext.J`.
+
+  The first point is particularly delicate since, when trying to make sense of the relative
+  adjunction, it is easy to come across a situation in which there is a (para)functor defined on objects
+  but not on morphisms. We show here that the parafunctors of the relative adjunction are reasonable:
+  they always go *from* naturals *into* dinaturals, whereas the opposite direction would be problematic.
+-}
 
 module Dinaturality.Sketch.HomRelativeAdjunction {o ℓ e} where
 

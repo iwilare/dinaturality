@@ -1,40 +1,30 @@
+{-# OPTIONS --safe --without-K #-}
+
+{-
+  Correspondence between dinaturals into Set and certain natural transformations with $hom$ in the domain.
+
+  (This file takes particularly long to typecheck.)
+-}
+
 module Dinaturality.NaturalDinatural where
 
 open import Level using (Level; _⊔_; Lift; lift) renaming (zero to zeroℓ; suc to sucℓ)
 
-import Data.Unit
 open import Categories.Category
-open import Categories.Category.BinaryProducts using (BinaryProducts; module BinaryProducts)
-open import Categories.Category.Cartesian using (Cartesian)
 open import Categories.Category.CartesianClosed using (CartesianClosed)
-open import Categories.Category.Construction.Functors using (Functors; eval; curry; uncurry)
-open import Categories.Category.Instance.One using (One; One-⊤)
-open import Categories.Category.Instance.SingletonSet using (SingletonSetoid; SingletonSetoid-⊤)
 open import Categories.Category.Instance.Properties.Setoids using (Setoids-CCC)
 open import Categories.Category.Instance.Setoids using (Setoids)
 open import Categories.Category.Product using (Product; πˡ; πʳ; _⁂_; _※_; assocˡ; assocʳ; Swap)
 open import Categories.Functor using (_∘F_; Functor) renaming (id to idF)
 open import Categories.Functor.Bifunctor.Properties using ([_]-decompose₁; [_]-decompose₂; [_]-merge; [_]-commute)
-open import Categories.Functor.Construction.Constant using (const)
 open import Categories.Functor.Hom using (Hom[_][-,-])
 open import Categories.Functor.Properties using ([_]-resp-square)
-open import Categories.Morphism using (_≅_)
 open import Categories.NaturalTransformation.Core using (NaturalTransformation; ntHelper)
 open import Categories.NaturalTransformation.Equivalence renaming (_≃_ to _≃ⁿ_)
 open import Categories.NaturalTransformation.Dinatural using (DinaturalTransformation; dtHelper) renaming (_≃_ to _≃ᵈ_)
-open import Categories.NaturalTransformation.StrongDinatural using (StrongDinaturalTransformation)
-open import Categories.NaturalTransformation.NaturalIsomorphism using (_≃_; niHelper; NaturalIsomorphism)
-open import Categories.Object.Terminal using (Terminal)
-open import Data.List using ([]; _∷_)
 open import Data.Product using (_,_; proj₁; proj₂) renaming (_×_ to _×′_)
-open import Data.Product.Function.NonDependent.Setoid using (proj₁ₛ; proj₂ₛ; <_,_>ₛ)
-open import Data.Unit.Polymorphic renaming (⊤ to ⊤′)
-open import Function using () renaming (id to idf; _∘_ to _⟨∘⟩_)
 open import Function.Bundles using (Func; _⟨$⟩_)
-open import Function.Construct.Composition using (function)
 open import Relation.Binary.Bundles using (Setoid)
-open import Relation.Binary.PropositionalEquality as Eq using (_≡_; refl; cong₂; trans; cong; sym)
-open import Relation.Binary.Construct.Closure.Equivalence using (isEquivalence; EqClosure; setoid; return; join; map; gmap; fold; gfold)
 
 open Functor using (F₀; F₁; homomorphism; F-resp-≈)
 open Category using (op)
@@ -55,12 +45,6 @@ infixr 5 _$_
 private
   _⊗_ = Product
   _$_ = _⟨$⟩_
-
-F-swap : Functor (A ⊗ B ⊗ C) (B ⊗ A ⊗ C)
-F-swap = assocˡ _ _ _ ∘F (Swap ⁂ idF) ∘F assocʳ _ _ _
-
-F-reorder : Functor (op A ⊗ A ⊗ op B ⊗ C) (op (A ⊗ B) ⊗ A ⊗ C)
-F-reorder = assocʳ _ _ _ ∘F (idF ⁂ F-swap)
 
 private
   module Set {ℓ} = CartesianClosed (Setoids-CCC ℓ)
@@ -119,10 +103,12 @@ homnat⇒dinat {A = A} {F = F} {G = G} α = dtHelper (record
     module KS {A} = Setoid (F₀ F A)
     open module A = Reason A
 
-dinat⇒homnat⨟homnat⇒dinat : ∀ {o ℓ} {A : Category o ℓ ℓ} {F G : Functor (op A ⊗ A) (Setoids ℓ ℓ)}
+-- The above maps are isomorphisms.
+
+dinat⇒homnat⨟homnat⇒dinat-iso : ∀ {o ℓ} {A : Category o ℓ ℓ} {F G : Functor (op A ⊗ A) (Setoids ℓ ℓ)}
        (α : DinaturalTransformation F G)
      → homnat⇒dinat {A = A} {F = F} {G = G} (dinat⇒homnat {A = A} {F = F} {G = G} α) ≃ᵈ α
-dinat⇒homnat⨟homnat⇒dinat {A = A} {F = F} {G = G} α {x} {y} eq =
+dinat⇒homnat⨟homnat⇒dinat-iso {A = A} {F = F} {G = G} α {x} {y} eq =
   G.identity (Func.cong (α.α x) (F.identity eq))
   where
     module α = DinaturalTransformation α
@@ -131,10 +117,10 @@ dinat⇒homnat⨟homnat⇒dinat {A = A} {F = F} {G = G} α {x} {y} eq =
     module KS {A} = Setoid (F₀ F A)
     open module A = Reason A
 
-homnat⇒dinat⨟dinat⇒homnat : ∀ {o ℓ} {A : Category o ℓ ℓ} {F G : Functor (op A ⊗ A) (Setoids ℓ ℓ)}
+homnat⇒dinat⨟dinat⇒homnat-iso : ∀ {o ℓ} {A : Category o ℓ ℓ} {F G : Functor (op A ⊗ A) (Setoids ℓ ℓ)}
        (α : NaturalTransformation Hom[ A ][-,-] (Set.-⇨- ∘F (Functor.op F ∘F Swap ※ G)))
      → dinat⇒homnat {A = A} {F = F} {G = G} (homnat⇒dinat {A = A} {F = F} {G = G} α) ≃ⁿ α
-homnat⇒dinat⨟dinat⇒homnat {A = A} {F = F} {G = G} α {x1 , x2} {f} eq₁ eq₂ =
+homnat⇒dinat⨟dinat⇒homnat-iso {A = A} {F = F} {G = G} α {x1 , x2} {f} eq₁ eq₂ =
   begin G.₁ (id , f) $ (α.η (x1 , x1) $ id) $ F.₁ (f , id) $ _ ≈⟨ α.sym-commute (A.id , f) A.refl eq₂ ⟩
         (α.η (x1 , x2) $ f ∘ id ∘ id) $ _ ≈⟨ Func.cong (α.η (x1 , x2)) (id-2-1 ∙ eq₁) KS.refl ⟩
         (α.η (x1 , x2) $ _) $ _ ∎

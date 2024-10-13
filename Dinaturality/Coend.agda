@@ -1,40 +1,33 @@
+{-# OPTIONS --safe --without-K #-}
+
+{-
+  We validate the rules for coends, and prove that they are isomorphisms.
+
+  We do not prove naturality here, although it is easy to
+  check given the parametric way in which the maps below are defined.
+
+  (This file is particularly slow to typecheck.)
+-}
+
 module Dinaturality.Coend where
 
 open import Level using (Level; _⊔_; Lift; lift) renaming (zero to zeroℓ; suc to sucℓ)
 
-import Data.Unit
 open import Categories.Category
-open import Categories.Category.BinaryProducts using (BinaryProducts; module BinaryProducts)
-open import Categories.Category.Cartesian using (Cartesian)
-open import Categories.Category.CartesianClosed using (CartesianClosed)
-open import Categories.Category.Construction.Functors using (Functors; eval; curry; uncurry)
-open import Categories.Category.Instance.One using (One; One-⊤)
-open import Categories.Category.Instance.Properties.Setoids using (Setoids-CCC)
 open import Categories.Category.Instance.Setoids using (Setoids)
 open import Categories.Category.Product using (Product; πˡ; πʳ; _⁂_; _※_; assocˡ; assocʳ; Swap)
 open import Categories.Functor using (_∘F_; Functor) renaming (id to idF)
 open import Categories.Functor.Bifunctor.Properties using ([_]-decompose₁; [_]-decompose₂; [_]-merge; [_]-commute)
-open import Categories.Functor.Construction.Constant using (const)
-open import Categories.Functor.Hom using (Hom[_][-,-])
 open import Categories.Functor.Properties using ([_]-resp-square)
-open import Categories.Morphism using (_≅_)
-open import Categories.NaturalTransformation.StrongDinatural
 open import Categories.NaturalTransformation.Dinatural using (DinaturalTransformation; dtHelper) renaming (_≃_ to _≃ᵈ_)
 open import Categories.NaturalTransformation.NaturalIsomorphism using (_≃_; niHelper; NaturalIsomorphism)
-open import Categories.Object.Terminal using (Terminal)
-open import Data.List using ([]; _∷_)
 open import Data.Product using (_,_; proj₁; proj₂) renaming (_×_ to _×′_)
-open import Data.Product.Function.NonDependent.Setoid using (proj₁ₛ; proj₂ₛ; <_,_>ₛ)
-open import Data.Unit.Polymorphic renaming (⊤ to ⊤′)
-open import Function using () renaming (id to idf; _∘_ to _⟨∘⟩_)
 open import Function.Bundles using (Func; _⟨$⟩_)
-open import Function.Construct.Composition using (function)
 open import Relation.Binary.Bundles using (Setoid)
-open import Relation.Binary.PropositionalEquality as Eq using (_≡_; refl; cong₂; trans; cong; sym)
-open import Relation.Binary.Construct.Closure.Equivalence using (isEquivalence; EqClosure; setoid; return; join; map; gmap; fold; gfold)
-
 open Functor using (F₀; F₁; homomorphism; F-resp-≈)
 open Category using (op)
+
+open import Relation.Binary.Construct.Closure.Equivalence using (isEquivalence; EqClosure; setoid; return; join; map; gmap; fold; gfold)
 
 import Categories.Morphism.Reasoning as MR
 import Relation.Binary.Reasoning.Setoid as RS
@@ -65,21 +58,12 @@ private
   variable
     F G H I J K L : Functor (op Γᵒᵖ ⊗ Γ) (Setoids ℓ ℓ)
 
-private
-  module Set {ℓ} = CartesianClosed (Setoids-CCC ℓ)
-  module SetC {ℓ} = Cartesian (Set.cartesian {ℓ})
-  module SetA {ℓ} = BinaryProducts (SetC.products {ℓ})
-  module SetT {ℓ} = Terminal (SetC.terminal {ℓ})
-  module F-⊤ {o} {ℓ} {e} = Terminal (One-⊤ {o} {ℓ} {e})
-
-pattern * = lift Data.Unit.tt
-
-coendAdjL : ∀ {o ℓ e} {A Γ : Category o ℓ e}
+coendL : ∀ {o ℓ e} {A Γ : Category o ℓ e}
     {P : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
     {Z : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
     → DinaturalTransformation Z (P ∘F (Functor.op πʳ ∘F πˡ ※ πʳ ∘F πʳ))
     → DinaturalTransformation (coendFunctor (Z ∘F F-reorder)) P
-coendAdjL {A = A} {Γ = Γ} {P = P} {Z = Z} α = dtHelper (record
+coendL {A = A} {Γ = Γ} {P = P} {Z = Z} α = dtHelper (record
       { α = λ X → record
         { to = λ { (A , p) → α.α (A , X) $ p }
         ; cong =
@@ -128,12 +112,12 @@ coendAdjL {A = A} {Γ = Γ} {P = P} {Z = Z} α = dtHelper (record
     module PS {A} = Setoid (F₀ P A)
     open Reason A
 
-coendAdjR : ∀ {o ℓ e} {A Γ : Category o ℓ e}
+coendR : ∀ {o ℓ e} {A Γ : Category o ℓ e}
     {P : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
     {Z : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
     → DinaturalTransformation (coendFunctor (Z ∘F F-reorder)) P
     → DinaturalTransformation Z (P ∘F (Functor.op πʳ ∘F πˡ ※ πʳ ∘F πʳ))
-coendAdjR {A = A} {Γ = Γ} {P = P} {Z = Z} α = dtHelper (record
+coendR {A = A} {Γ = Γ} {P = P} {Z = Z} α = dtHelper (record
       { α = λ { (X , G) → record
         { to = λ { p → α.α G $ (X , p) }
         ; cong = λ { {x} {y} eq → Func.cong (α.α G) (convert (Z ∘F F-reorder) eq) }
@@ -156,6 +140,22 @@ coendAdjR {A = A} {Γ = Γ} {P = P} {Z = Z} α = dtHelper (record
     module ZS {A} = Setoid (F₀ Z A)
     module PS {A} = Setoid (F₀ P A)
     open Reason A
+
+-- The two maps above are isomorphisms (in Set).
+
+coendL⨟coendR-iso : ∀ {o ℓ e} {A Γ : Category o ℓ e}
+    {P : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
+    {Z : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
+    → (α : DinaturalTransformation Z (P ∘F (Functor.op πʳ ∘F πˡ ※ πʳ ∘F πʳ)))
+    → coendR {A = A} {Γ = Γ} {P = P} {Z = Z} (coendL α) ≃ᵈ α
+coendL⨟coendR-iso α eq = Func.cong (DinaturalTransformation.α α _) eq
+
+coendR⨟coendL-iso : ∀ {o ℓ e} {A Γ : Category o ℓ e}
+    {P : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
+    {Z : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
+    → (α : DinaturalTransformation (coendFunctor (Z ∘F F-reorder)) P)
+    → coendL {A = A} {Γ = Γ} {P = P} {Z = Z} (coendR α) ≃ᵈ α
+coendR⨟coendL-iso α eq = Func.cong (DinaturalTransformation.α α _) eq
 
 {-
 coendProjection : ∀ {o ℓ e} {A Γ : Category o ℓ e}

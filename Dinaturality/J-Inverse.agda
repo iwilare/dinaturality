@@ -1,18 +1,16 @@
-{-# OPTIONS --safe --without-K #-}
+{-# OPTIONS --safe --without-K --lossy-unification #-}
 
 {-
-  Main rule for directed equality elimination (and introduction, via its inverse direction).
+  Main rule for the inverse of directed equality introduction.
 
-  The inverse direction is contained in `Dinaturality/J-Inverse.agda`.
-
-  This module contains the maps in both directions.
   The isomorphism is split into the module `Dinaturality/J-Iso.agda`
   because of Agda running out of memory.
 -}
-module Dinaturality.J where
+module Dinaturality.J-Inverse where
 
 open import Level using (Level; _⊔_; Lift; lift) renaming (zero to zeroℓ; suc to sucℓ)
 
+import Data.Unit
 open import Categories.Category
 open import Categories.Category.BinaryProducts using (BinaryProducts; module BinaryProducts)
 open import Categories.Category.Cartesian using (Cartesian)
@@ -94,55 +92,53 @@ v3 = πʳ ∘F πʳ
 ------------------------------------------------------------------------------------------
 
 {-
-  Directed equality elimination.
+  Inverse map for directed equality elimination, instantiating with identity.
+
+  The other direction is contained in `Dinaturality/J.agda`.
 
   Compared to the version with in the paper, here we have to reorder the
   term context because of the signature for dinatural transformations, which
   is always of the form Cᵒᵖ × C for some C.
 -}
-J :
+J⁻¹ :
   ∀ {o} {A C : Category o ℓ ℓ}
     (let module A = Category A)
     {Γ P : Functor (op (A ⊗ C) ⊗ (A ⊗ C)) (Setoids ℓ ℓ)}
-  → DinaturalTransformation {C = A ⊗ C}
-      Γ
-      P
   → DinaturalTransformation {C = A.op ⊗ A ⊗ C}
       (SetA.-×- ∘F ((Hom[ A ][-,-] ∘F (v1 ∘F pos ※ v2 ∘F pos))
                  ※ (Γ ∘F ((v2 ∘F neg ※ v3 ∘F neg) ※ v1 ∘F neg ※ v3 ∘F pos))))
       (P ∘F ((v1 ∘F pos ※ v3 ∘F neg) ※ v2 ∘F pos ※ v3 ∘F pos))
-J {A = A} {C = C} {Γ = Γ} {P = P} h = dtHelper (record
-  { α = λ { (A , B , X) → record
+  → DinaturalTransformation {C = A ⊗ C}
+      Γ
+      P
+J⁻¹ {A = A} {C = C} {Γ = Γ} {P = P} h = dtHelper (record
+  { α = λ { (A , X) → record
     -- Definition of the main map.
-    { to = λ { (f , k) → P.₁ ((f , C.id) , A.id , C.id) $ h.α (B , X) $ Γ.₁ ((A.id , C.id) , f , C.id) $ k }
-    ; cong = λ { (feq , eq) → P.F-resp-≈ ((feq , C.refl) , A.refl , C.refl) (Func.cong (h.α _) (Γ.F-resp-≈ ((A.refl , C.refl) , feq , C.refl ) eq)) }
+    { to = λ { k → h.α (A , A , X) $ (id , k) }
+    ; cong = λ eq → Func.cong (h.α _) (A.refl , eq)
     } }
-  ; commute = λ { {X1 , X2 , X3} {Y1 , Y2 , Y3} (f1 , f2 , f3) {e1 , k1} {e2 , k2} (eq1 , eq2) →
-      let open RS (P.F₀ ((Y1 , X3) , Y2 , Y3)) in
-      begin P.₁ ((f1 , C.id) , f2 , f3)
-             $ P.₁ ((id ∘ e1 ∘ id , C.id) , id , C.id)
-             $ h.α (X2 , X3)
-             $ Γ.F₁ ((id , C.id) , id ∘ e1 ∘ id , C.id)
-             $ Γ.F₁ ((f2 , f3) , f1 , C.id)
-             $ k1 ≈⟨ [ P ]-resp-square ((((assoc-3 ∙ idm-2) , C.refl) , A.id-swap , C.id-swap)) (Func.cong (h.α _) ([ Γ ]-resp-square ((A.id-swap , C.id-swap) , (assoc-3 ∙ idm-2) , C.refl) eq2)) ⟩
-            P.₁ ((e1 ∘ f1 , C.id) , id , C.id)
-             $ P.₁ ((id , C.id) , f2 , f3)
-             $ h.α (X2 , X3)
-             $ Γ.₁ ((f2 , f3) , id , C.id)
-             $ Γ.₁ ((id , C.id) , e1 ∘ f1 , C.id)
-             $ k2 ≈⟨ Func.cong (P.₁ _) (h.commute _ ΓS.refl) ⟩
-            P.₁ ((e1 ∘ f1 , C.id) , id , C.id)
-            $ P.₁ ((f2 , f3) , id , C.id)
-            $ h.α (Y2 , Y3)
-            $ Γ.₁ ((id , C.id) , f2 , f3)
-            $ Γ.₁ ((id , C.id) , e1 ∘ f1 , C.id)
-            $ k2 ≈⟨ [ P ]-resp-square (((skip (rw eq1) ∙ sym-id-1) , C.id-swap) , A.refl , C.refl) (Func.cong (h.α _) ([ Γ ]-resp-square ((A.refl , C.refl) , ((skip (rw eq1) ∙ sym-id-1) , C.id-swap)) ΓS.refl)) ⟩
-            P.₁ ((id , f3) , id , C.id)
-            $ P.₁ ((f2 ∘ e2 ∘ f1 , C.id) , id , C.id)
-            $ h.α (Y2 , Y3)
-            $ Γ.₁ ((id , C.id) , f2 ∘ e2 ∘ f1 , C.id)
-            $ Γ.₁ ((id , C.id) , id , f3)
-            $ k2 ∎
+  ; commute =
+  λ { {X1 , X2} {Y1 , Y2} (f1 , f2) {k1} {k2} eq → let open RS (P.F₀ ((X1 , X2) , Y1 , Y2)) in
+    begin P.₁ ((id , C.id) , f1 , f2)
+           $ h.α (X1 , X1 , X2)
+           $ (id , Γ.F₁ ((f1 , f2) , id , C.id) $ k1) ≈⟨ Func.cong (P.₁ _) (Func.cong (h.α _) (A.sym-id-1 ∙ A.sym-id-2 , ΓS.refl)) ⟩
+          P.₁ ((id , C.id) , f1 , f2)
+           $ h.α (X1 , X1 , X2)
+           $ (id ∘ id ∘ id , Γ.₁ ((f1 , f2) , id , C.id) $ k1) ≈⟨ h.commute (id , f1 , f2) (A.refl , eq) ⟩
+          P.₁ ((id , f2) , id , C.id)
+           $ h.α _
+           $ (f1 ∘ id ∘ id , Γ.F₁ ((id , C.id) , id , f2) $ _) ≈˘⟨ [ P ]-merge (A.id-0 , C.id-0) (A.id-0 , C.id-0) (Func.cong (h.α _) (A.sym-id-swap-2 , [ Γ ]-merge (A.id-0 , C.id-0) (A.id-0 , C.id-0) ΓS.refl)) ⟩
+          P.₁ ((id , f2) , id , C.id)
+          $ P.₁ ((id , C.id) , id , C.id)
+           $ h.α _
+           $ (id ∘ id ∘ f1 , Γ.F₁ ((id , C.id) , id , C.id) $ Γ.F₁ ((id , C.id) , id , f2) $ _) ≈⟨ Func.cong (P.₁ _) (h.op-commute (f1 , id , C.id) (A.refl , ΓS.refl)) ⟩
+          P.₁ ((id , f2) , id , C.id)
+           $ P.₁ ((f1 , C.id) , id , C.id)
+           $ h.α (Y1 , Y1 , Y2)
+           $ (id ∘ id ∘ id , Γ.₁ ((id , C.id) , f1 , C.id) $ Γ.₁ ((id , C.id) , id , f2) $ k2) ≈⟨ [ P ]-merge (A.id-1 , C.id-0) (A.id-1 , C.id-0) (Func.cong (h.α _) ((A.id-0 ∙ A.id-0) , [ Γ ]-merge (A.id-1 , C.id-0) (A.id-1 , C.id-0) ΓS.refl)) ⟩
+          P.F₁ ((f1 , f2) , id , C.id)
+           $ h.α (Y1 , Y1 , Y2)
+           $ (id , Γ.F₁ ((id , C.id) , f1 , f2) $ k2) ∎
       }
   }) where
     module Γ = Functor Γ

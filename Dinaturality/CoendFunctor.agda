@@ -1,3 +1,11 @@
+{-# OPTIONS --safe --without-K #-}
+
+{-
+  We define the parametric coend of a functor F : A × Aᵒᵖ × Γ → Set, taking the coend in A.
+
+  The action on morphisms (i.e., on natural transformations) is not required in other developments.
+-}
+
 module Dinaturality.CoendFunctor where
 
 open import Level using (Level; _⊔_) renaming (zero to zeroℓ; suc to sucℓ)
@@ -41,6 +49,7 @@ module _ {o ℓ e} {A Γ : Category o ℓ e}
     open module FS {A} {B} {Γ} = Setoid (F.₀ (A , B , Γ))
     open module MRS {A} {B} {Γ} = RS (F.₀ (A , B , Γ))
 
+  -- The dinaturality relation for a fixed G : Γ.Obj, coending in the first variable.
   Dinaturality : (G : Γ.Obj) → Rel (Σ[ X ∈ Obj ] Setoid.Carrier (F.₀ (X , X , G))) (o ⊔ ℓ)
   Dinaturality G = λ (X , p₁) (Y , p₂) →
     Σ[ f ∈ X ⇒ Y ]
@@ -50,12 +59,15 @@ module _ {o ℓ e} {A Γ : Category o ℓ e}
 
   module Dinaturality {G} = Setoid (setoid (Dinaturality G))
 
+  -- Helper function to lift equality in Setoids to equality in the transitive
+  -- reflexive closure of the relation Dinaturality.
   convert : ∀ {G} {X} {a b : FS.Carrier {X} {X} {G}}
           → a ≈ b
           → EqClosure (Dinaturality G) (_ , a) (_ , b)
   convert eq = return (id , _ , FS.sym (F.identity (FS.sym eq))
                               , FS.sym (F.identity FS.refl))
 
+  -- Output functor.
   coendFunctor : Functor Γ (Setoids (o ⊔ ℓ) (o ⊔ ℓ))
   coendFunctor = record
     { F₀ = λ G → setoid (Dinaturality G)

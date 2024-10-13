@@ -1,39 +1,29 @@
+{-# OPTIONS --safe --without-K #-}
+
+{-
+  We validate the rules for ends, and prove that they are isomorphisms.
+
+  We do not prove naturality here, although it is easy to
+  check given the parametric way in which the maps below are defined.
+
+  (This file is particularly slow to typecheck.)
+-}
+
 module Dinaturality.End where
 
 open import Level using (Level; _⊔_; Lift; lift) renaming (zero to zeroℓ; suc to sucℓ)
 
-import Data.Unit
 open import Categories.Category
-open import Categories.Category.BinaryProducts using (BinaryProducts; module BinaryProducts)
-open import Categories.Category.Cartesian using (Cartesian)
-open import Categories.Category.CartesianClosed using (CartesianClosed)
-open import Categories.Category.Construction.Functors using (Functors; eval; curry; uncurry)
-open import Categories.Category.Instance.One using (One; One-⊤)
-open import Categories.Category.Instance.Properties.Setoids using (Setoids-CCC)
 open import Categories.Category.Instance.Setoids using (Setoids)
 open import Categories.Category.Product using (Product; πˡ; πʳ; _⁂_; _※_; assocˡ; assocʳ; Swap)
 open import Categories.Functor using (_∘F_; Functor) renaming (id to idF)
 open import Categories.Functor.Bifunctor.Properties using ([_]-decompose₁; [_]-decompose₂; [_]-merge; [_]-commute)
-open import Categories.Functor.Construction.Constant using (const)
-open import Categories.Functor.Hom using (Hom[_][-,-])
 open import Categories.Functor.Properties using ([_]-resp-square)
-open import Categories.Morphism using (_≅_)
-open import Categories.NaturalTransformation.Core using (NaturalTransformation)
-open import Categories.NaturalTransformation.StrongDinatural
 open import Categories.NaturalTransformation.Dinatural using (DinaturalTransformation; dtHelper) renaming (_≃_ to _≃ᵈ_)
 open import Categories.NaturalTransformation.NaturalIsomorphism using (_≃_; niHelper; NaturalIsomorphism)
-open import Categories.Object.Terminal using (Terminal)
-open import Data.List using ([]; _∷_)
 open import Data.Product using (_,_; proj₁; proj₂) renaming (_×_ to _×′_)
-open import Data.Product.Function.NonDependent.Setoid using (proj₁ₛ; proj₂ₛ; <_,_>ₛ)
-open import Data.Unit.Polymorphic renaming (⊤ to ⊤′)
-open import Function using () renaming (id to idf; _∘_ to _⟨∘⟩_)
 open import Function.Bundles using (Func; _⟨$⟩_)
-open import Function.Construct.Composition renaming (function to setoidComposition)
-open import Function.Construct.Identity renaming (function to setoidIdentity)
 open import Relation.Binary.Bundles using (Setoid)
-open import Relation.Binary.PropositionalEquality as Eq using (_≡_; refl; cong₂; trans; cong; sym)
-open import Relation.Binary.Construct.Closure.Equivalence using (isEquivalence; EqClosure; setoid; return; join; map; gmap; fold; gfold)
 
 open Functor using (F₀; F₁; homomorphism; F-resp-≈)
 open Category using (op)
@@ -67,21 +57,14 @@ private
   variable
     F G H I J K L : Functor (op Γᵒᵖ ⊗ Γ) (Setoids ℓ ℓ)
 
-private
-  module Set {ℓ} = CartesianClosed (Setoids-CCC ℓ)
-  module SetC {ℓ} = Cartesian (Set.cartesian {ℓ})
-  module SetA {ℓ} = BinaryProducts (SetC.products {ℓ})
-  module SetT {ℓ} = Terminal (SetC.terminal {ℓ})
-  module F-⊤ {o} {ℓ} {e} = Terminal (One-⊤ {o} {ℓ} {e})
+-- Rules for ends, both directions.
 
-pattern * = lift Data.Unit.tt
-
-endAdjL : ∀ {o ℓ e} {A Γ : Category o ℓ e}
-    {P : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
-    {Z : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
-    → DinaturalTransformation P (endFunctor (Z ∘F F-reorder))
-    → DinaturalTransformation (P ∘F (πʳ ∘F πˡ ※ πʳ ∘F πʳ)) Z
-endAdjL {A = A} {Γ = Γ} {P = P} {Z = Z} α = dtHelper (record
+endL : ∀ {o ℓ e} {A Γ : Category o ℓ e}
+  {P : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
+  {Z : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
+  → DinaturalTransformation P (endFunctor (Z ∘F F-reorder))
+  → DinaturalTransformation (P ∘F (πʳ ∘F πˡ ※ πʳ ∘F πʳ)) Z
+endL {A = A} {Γ = Γ} {P = P} {Z = Z} α = dtHelper (record
       { α = λ { (X , G) → record
         { to = λ pxx → proj₁ (α.α G $ pxx) X
         ; cong = λ eq → Func.cong (α.α G) eq
@@ -103,12 +86,12 @@ endAdjL {A = A} {Γ = Γ} {P = P} {Z = Z} α = dtHelper (record
     module PS {A} = Setoid (F₀ P A)
     open Reason A
 
-endAdjR : ∀ {o ℓ e} {A Γ : Category o ℓ e}
-    {P : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
-    {Z : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
-    → DinaturalTransformation (P ∘F (πʳ ∘F πˡ ※ πʳ ∘F πʳ)) Z
-    → DinaturalTransformation P (endFunctor (Z ∘F F-reorder))
-endAdjR {A = A} {Γ = Γ} {P = P} {Z = Z} α = dtHelper (record
+endR : ∀ {o ℓ e} {A Γ : Category o ℓ e}
+  {P : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
+  {Z : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
+  → DinaturalTransformation (P ∘F (πʳ ∘F πˡ ※ πʳ ∘F πʳ)) Z
+  → DinaturalTransformation P (endFunctor (Z ∘F F-reorder))
+endR {A = A} {Γ = Γ} {P = P} {Z = Z} α = dtHelper (record
       { α = λ X → record
         { to = λ pxx → (λ A → α.α (A , X) $ pxx) , λ {Q} {W} f →
           let open module ZZ = RS (F₀ Z ((Q , X) , W , X)) in
@@ -125,20 +108,30 @@ endAdjR {A = A} {Γ = Γ} {P = P} {Z = Z} α = dtHelper (record
     module Γ = Reason Γ
     open Reason A
 
-endAdjL⨟endAdjR-iso : ∀ {o ℓ e} {A Γ : Category o ℓ e}
+-- The two maps above are isomorphisms (in Set).
+
+endL⨟endR-iso : ∀ {o ℓ e} {A Γ : Category o ℓ e}
     {P : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
     {Z : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
     → (α : DinaturalTransformation P (endFunctor (Z ∘F F-reorder)))
-    → endAdjR {A = A} {Γ = Γ} {P = P} {Z = Z} (endAdjL α) ≃ᵈ α
-endAdjL⨟endAdjR-iso α = λ x₁ → Func.cong (DinaturalTransformation.α α _) x₁
+    → endR {A = A} {Γ = Γ} {P = P} {Z = Z} (endL α) ≃ᵈ α
+endL⨟endR-iso α eq = Func.cong (DinaturalTransformation.α α _) eq
 
-endAdjR⨟endAdjL-iso : ∀ {o ℓ e} {A Γ : Category o ℓ e}
+endR⨟endL-iso : ∀ {o ℓ e} {A Γ : Category o ℓ e}
     {P : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
     {Z : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
     → (α : DinaturalTransformation (P ∘F (πʳ ∘F πˡ ※ πʳ ∘F πʳ)) Z)
-    → endAdjL {A = A} {Γ = Γ} {P = P} {Z = Z} (endAdjR α) ≃ᵈ α
-endAdjR⨟endAdjL-iso α = {!   !}
+    → endL {A = A} {Γ = Γ} {P = P} {Z = Z} (endR α) ≃ᵈ α
+endR⨟endL-iso α eq = Func.cong (DinaturalTransformation.α α _) eq
 
+{-
+  This map exemplifies the fact that $∀x.P(x,¬x,y)$ implies $P(t(y),t(y),y)$, i.e., that universal
+  quantification implies that the property holds for any concrete term $t(y)$, here represented by difunctors.
+  This is derivable with `endR` and the reindexing as in `Dinatural/Reindexing.agda`,
+  but we define it here explicitly for convenience.
+
+  This is not used in any development.
+-}
 {-
 endProjection : ∀ {o ℓ e} {A Γ : Category o ℓ e}
     {P : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
