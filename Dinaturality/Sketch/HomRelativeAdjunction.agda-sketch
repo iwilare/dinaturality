@@ -20,7 +20,7 @@
   - the maps that need to provide are familiar and they are provided as in previous files.
 
   The second point is the most important one, which we check in this proof, and the
-  maps provided are indeed exactly the same given in `Dinaturality.MuteContext.J`.
+  maps provided are indeed exactly the same given in `Dinaturality.J` (with some degenerate choices of dipresheaves).
 
   The first point is particularly delicate since, when trying to make sense of the relative
   adjunction, it is easy to come across a situation in which there is a (para)functor defined on objects
