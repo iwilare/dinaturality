@@ -1,12 +1,11 @@
-# Directed equality with dinaturality
-
-Agda formalization for the preprint "Directed equality with dinaturality" by Laretto, Loregian, Veltri.
+# Directed equality for (co)end calculus
 
 ## How to run this
 
 Install [Nix](https://nixos.org/download/) [with flakes](https://nixos.wiki/wiki/Flakes) enabled, then run `nix develop` to have a working Agda installation. The file `All.agda` groups all formalization files for batch typechecking/inspection.
 
-> [!WARNING] Most of the files contained here are particularly slow to typecheck and require considerable memory, and might run out of memory even with 16 GB allocated.
+> [!WARNING]
+> Most of the files contained here are particularly slow to typecheck and require considerable memory, and might run out of memory even with 16 GB allocated.
 > The recommended flags for Agda under which this formalization has been tested are `+RTS -M32G`, which should ensure that eventually every file compiles.
 
 ## Files structure
@@ -19,9 +18,9 @@ Naturality of the rules is only shown for the case of exponentials in [Dinatural
 
 Every file which typechecks is contained in the [All](All.agda) file.
 
-The formalization for the [left relative adjunction](Dinaturality/Sketch/HomRelativeAdjunction.agda) contains only a minimal formalization sketch. See the description at the top of the file.
+The formalization for the left relative adjunction in [Dinaturality/Sketch/HomRelativeAdjunction.agda](Dinaturality/Sketch/HomRelativeAdjunction.agda) contains only a minimal formalization sketch. See the description at the top of the file.
 
-Files in the folder [Failure/](Dinaturality/Failure/) do not typecheck (on purpose) and they are not included in the [All](All.agda) file. They are just sanity checks to verify that something is not provable.
+Files in the folder [Failure/](Dinaturality/Failure/) do not typecheck (on purpose), and they are not included in the [All](All.agda) file. They are just sanity checks to verify that something is not provable.
 
 ## Requirements
 
