@@ -143,13 +143,11 @@ module _ {ℓ} (Γ : Category ℓ ℓ ℓ) where
     }
 
   {-
-    In order to state the isomorphism,
-    it is crucial to use the `Dinats` functor, which
-    is the functor sending two dipresheaves F, G to the set
-    of dinatural transformations between them: crucially, this is
+    In order to state the isomorphism, it is crucial to use
+    the `Dinats` functor, which is the functor sending two dipresheaves
+    F, G to the set of dinatural transformations between them: this is
     a functor defined on functor categories where morphisms are *naturals*;
-    hence it is well-defined since naturals compose with dinaturals and thus
-    show that it is indeed a functor.
+    and so it is well-defined because naturals compose with dinaturals.
   -}
   open import Dinaturality.DinaturalsFunctor using (Dinats)
 
@@ -161,21 +159,21 @@ module _ {ℓ} (Γ : Category ℓ ℓ ℓ) where
   -- The functor given by (F, G, H) ↦ Dinat(F × G, H), contravariant in F, G, and covariant in H.
   -- Crucially, we use here the `PBP.-×-` which, as a whole, is the pointwise product of presheaves.
   -- The signature of `PBP.-×-` is `Functor (C ⊗ C) C` where C := Functors (op Γ ⊗ Γ) (Setoids ℓ ℓ).
-  functor-L : Functor ((op (Functors (op Γ ⊗ Γ) (Setoids ℓ ℓ))
+  functor-↑ : Functor ((op (Functors (op Γ ⊗ Γ) (Setoids ℓ ℓ))
                      ⊗ op (Functors (op Γ ⊗ Γ) (Setoids ℓ ℓ)))
                      ⊗     Functors (op Γ ⊗ Γ) (Setoids ℓ ℓ))
                   (Setoids (sucℓ ℓ) ℓ)
-  functor-L = Dinats {Γ = Γ} {Δ = Setoids ℓ ℓ} ∘F (Functor.op PBP.-×- ∘F πˡ ※ πʳ)
+  functor-↑ = Dinats {Γ = Γ} {Δ = Setoids ℓ ℓ} ∘F (Functor.op PBP.-×- ∘F πˡ ※ πʳ)
 
   -- The functor given by (F, G, H) ↦ Dinat(G, Fᵒᵖ ⇒ H), contravariant in F, G, and covariant in H.
-  functor-R : Functor ((op (Functors (op Γ ⊗ Γ) (Setoids ℓ ℓ))
+  functor-↓ : Functor ((op (Functors (op Γ ⊗ Γ) (Setoids ℓ ℓ))
                      ⊗ op (Functors (op Γ ⊗ Γ) (Setoids ℓ ℓ)))
                      ⊗    Functors (op Γ ⊗ Γ) (Setoids ℓ ℓ))
                   (Setoids (sucℓ ℓ) ℓ)
-  functor-R = Dinats {Γ = Γ} {Δ = Setoids ℓ ℓ} ∘F (πʳ ∘F πˡ ※ PointwiseHom ∘F (πˡ ∘F πˡ ※ πʳ))
+  functor-↓ = Dinats {Γ = Γ} {Δ = Setoids ℓ ℓ} ∘F (πʳ ∘F πˡ ※ PointwiseHom ∘F (πˡ ∘F πˡ ※ πʳ))
 
   -- There is a natural isomorphism between the above functors.
-  iso : NaturalIsomorphism functor-L functor-R
+  iso : NaturalIsomorphism functor-↑ functor-↓
   iso = niHelper record
     { η = λ { ((F , G) , H) → record
       { to = λ α → lambda {F = F} {G = G} {H = H} α
@@ -186,13 +184,16 @@ module _ {ℓ} (Γ : Category ℓ ℓ ℓ) where
       ; cong = λ { eq (eq₁ , eq₂) → eq eq₂ eq₁ }
       } }
     ; commute = λ { ((f , g) , h) eq eq₁ eq₂ →
+    -- This is the naturality statement itself.
+    -- Naturality is trivial to prove, essentially because in Setoid
+    -- everything computes down and the only thing left to prove is the fact that
+    -- a certain function respects the setoid equality.
       Func.cong (NaturalTransformation.η h _) (eq (Func.cong (NaturalTransformation.η f _) eq₂
                                                 , (Func.cong (NaturalTransformation.η g _) eq₁))) }
-    -- it is simply faster to write the proof by hand instead of using the
+    -- It is simply faster to write the proof by hand instead of using the
     -- previously proven isos because these have a different structure.
-    -- The reason why these isomorphisms are so easy is because in Setoids
-    -- everything computes down and the only thing left to prove is the fact that
-    -- every function respects the equality.
+    -- As above, the actual isomorphism is trivial to prove because of computation
+    -- in Setoid, where we only need to propagate the setoid equality.
     ; iso = λ X → record
       { isoˡ = λ { {α} {β} eq (eq₁ , eq₂) → eq (eq₁ , eq₂) }
       ; isoʳ = λ { {α} {β} eq eq₁ eq₂ → eq eq₁ eq₂ }
