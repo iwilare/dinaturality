@@ -2,6 +2,8 @@
 
 {-
   We define the rules for exponentials and prove that they are isomorphisms.
+
+  Naturality of this isomorphism is contained in `Dinaturality/NaturalityExample.agda`.
 -}
 
 module Dinaturality.Exponential where
@@ -12,8 +14,6 @@ open import Categories.Category
 open import Categories.Category.BinaryProducts using (BinaryProducts; module BinaryProducts)
 open import Categories.Category.Cartesian using (Cartesian)
 open import Categories.Category.CartesianClosed using (CartesianClosed)
-open import Categories.Category.Cocomplete.Properties using (Cocomplete⇒FinitelyCocomplete)
-open import Categories.Category.Cocomplete.Finitely using (FinitelyCocomplete)
 open import Categories.Category.Construction.Functors using (Functors; eval; curry; uncurry)
 open import Categories.Category.Monoidal.Instance.Setoids using (Setoids-Cocartesian)
 open import Categories.Category.Instance.Properties.Setoids using (Setoids-CCC; Setoids-Cocomplete)
@@ -26,8 +26,6 @@ open import Categories.NaturalTransformation.Dinatural using (DinaturalTransform
 open import Data.Product using (_,_; proj₁; proj₂) renaming (_×_ to _×′_)
 open import Function.Bundles using (Func; _⟨$⟩_)
 open import Relation.Binary.Bundles using (Setoid)
-open import Relation.Binary.PropositionalEquality as Eq using (_≡_; refl; cong₂; trans; cong; sym; Reveal_·_is_; inspect)
-open import Relation.Binary.Construct.Closure.Equivalence using (isEquivalence; EqClosure; setoid; return; join; map; gmap; fold; gfold)
 
 open Functor using (F₀; F₁; homomorphism; F-resp-≈)
 open Category using (op)
@@ -60,65 +58,82 @@ private
   module SetA {ℓ} = BinaryProducts (SetC.products {ℓ})
 
 -- Bidirectional rules for exponentials.
+module _ {ℓ} {Γ : Category ℓ ℓ ℓ} where
 
-lambda : ∀ {o ℓ} {Γ : Category o ℓ ℓ} {F G H : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
-       → DinaturalTransformation (SetA.-×- ∘F (F ※ G)) H
-       → DinaturalTransformation G (Set.-⇨- ∘F (Functor.op F ∘F Swap ※ H))
-lambda {G = G} α = dtHelper record
-  { α = λ X → record
-    { to = λ a → record
-      { to = λ b → α.α X $ (b , a)
-      ; cong = λ x≈y → Func.cong (α.α X) (x≈y , Setoid.refl (F₀ G (X , X)))
-      }
-    ; cong = λ x₁≈y₁ x₂≈y₂ → Func.cong (α.α X) (x₂≈y₂ , x₁≈y₁)
-    }
-  ; commute = λ f x₁≈y₁ x₂≈y₂ → α.commute f (x₂≈y₂ , x₁≈y₁)
-  } where module α = DinaturalTransformation α
+  open import Categories.Category.Construction.Properties.Presheaves.CartesianClosed
 
-lambda⁻¹ : ∀ {o ℓ} {Γ : Category o ℓ ℓ} {F G H : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
+  -- This extra op is necessary since we have presheaves and not copresheaves.
+  open IsCartesianClosed (op (op Γ ⊗ Γ))
+
+  module PCCC = CartesianClosed Presheaves-CartesianClosed
+  module PC = Cartesian PCCC.cartesian
+  module PBP = BinaryProducts PC.products
+
+  -- We use this complicated formulation with the PBP module, containing the pointwise
+  -- product of presheaves, in order to be able to later prove the naturality
+  -- of the maps in `Dinaturality/ExponentialNatural.agda`, which needs to use this functor.
+  -- The alternative, more direct, formulation would have been `SetA.-×- ∘F (F ※ G)`,
+  -- postcomposing with the bifunctor taking the product of sets directly.
+  lambda : {F G H : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
+        → DinaturalTransformation (Functor.₀ PBP.-×- (F , G)) H
         → DinaturalTransformation G (Set.-⇨- ∘F (Functor.op F ∘F Swap ※ H))
-        → DinaturalTransformation (SetA.-×- ∘F (F ※ G)) H
-lambda⁻¹ {G = G} α = dtHelper record
-  { α = λ X → record
-    { to = λ { (fxx , gxx) → (α.α X $ gxx) $ fxx }
-    ; cong = λ { (eq1 , eq2) → Func.cong (α.α X) eq2 eq1  }
-    }
-  ; commute = λ { f (x₁≈y₁ , x₂≈y₂) → α.commute f x₂≈y₂ x₁≈y₁ }
-  } where
-    module α = DinaturalTransformation α
-
--- The above maps are isomorphisms.
-
-lambda⁻¹⨟lambda-iso : ∀ {o ℓ} {Γ : Category o ℓ ℓ} {F G H : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
-       →  (α : DinaturalTransformation G (Set.-⇨- ∘F (Functor.op F ∘F Swap ※ H)))
-        → lambda {Γ = Γ} {F = F} {G = G} {H = H} (lambda⁻¹ {Γ = Γ} {F = F} {G = G} {H = H} α) ≃ᵈ α
-lambda⁻¹⨟lambda-iso α eq₁ eq₂ = Func.cong (DinaturalTransformation.α α _) eq₁ eq₂
-
-lambda⨟lambda⁻¹-iso : ∀ {o ℓ} {Γ : Category o ℓ ℓ} {F G H : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
-       →  (α : DinaturalTransformation (SetA.-×- ∘F (F ※ G)) H)
-        → lambda⁻¹ {Γ = Γ} {F = F} {G = G} {H = H} (lambda {Γ = Γ} {F = F} {G = G} {H = H} α) ≃ᵈ α
-lambda⨟lambda⁻¹-iso α (eq₁ , eq₂) = Func.cong (DinaturalTransformation.α α _) (eq₁ , eq₂)
-
--- Exponentials are functorial for dinaturals.
-⇨-functor-dinat : ∀ {ℓ} {Γ : Category ℓ ℓ ℓ} {F G F′ G′ : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
-  → DinaturalTransformation F′ F
-  → DinaturalTransformation G G′
-  → DinaturalTransformation (Set.-⇨- ∘F (Functor.op F ∘F Swap ※ G))
-                            (Set.-⇨- ∘F (Functor.op F′ ∘F Swap ※ G′))
-⇨-functor-dinat {Γ = Γ} {F = F} {G = G} {F′ = F′} {G′ = G′} α β = dtHelper record
-  { α = λ X → record
-    { to = λ f → record
-      { to = λ fxx → β.α X $ f $ α.α X $ fxx
-      ; cong = λ x → Func.cong (β.α X) (Func.cong f (Func.cong (α.α X) x))
+  lambda {G = G} α = dtHelper record
+    { α = λ X → record
+      { to = λ a → record
+        { to = λ b → α.α X $ (b , a)
+        ; cong = λ x≈y → Func.cong (α.α X) (x≈y , Setoid.refl (F₀ G (X , X)))
+        }
+      ; cong = λ x₁≈y₁ x₂≈y₂ → Func.cong (α.α X) (x₂≈y₂ , x₁≈y₁)
       }
-    ; cong = λ fe eq → Func.cong (β.α X) (fe (Func.cong (α.α X) eq))
-    }
-  ; commute = λ f eq1 eq2 → β.commute f (eq1 (α.commute f eq2))
-  } where
-    module α = DinaturalTransformation α
-    module β = DinaturalTransformation β
-    module Γ = Reason Γ
-    module G = Functor G
-    module G′ = Functor G′
-    module F = Functor F
-    module F′ = Functor F′
+    ; commute = λ f x₁≈y₁ x₂≈y₂ → α.commute f (x₂≈y₂ , x₁≈y₁)
+    } where module α = DinaturalTransformation α
+
+  lambda⁻¹ : {F G H : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
+          → DinaturalTransformation G (Set.-⇨- ∘F (Functor.op F ∘F Swap ※ H))
+          → DinaturalTransformation (Functor.₀ PBP.-×- (F , G)) H
+  lambda⁻¹ {G = G} α = dtHelper record
+    { α = λ X → record
+      { to = λ { (fxx , gxx) → (α.α X $ gxx) $ fxx }
+      ; cong = λ { (eq1 , eq2) → Func.cong (α.α X) eq2 eq1  }
+      }
+    ; commute = λ { f (x₁≈y₁ , x₂≈y₂) → α.commute f x₂≈y₂ x₁≈y₁ }
+    } where
+      module α = DinaturalTransformation α
+
+  -- The above maps are isomorphisms.
+
+  lambda⁻¹⨟lambda-iso : {F G H : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
+        →  (α : DinaturalTransformation G (Set.-⇨- ∘F (Functor.op F ∘F Swap ※ H)))
+          → lambda {F = F} {G = G} {H = H} (lambda⁻¹ {F = F} {G = G} {H = H} α) ≃ᵈ α
+  lambda⁻¹⨟lambda-iso α eq₁ eq₂ = Func.cong (DinaturalTransformation.α α _) eq₁ eq₂
+
+  lambda⨟lambda⁻¹-iso : {F G H : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
+        →  (α : DinaturalTransformation (Functor.₀ PBP.-×- (F , G)) H)
+          → lambda⁻¹ {F = F} {G = G} {H = H} (lambda {F = F} {G = G} {H = H} α) ≃ᵈ α
+  lambda⨟lambda⁻¹-iso α (eq₁ , eq₂) = Func.cong (DinaturalTransformation.α α _) (eq₁ , eq₂)
+
+  -- Exponentials are functorial for dinaturals.
+  ⇨-functor-dinat : ∀ {ℓ} {Γ : Category ℓ ℓ ℓ} {F G F′ G′ : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
+    → DinaturalTransformation F′ F
+    → DinaturalTransformation G G′
+    → DinaturalTransformation (Set.-⇨- ∘F (Functor.op F ∘F Swap ※ G))
+                              (Set.-⇨- ∘F (Functor.op F′ ∘F Swap ※ G′))
+  ⇨-functor-dinat {F = F} {G = G} {F′ = F′} {G′ = G′} α β = dtHelper record
+    { α = λ X → record
+      { to = λ f → record
+        { to = λ fxx → β.α X $ f $ α.α X $ fxx
+        ; cong = λ x → Func.cong (β.α X) (Func.cong f (Func.cong (α.α X) x))
+        }
+      ; cong = λ fe eq → Func.cong (β.α X) (fe (Func.cong (α.α X) eq))
+      }
+    ; commute = λ f eq1 eq2 → β.commute f (eq1 (α.commute f eq2))
+    } where
+      module α = DinaturalTransformation α
+      module β = DinaturalTransformation β
+      module Γ = Reason Γ
+      module G = Functor G
+      module G′ = Functor G′
+      module F = Functor F
+      module F′ = Functor F′
+
+  -- Naturality of this isomorphism is contained in `Dinaturality/NaturalityExample.agda`.
