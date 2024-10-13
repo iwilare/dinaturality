@@ -15,6 +15,7 @@ Each of the theorems in the paper links to a single formalization file, which ty
 ## Comments
 
 Naturality of the rules is only shown for the case of exponentials in [Dinaturality.NaturalExample](Dinaturality/NaturalityExample.agda), due to the technical limitation of running out of memory for most of the remaining rules.
+Finding a workaround to fully formalize naturality for every rule is left for future work.
 
 Every file which typechecks is contained in the [All](All.agda) file.
 
