@@ -6,7 +6,7 @@ Install [Nix](https://nixos.org/download/) [with flakes](https://nixos.wiki/wiki
 
 The file `All.agda` groups all formalization files for batch typechecking/inspection. Typecheck the code by running Agda in Safe Mode:
 ```bash
-$ agda --safe ./All.agda
+$ agda --safe ./All.agda +RTS -M32G  # Recommended flags for Agda.
 ```
 
 > [!WARNING]
