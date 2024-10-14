@@ -12,14 +12,17 @@ open import Dinaturality.J-Iso
 open import Dinaturality.J-IsoA
 open import Dinaturality.J-IsoB
 open import Dinaturality.J
-open import Dinaturality.NaturalDinatural
 open import Dinaturality.NaturalityExample
 open import Dinaturality.Product
 open import Dinaturality.Refl
 open import Dinaturality.Reindexing
 open import Dinaturality.Weakening
 
--- Files not meant for typechecking:
+---- Files not meant for typechecking:
 
 -- import Dinaturality.Failure.ComposeReflLeft
 -- import Dinaturality.Sketch.HomRelativeAdjunction
+
+---- Particularly slow to typecheck:
+
+-- open import Dinaturality.NaturalDinatural
