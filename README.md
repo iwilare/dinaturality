@@ -37,5 +37,5 @@ Files in the folder [Failure/](Dinaturality/Failure/) do not typecheck (on purpo
 
 ## Requirements
 
-- `agda` 2.6.4.1 (flags: `+RTS -M32G`)
+- `agda` 2.6.4.1
 - `agda-categories` 0.2.0
