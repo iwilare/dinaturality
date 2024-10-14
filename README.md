@@ -6,12 +6,12 @@ Install [Nix](https://nixos.org/download/) [with flakes](https://nixos.wiki/wiki
 
 The file `All.agda` groups all formalization files for batch typechecking/inspection. Typecheck the code by running Agda in Safe Mode:
 ```bash
-$ agda --safe ./All.agda +RTS -M32G  # Recommended flags for Agda.
+$ agda --safe ./All.agda +RTS -M16G  # Recommended flags for Agda.
 ```
 
 > [!WARNING]
-> Most of the files contained here are particularly slow to typecheck and require considerable memory, and might run out of memory even with 16 GB allocated.
-> The recommended flags for Agda under which this formalization has been tested are `+RTS -M32G`, which should ensure that eventually every file compiles.
+> Most of the files contained here are particularly slow to typecheck and require considerable memory, and might run out of memory even with >8 GB allocated.
+> The recommended flags for Agda under which this formalization has been tested are `+RTS -M16G`, which should ensure that eventually every file compiles.
 
 The flake output `agda-html` can be used to typecheck and build the HTML for the `All.agda` file (the above flags are already active):
 
@@ -35,7 +35,12 @@ The formalization for the left relative adjunction in [Dinaturality/Sketch/HomRe
 
 Files in the folder [Failure/](Dinaturality/Failure/) do not typecheck (on purpose), and they are not included in the [All](All.agda) file. They are just sanity checks to verify that something is not provable.
 
+## Typechecking time
+
+Running `agda --safe ./All.agda +RTS -M16G` on an AMD Ryzen 7 5800X (16) @ 3.792GHz running Debian 12 on WSL2 (Windows 10.0.19045 x86_64) takes approximately ~30 mins to complete (assuming all libraries have been compiled).
+
 ## Requirements
 
 - `agda` 2.6.4.1
 - `agda-categories` 0.2.0
+- `agda-stdlib` 2.0
