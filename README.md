@@ -2,11 +2,23 @@
 
 ## How to run this
 
-Install [Nix](https://nixos.org/download/) [with flakes](https://nixos.wiki/wiki/Flakes) enabled, then run `nix develop` to have a working Agda installation. The file `All.agda` groups all formalization files for batch typechecking/inspection.
+Install [Nix](https://nixos.org/download/) [with flakes](https://nixos.wiki/wiki/Flakes) enabled, then run `nix develop` to have a working Agda installation. Alternatively, install the correct [Agda](https://agda.readthedocs.io/en/latest/getting-started/installation.html) version manually.
+
+The file `All.agda` groups all formalization files for batch typechecking/inspection. Typecheck the code by running Agda in Safe Mode:
+```bash
+$ agda --safe ./All.agda
+```
 
 > [!WARNING]
 > Most of the files contained here are particularly slow to typecheck and require considerable memory, and might run out of memory even with 16 GB allocated.
 > The recommended flags for Agda under which this formalization has been tested are `+RTS -M32G`, which should ensure that eventually every file compiles.
+
+The flake output `agda-html` can be used to typecheck and build the HTML for the `All.agda` file (the above flags are already active):
+
+```bash
+$ nix build '.#agda-html' # This typechecks and creates a browsable HTML output.
+$ xdg-open html/All.html  # Open html/All.html in your browser.
+```
 
 ## Files structure
 

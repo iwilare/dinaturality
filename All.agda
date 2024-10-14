@@ -1,3 +1,5 @@
+---- Main formalization files:
+
 open import Dinaturality.Coend
 open import Dinaturality.CoendFunctor
 open import Dinaturality.Delta

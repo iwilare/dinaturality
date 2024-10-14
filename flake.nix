@@ -8,7 +8,7 @@
           pkgs.agdaPackages.agda-categories
           pkgs.agdaPackages.standard-library
         ];
-        formalization = pkgs.agdaPackages.mkDerivation {
+        agda-html = pkgs.agdaPackages.mkDerivation {
           pname = "dinaturality";
           version = "0.1.0";
           src = builtins.path { path = ./.; name = "dinaturality"; };
@@ -37,8 +37,8 @@
           (pkgs.agda.withPackages agdaDependencies)
         ]; };
         packages = {
-          inherit formalization;
-          default = formalization;
+          inherit agda-html;
+          default = agda-html;
         };
       }
     );
