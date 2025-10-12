@@ -47,7 +47,7 @@ private
 
 private
   variable
-    F G H I J K L : Functor (op Γᵒᵖ ⊗ Γ) (Setoids ℓ ℓ)
+    Φ : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)
 
 private
   module Set {ℓ} = CartesianClosed (Setoids-CCC ℓ)
@@ -57,21 +57,22 @@ private
 pattern * = lift Data.Unit.tt
 
 -- Directed equality is reflexive, precisely because of identities in hom-sets.
-homRefl : ∀ {o ℓ} {A : Category o ℓ ℓ}
-      → DinaturalTransformation (const SetT.⊤) Hom[ A ][-,-]
+
+homRefl : DinaturalTransformation Φ Hom[ A ][-,-]
 homRefl {A = A} = dtHelper record
   { α = λ X → record
-    { to = λ { * → A.id }
-    ; cong = λ { * → A.refl }
+    { to = λ { _ → A.id }
+    ; cong = λ { _ → A.refl }
     }
-  ; commute = λ { {X} {Y} f {*} {*} * → A.id-swap-2 }
+  ; commute = λ { {X} {Y} f {_} {_} _ → A.id-swap-2 }
   } where module A = Reason A
 
 -- Same as homRefl, but using terms (i.e., difunctors).
+
 homRefl-term : ∀ {o} {A : Category o ℓ ℓ}
-      → (F : Functor (op Γ ⊗ Γ) A)
-      → DinaturalTransformation H (Hom[ A ][-,-] ∘F (Functor.op F ∘F Swap ※ F))
-homRefl-term {Γ = Γ}  {H = H}{A = A} F  = dtHelper record
+             → (F : Functor (op Γ ⊗ Γ) A)
+             → DinaturalTransformation Φ (Hom[ A ][-,-] ∘F (Functor.op F ∘F Swap ※ F))
+homRefl-term {Γ = Γ} {A = A} F  = dtHelper record
       { α = λ { e → record
         { to = λ x → id
         ; cong = λ _ → Equiv.refl
@@ -84,6 +85,5 @@ homRefl-term {Γ = Γ}  {H = H}{A = A} F  = dtHelper record
       } where
   module Γ = Reason Γ
   module F = Functor F
-  module H = Functor H
   open Reason A
   open Chain

@@ -42,7 +42,6 @@ open import Dinaturality.Product renaming (π₁ to π₁ᵈ)
 private
   variable
     o ℓ e : Level
-    A B C Γ Δ Γ′ Γ″ Γᵒᵖ Δᵒᵖ : Category o ℓ e
 
 infixr 5 _⊗_
 infixr 5 _$_
@@ -53,7 +52,7 @@ private
 
 private
   variable
-    F G H I K L : Functor (op Γᵒᵖ ⊗ Γ) (Setoids ℓ ℓ)
+    F G H I K L : Functor (op Γᵒᵖ ⊗ Φ) (Setoids ℓ ℓ)
 
 open import Dinaturality.J using (J)
 open import Dinaturality.J-Inverse using (J⁻¹)
@@ -63,13 +62,13 @@ open import Dinaturality.J-Inverse using (J⁻¹)
   This follows from functoriality, and corresponds to the computation rule for
   directed equality elimination.
 -}
-J⨟J⁻¹-iso : ∀ {o} {A C : Category o ℓ ℓ}
+J⨟J⁻¹-iso : ∀ {o} {A Γ : Category o ℓ ℓ}
        (let module A = Category A)
-       {Γ P : Functor (op (A ⊗ C) ⊗ (A ⊗ C)) (Setoids ℓ ℓ)}
-       (h : DinaturalTransformation {C = A ⊗ C} Γ P)
-     → J⁻¹ {A = A} {C = C} {Γ = Γ} {P = P} (J {A = A} {C = C} {Γ = Γ} {P = P} h) ≃ᵈ h
-J⨟J⁻¹-iso {A = A} {C = C} {Γ = Γ} {P = P} h eq = P.identity (Func.cong (h.α _) (Γ.identity eq))
+       {Φ P : Functor (op (A ⊗ Γ) ⊗ (A ⊗ Γ)) (Setoids ℓ ℓ)}
+       (h : DinaturalTransformation {C = A ⊗ Γ} Φ P)
+     → J⁻¹ {A = A} {Γ = Γ} {Φ = Φ} {P = P} (J {A = A} {Γ = Γ} {Φ = Φ} {P = P} h) ≃ᵈ h
+J⨟J⁻¹-iso {A = A} {Γ = Γ} {Φ = Φ} {P = P} h eq = P.identity (Func.cong (h.α _) (Φ.identity eq))
   where
     module h = DinaturalTransformation h
-    module Γ = Functor Γ
+    module Φ = Functor Φ
     module P = Functor P

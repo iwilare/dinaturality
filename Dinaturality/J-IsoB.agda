@@ -40,11 +40,6 @@ import Reason
 
 open import Dinaturality.Product renaming (π₁ to π₁ᵈ)
 
-private
-  variable
-    o ℓ e : Level
-    A B C Γ Δ Γ′ Γ″ Γᵒᵖ Δᵒᵖ : Category o ℓ e
-
 infixr 5 _⊗_
 infixr 5 _$_
 
@@ -54,7 +49,7 @@ private
 
 private
   variable
-    F G H I K L : Functor (op Γᵒᵖ ⊗ Γ) (Setoids ℓ ℓ)
+    F G H I K L : Functor (op Γᵒᵖ ⊗ Φ) (Setoids ℓ ℓ)
 
 private
   module Set {ℓ} = CartesianClosed (Setoids-CCC ℓ)
@@ -101,21 +96,21 @@ open import Dinaturality.J-Inverse using (J⁻¹)
   Technical note: we do not sure modules here and fully qualify as many identifiers
   as possible in order to make typechecking faster.
 -}
-J⁻¹⨟J-iso : ∀ {o} {A C : Category o ℓ ℓ}
+J⁻¹⨟J-iso : ∀ {o} {A Γ : Category o ℓ ℓ}
        (let module A = Category A)
-       {Γ P : Functor (op (A ⊗ C) ⊗ (A ⊗ C)) (Setoids ℓ ℓ)}
-       (h : DinaturalTransformation {C = A.op ⊗ A ⊗ C}
+       {Φ P : Functor (op (A ⊗ Γ) ⊗ (A ⊗ Γ)) (Setoids ℓ ℓ)}
+       (h : DinaturalTransformation {C = A.op ⊗ A ⊗ Γ}
         (SetA.-×- ∘F ((Hom[ A ][-,-] ∘F (v1 ∘F pos ※ v2 ∘F pos))
-                  ※ (Γ ∘F ((v2 ∘F neg ※ v3 ∘F neg) ※ v1 ∘F neg ※ v3 ∘F pos))))
+                  ※ (Φ ∘F ((v2 ∘F neg ※ v3 ∘F neg) ※ v1 ∘F neg ※ v3 ∘F pos))))
         (P ∘F ((v1 ∘F pos ※ v3 ∘F neg) ※ v2 ∘F pos ※ v3 ∘F pos)))
-     → J {A = A} {C = C} {Γ = Γ} {P = P} (J⁻¹ {A = A} {C = C} {Γ = Γ} {P = P} h) ≃ᵈ h
-J⁻¹⨟J-iso {A = A} {C = C} {Γ = Γ} {P = P} h {a , B , X} {x1 , x2} {y1 , y2} (eq1 , eq2) =
+     → J {A = A} {Γ = Γ} {Φ = Φ} {P = P} (J⁻¹ {A = A} {Γ = Γ} {Φ = Φ} {P = P} h) ≃ᵈ h
+J⁻¹⨟J-iso {A = A} {Γ = Γ} {Φ = Φ} {P = P} h {a , B , X} {x1 , x2} {y1 , y2} (eq1 , eq2) =
   let open RS (F₀ P ((a , X) , B , X))
       module A = Reason A in
-      begin Functor.F₁ P ((x1 , Category.id C) , A.id , Category.id C) $ DinaturalTransformation.α h (B , B , X) $ (A.id , Functor.F₁ Γ ((A.id , Category.id C) , x1 , Category.id C) $ x2)
-              ≈⟨ Func.cong (Functor.F₁ P _) (Func.cong (DinaturalTransformation.α h _) ((A.sym-id-0 A.∙ A.sym-id-0) , Setoid.refl (F₀ Γ ((B , X) , B , X)))) ⟩
-            Functor.F₁ P ((x1 , Category.id C) , A.id , Category.id C) $ DinaturalTransformation.α h (B , B , X) $ (A.id A.∘ A.id A.∘ A.id , Functor.F₁ Γ ((A.id , Category.id C) , x1 , Category.id C) $ x2)
-              ≈⟨ DinaturalTransformation.commute h (x1 , A.id  , Category.id C) (A.refl , (Setoid.refl (F₀ Γ ((B , X) , a , X)))) ⟩
-            Functor.F₁ P ((A.id , Category.id C) , A.id , Category.id C) $ DinaturalTransformation.α h (a , B , X) $ (A.id A.∘ A.id A.∘ x1 , Functor.F₁ Γ ((A.id , Category.id C) , A.id , Category.id C) $ x2)
-              ≈⟨ Functor.identity P (Func.cong (DinaturalTransformation.α h (a , B , X)) ((A.id-0 A.∙ A.id-0 A.∙ eq1) , Functor.identity Γ eq2)) ⟩
+      begin Functor.F₁ P ((x1 , Category.id Γ) , A.id , Category.id Γ) $ DinaturalTransformation.α h (B , B , X) $ (A.id , Functor.F₁ Φ ((A.id , Category.id Γ) , x1 , Category.id Γ) $ x2)
+              ≈⟨ Func.cong (Functor.F₁ P _) (Func.cong (DinaturalTransformation.α h _) ((A.sym-id-0 A.∙ A.sym-id-0) , Setoid.refl (F₀ Φ ((B , X) , B , X)))) ⟩
+            Functor.F₁ P ((x1 , Category.id Γ) , A.id , Category.id Γ) $ DinaturalTransformation.α h (B , B , X) $ (A.id A.∘ A.id A.∘ A.id , Functor.F₁ Φ ((A.id , Category.id Γ) , x1 , Category.id Γ) $ x2)
+              ≈⟨ DinaturalTransformation.commute h (x1 , A.id  , Category.id Γ) (A.refl , (Setoid.refl (F₀ Φ ((B , X) , a , X)))) ⟩
+            Functor.F₁ P ((A.id , Category.id Γ) , A.id , Category.id Γ) $ DinaturalTransformation.α h (a , B , X) $ (A.id A.∘ A.id A.∘ x1 , Functor.F₁ Φ ((A.id , Category.id Γ) , A.id , Category.id Γ) $ x2)
+              ≈⟨ Functor.identity P (Func.cong (DinaturalTransformation.α h (a , B , X)) ((A.id-0 A.∙ A.id-0 A.∙ eq1) , Functor.identity Φ eq2)) ⟩
             DinaturalTransformation.α h (a , B , X) $ (y1 , y2) ∎

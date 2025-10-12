@@ -20,13 +20,13 @@
 
   ---------------------------------------------------------------------------------
 
-  The main idea to formalize this is to lift the rules in terms of natural maps in functor categories, where
+  The idea to formalize this is to lift the rules in terms of natural maps in functor categories, where
   each construction (e.g., pointwise products of dipresheaves, pointwise exponentials of dipresheaves)
   are taken to be functors.
 
   The main technical aspect of this proof is the fact that we use the `Dinats` functor,
   defined in `Dinaturality/DinaturalsFunctor.agda`, which is the functor sending two
-  dipresheaves F, G to the set of dinatural transformations between them. Crucially,
+  dipresheaves A, B to the set of dinatural transformations between them. Crucially,
   this admits an action on morphisms (on functor categories) precisely because naturals
   compose with dinaturals.
 
@@ -90,11 +90,6 @@ private
   _$_ = _⟨$⟩_
 
 private
-  variable
-    F G H I J K L : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)
-    F′ G′ H′ I′ J′ K′ L′ : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)
-
-private
   module Set {ℓ} = CartesianClosed (Setoids-CCC ℓ)
   module SetC {ℓ} = Cartesian (Set.cartesian {ℓ})
   module SetA {ℓ} = BinaryProducts (SetC.products {ℓ})
@@ -118,7 +113,7 @@ module _ {ℓ} (Γ : Category ℓ ℓ ℓ) where
                            ⊗ Functors (op Γ ⊗ Γ) (Setoids ℓ ℓ))
                          (Functors (Product (op Γ) Γ) (Setoids ℓ ℓ))
   PointwiseHom = record
-    { F₀ = λ { (F , G) → Set.-⇨- ∘F (Functor.op F ∘F Swap ※ G) }
+    { F₀ = λ { (A , B) → Set.-⇨- ∘F (Functor.op A ∘F Swap ※ B) }
     ; F₁ = λ { {A1 , A2} {B1 , B2} (f , g) →
       let module f = NaturalTransformation f
           module g = NaturalTransformation g in
@@ -145,7 +140,7 @@ module _ {ℓ} (Γ : Category ℓ ℓ ℓ) where
   {-
     In order to state the isomorphism, it is crucial to use
     the `Dinats` functor, which is the functor sending two dipresheaves
-    F, G to the set of dinatural transformations between them: this is
+    A, B to the set of dinatural transformations between them: this is
     a functor defined on functor categories where morphisms are *naturals*;
     and so it is well-defined because naturals compose with dinaturals.
   -}
@@ -156,7 +151,7 @@ module _ {ℓ} (Γ : Category ℓ ℓ ℓ) where
 
   -- The next implicit arguments to Dinat are needed because of --lossy-unification.
 
-  -- The functor given by (F, G, H) ↦ Dinat(F × G, H), contravariant in F, G, and covariant in H.
+  -- The functor given by (A, B, Φ) ↦ Dinat(A × B, Φ), contravariant in A, B, and covariant in Φ.
   -- Crucially, we use here the `PBP.-×-` which, as a whole, is the pointwise product of presheaves.
   -- The signature of `PBP.-×-` is `Functor (C ⊗ C) C` where C := Functors (op Γ ⊗ Γ) (Setoids ℓ ℓ).
   functor-↑ : Functor ((op (Functors (op Γ ⊗ Γ) (Setoids ℓ ℓ))
@@ -165,7 +160,7 @@ module _ {ℓ} (Γ : Category ℓ ℓ ℓ) where
                   (Setoids (sucℓ ℓ) ℓ)
   functor-↑ = Dinats {Γ = Γ} {Δ = Setoids ℓ ℓ} ∘F (Functor.op PBP.-×- ∘F πˡ ※ πʳ)
 
-  -- The functor given by (F, G, H) ↦ Dinat(G, Fᵒᵖ ⇒ H), contravariant in F, G, and covariant in H.
+  -- The functor given by (A, B, Φ) ↦ Dinat(B, Fᵒᵖ ⇒ Φ), contravariant in A, B, and covariant in Φ.
   functor-↓ : Functor ((op (Functors (op Γ ⊗ Γ) (Setoids ℓ ℓ))
                      ⊗ op (Functors (op Γ ⊗ Γ) (Setoids ℓ ℓ)))
                      ⊗    Functors (op Γ ⊗ Γ) (Setoids ℓ ℓ))
@@ -175,26 +170,26 @@ module _ {ℓ} (Γ : Category ℓ ℓ ℓ) where
   -- There is a natural isomorphism between the above functors.
   iso : NaturalIsomorphism functor-↑ functor-↓
   iso = niHelper record
-    { η = λ { ((F , G) , H) → record
-      { to = λ α → lambda {F = F} {G = G} {H = H} α
+    { η = λ { ((A , Φ) , B) → record
+      { to = λ α → lambda {A = A} {B = B} {Φ = Φ} α
       ; cong = λ eq eq₁ eq₂ → eq (eq₂ , eq₁)
       } }
-    ; η⁻¹ = λ { ((F , G) , H) → record
-      { to = λ α → lambda⁻¹ {F = F} {G = G} {H = H} α
+    ; η⁻¹ = λ { ((A , Φ) , B) → record
+      { to = λ α → lambda⁻¹ {A = A} {B = B} {Φ = Φ} α
       ; cong = λ { eq (eq₁ , eq₂) → eq eq₂ eq₁ }
       } }
     ; commute = λ { ((f , g) , h) eq eq₁ eq₂ →
-    -- This is the naturality statement itself.
-    -- Naturality is trivial to prove, essentially because in Setoid
-    -- everything computes down and the only thing left to prove is the fact that
-    -- a certain function respects the setoid equality.
+      -- This is the naturality statement itself.
+      -- Naturality is trivial to prove, essentially because in Setoid
+      -- everything computes down and the only thing left to prove is the fact that
+      -- a certain function respects the setoid equality.
       Func.cong (NaturalTransformation.η h _) (eq (Func.cong (NaturalTransformation.η f _) eq₂
                                                 , (Func.cong (NaturalTransformation.η g _) eq₁))) }
-    -- It is simply faster to write the proof by hand instead of using the
-    -- previously proven isos because these have a different structure.
-    -- As above, the actual isomorphism is trivial to prove because of computation
-    -- in Setoid, where we only need to propagate the setoid equality.
+      -- It is simply faster to write the proof by hand instead of using the
+      -- previously proven isos because they have a different structure.
     ; iso = λ X → record
+      -- As above, the actual isomorphism is trivial to prove because of computation
+      -- in Setoid, where we only need to propagate setoid equalities.
       { isoˡ = λ { {α} {β} eq (eq₁ , eq₂) → eq (eq₁ , eq₂) }
       ; isoʳ = λ { {α} {β} eq eq₁ eq₂ → eq eq₁ eq₂ }
       }

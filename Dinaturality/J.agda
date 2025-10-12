@@ -45,7 +45,7 @@ import Reason
 private
   variable
     o ℓ e : Level
-    A B C Γ Δ Γ′ Γ″ Γᵒᵖ Δᵒᵖ : Category o ℓ e
+    A B C Φ Δ Γ′ Γ″ Γᵒᵖ Δᵒᵖ : Category o ℓ e
 
 infixr 5 _⊗_
 infixr 5 _$_
@@ -56,7 +56,7 @@ private
 
 private
   variable
-    F G H I K L : Functor (op Γᵒᵖ ⊗ Γ) (Setoids ℓ ℓ)
+    F G H I K L : Functor (op Γᵒᵖ ⊗ Φ) (Setoids ℓ ℓ)
 
 private
   module Set {ℓ} = CartesianClosed (Setoids-CCC ℓ)
@@ -103,52 +103,52 @@ v3 = πʳ ∘F πʳ
 J :
   ∀ {o} {A C : Category o ℓ ℓ}
     (let module A = Category A)
-    {Γ P : Functor (op (A ⊗ C) ⊗ (A ⊗ C)) (Setoids ℓ ℓ)}
+    {Φ P : Functor (op (A ⊗ C) ⊗ (A ⊗ C)) (Setoids ℓ ℓ)}
   → DinaturalTransformation {C = A ⊗ C}
-      Γ
+      Φ
       P
   → DinaturalTransformation {C = A.op ⊗ A ⊗ C}
       (SetA.-×- ∘F ((Hom[ A ][-,-] ∘F (v1 ∘F pos ※ v2 ∘F pos))
-                 ※ (Γ ∘F ((v2 ∘F neg ※ v3 ∘F neg) ※ v1 ∘F neg ※ v3 ∘F pos))))
+                 ※ (Φ ∘F ((v2 ∘F neg ※ v3 ∘F neg) ※ v1 ∘F neg ※ v3 ∘F pos))))
       (P ∘F ((v1 ∘F pos ※ v3 ∘F neg) ※ v2 ∘F pos ※ v3 ∘F pos))
-J {A = A} {C = C} {Γ = Γ} {P = P} h = dtHelper (record
+J {A = A} {C = C} {Φ = Φ} {P = P} h = dtHelper (record
   { α = λ { (A , B , X) → record
     -- Definition of the main map.
-    { to = λ { (f , k) → P.₁ ((f , C.id) , A.id , C.id) $ h.α (B , X) $ Γ.₁ ((A.id , C.id) , f , C.id) $ k }
-    ; cong = λ { (feq , eq) → P.F-resp-≈ ((feq , C.refl) , A.refl , C.refl) (Func.cong (h.α _) (Γ.F-resp-≈ ((A.refl , C.refl) , feq , C.refl ) eq)) }
+    { to = λ { (f , k) → P.₁ ((f , C.id) , A.id , C.id) $ h.α (B , X) $ Φ.₁ ((A.id , C.id) , f , C.id) $ k }
+    ; cong = λ { (feq , eq) → P.F-resp-≈ ((feq , C.refl) , A.refl , C.refl) (Func.cong (h.α _) (Φ.F-resp-≈ ((A.refl , C.refl) , feq , C.refl ) eq)) }
     } }
   ; commute = λ { {X1 , X2 , X3} {Y1 , Y2 , Y3} (f1 , f2 , f3) {e1 , k1} {e2 , k2} (eq1 , eq2) →
       let open RS (P.F₀ ((Y1 , X3) , Y2 , Y3)) in
       begin P.₁ ((f1 , C.id) , f2 , f3)
              $ P.₁ ((id ∘ e1 ∘ id , C.id) , id , C.id)
              $ h.α (X2 , X3)
-             $ Γ.F₁ ((id , C.id) , id ∘ e1 ∘ id , C.id)
-             $ Γ.F₁ ((f2 , f3) , f1 , C.id)
-             $ k1 ≈⟨ [ P ]-resp-square ((((assoc-3 ∙ idm-2) , C.refl) , A.id-swap , C.id-swap)) (Func.cong (h.α _) ([ Γ ]-resp-square ((A.id-swap , C.id-swap) , (assoc-3 ∙ idm-2) , C.refl) eq2)) ⟩
+             $ Φ.F₁ ((id , C.id) , id ∘ e1 ∘ id , C.id)
+             $ Φ.F₁ ((f2 , f3) , f1 , C.id)
+             $ k1 ≈⟨ [ P ]-resp-square ((((assoc-3 ∙ idm-2) , C.refl) , A.id-swap , C.id-swap)) (Func.cong (h.α _) ([ Φ ]-resp-square ((A.id-swap , C.id-swap) , (assoc-3 ∙ idm-2) , C.refl) eq2)) ⟩
             P.₁ ((e1 ∘ f1 , C.id) , id , C.id)
              $ P.₁ ((id , C.id) , f2 , f3)
              $ h.α (X2 , X3)
-             $ Γ.₁ ((f2 , f3) , id , C.id)
-             $ Γ.₁ ((id , C.id) , e1 ∘ f1 , C.id)
-             $ k2 ≈⟨ Func.cong (P.₁ _) (h.commute _ ΓS.refl) ⟩
+             $ Φ.₁ ((f2 , f3) , id , C.id)
+             $ Φ.₁ ((id , C.id) , e1 ∘ f1 , C.id)
+             $ k2 ≈⟨ Func.cong (P.₁ _) (h.commute _ ΦS.refl) ⟩
             P.₁ ((e1 ∘ f1 , C.id) , id , C.id)
             $ P.₁ ((f2 , f3) , id , C.id)
             $ h.α (Y2 , Y3)
-            $ Γ.₁ ((id , C.id) , f2 , f3)
-            $ Γ.₁ ((id , C.id) , e1 ∘ f1 , C.id)
-            $ k2 ≈⟨ [ P ]-resp-square (((skip (rw eq1) ∙ sym-id-1) , C.id-swap) , A.refl , C.refl) (Func.cong (h.α _) ([ Γ ]-resp-square ((A.refl , C.refl) , ((skip (rw eq1) ∙ sym-id-1) , C.id-swap)) ΓS.refl)) ⟩
+            $ Φ.₁ ((id , C.id) , f2 , f3)
+            $ Φ.₁ ((id , C.id) , e1 ∘ f1 , C.id)
+            $ k2 ≈⟨ [ P ]-resp-square (((skip (rw eq1) ∙ sym-id-1) , C.id-swap) , A.refl , C.refl) (Func.cong (h.α _) ([ Φ ]-resp-square ((A.refl , C.refl) , ((skip (rw eq1) ∙ sym-id-1) , C.id-swap)) ΦS.refl)) ⟩
             P.₁ ((id , f3) , id , C.id)
             $ P.₁ ((f2 ∘ e2 ∘ f1 , C.id) , id , C.id)
             $ h.α (Y2 , Y3)
-            $ Γ.₁ ((id , C.id) , f2 ∘ e2 ∘ f1 , C.id)
-            $ Γ.₁ ((id , C.id) , id , f3)
+            $ Φ.₁ ((id , C.id) , f2 ∘ e2 ∘ f1 , C.id)
+            $ Φ.₁ ((id , C.id) , id , f3)
             $ k2 ∎
       }
   }) where
-    module Γ = Functor Γ
+    module Φ = Functor Φ
     module P = Functor P
     open module A = Reason A
     module C = Reason C
     module h = DinaturalTransformation h
-    module ΓS {A} = Setoid (F₀ Γ A)
+    module ΦS {A} = Setoid (F₀ Φ A)
     module PS {A} = Setoid (F₀ P A)

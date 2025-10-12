@@ -60,45 +60,45 @@ private
 -- Rules for ends, both directions.
 
 endL : ∀ {o ℓ e} {A Γ : Category o ℓ e}
-  {P : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
-  {Z : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
-  → DinaturalTransformation P (endFunctor (Z ∘F F-reorder))
-  → DinaturalTransformation (P ∘F (πʳ ∘F πˡ ※ πʳ ∘F πʳ)) Z
-endL {A = A} {Γ = Γ} {P = P} {Z = Z} α = dtHelper (record
+  {Φ : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
+  {P : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
+  → DinaturalTransformation Φ (endFunctor (P ∘F F-reorder))
+  → DinaturalTransformation (Φ ∘F (πʳ ∘F πˡ ※ πʳ ∘F πʳ)) P
+endL {A = A} {Γ = Γ} {Φ = Φ} {P = P} α = dtHelper (record
       { α = λ { (X , G) → record
         { to = λ pxx → proj₁ (α.α G $ pxx) X
         ; cong = λ eq → Func.cong (α.α G) eq
         } }
-      ; commute = λ {X} {Y} (f1 , f2) eq → let open RS (F₀ Z (X , Y)) in begin
-        Z.₁ ((id , Γ.id) , (f1 , f2)) $ (proj₁ (α.α (proj₂ X) $ P.₁ (f2 , Γ.id) $ _) (proj₁ X)) ≈˘⟨ [ Z ]-merge (id-0 , Γ.id-0) (id-0 , Γ.id-1) ZS.refl ⟩
-        Z.₁ ((id , Γ.id) , (id , f2)) $ Z.₁ ((id , Γ.id) , (f1 , Γ.id)) $ (proj₁ (α.α (proj₂ X) $ P.₁ (f2 , Γ.id) $ _) (proj₁ X)) ≈˘⟨ Func.cong (Z.₁ _) (proj₂ (α.α (proj₂ X) $ P.₁ (f2 , Γ.id) $ _) f1) ⟩
-        Z.₁ ((id , Γ.id) , id , f2) $ Z.₁ ((f1 , Γ.id) , id , Γ.id) $ (proj₁ (α.α (proj₂ X) $ P.₁ (f2 , Γ.id) $ _) (proj₁ Y)) ≈⟨ [ Z ]-resp-square ((id-swap , Γ.refl) , Equiv.refl , Γ.id-swap) ZS.refl ⟩
-        Z.₁ ((f1 , Γ.id) , id , Γ.id) $ Z.₁ ((id , Γ.id) , id , f2) $ (proj₁ (α.α (proj₂ X) $ P.₁ (f2 , Γ.id) $ _) (proj₁ Y)) ≈⟨ Func.cong (Z.₁ _) (α.commute f2 eq) ⟩
-        Z.₁ ((f1 , Γ.id) , id , Γ.id) $ Z.₁ ((id , f2) , id , Γ.id) $ (proj₁ (α.α (proj₂ Y) $ P.₁ (Γ.id , f2) $ _) (proj₁ Y)) ≈⟨ [ Z ]-merge (id-0 , Γ.id-1) (id-0 , Γ.id-0) ZS.refl ⟩
-        Z.₁ ((f1 , f2) , id , Γ.id) $ (proj₁ (α.α (proj₂ Y) $ P.₁ (Γ.id , f2) $ _) (proj₁ Y)) ∎
+      ; commute = λ {X} {Y} (f1 , f2) eq → let open RS (F₀ P (X , Y)) in begin
+        P.₁ ((id , Γ.id) , (f1 , f2)) $ (proj₁ (α.α (proj₂ X) $ Φ.₁ (f2 , Γ.id) $ _) (proj₁ X)) ≈˘⟨ [ P ]-merge (id-0 , Γ.id-0) (id-0 , Γ.id-1) PS.refl ⟩
+        P.₁ ((id , Γ.id) , (id , f2)) $ P.₁ ((id , Γ.id) , (f1 , Γ.id)) $ (proj₁ (α.α (proj₂ X) $ Φ.₁ (f2 , Γ.id) $ _) (proj₁ X)) ≈˘⟨ Func.cong (P.₁ _) (proj₂ (α.α (proj₂ X) $ Φ.₁ (f2 , Γ.id) $ _) f1) ⟩
+        P.₁ ((id , Γ.id) , id , f2) $ P.₁ ((f1 , Γ.id) , id , Γ.id) $ (proj₁ (α.α (proj₂ X) $ Φ.₁ (f2 , Γ.id) $ _) (proj₁ Y)) ≈⟨ [ P ]-resp-square ((id-swap , Γ.refl) , Equiv.refl , Γ.id-swap) PS.refl ⟩
+        P.₁ ((f1 , Γ.id) , id , Γ.id) $ P.₁ ((id , Γ.id) , id , f2) $ (proj₁ (α.α (proj₂ X) $ Φ.₁ (f2 , Γ.id) $ _) (proj₁ Y)) ≈⟨ Func.cong (P.₁ _) (α.commute f2 eq) ⟩
+        P.₁ ((f1 , Γ.id) , id , Γ.id) $ P.₁ ((id , f2) , id , Γ.id) $ (proj₁ (α.α (proj₂ Y) $ Φ.₁ (Γ.id , f2) $ _) (proj₁ Y)) ≈⟨ [ P ]-merge (id-0 , Γ.id-1) (id-0 , Γ.id-0) PS.refl ⟩
+        P.₁ ((f1 , f2) , id , Γ.id) $ (proj₁ (α.α (proj₂ Y) $ Φ.₁ (Γ.id , f2) $ _) (proj₁ Y)) ∎
       })
   where
     module α = DinaturalTransformation α
     module Γ = Reason Γ
+    module Φ = Functor Φ
     module P = Functor P
-    module Z = Functor Z
-    module ZS {A} = Setoid (F₀ Z A)
+    module ΦS {A} = Setoid (F₀ Φ A)
     module PS {A} = Setoid (F₀ P A)
     open Reason A
 
 endR : ∀ {o ℓ e} {A Γ : Category o ℓ e}
-  {P : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
-  {Z : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
-  → DinaturalTransformation (P ∘F (πʳ ∘F πˡ ※ πʳ ∘F πʳ)) Z
-  → DinaturalTransformation P (endFunctor (Z ∘F F-reorder))
-endR {A = A} {Γ = Γ} {P = P} {Z = Z} α = dtHelper (record
+  {Φ : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
+  {P : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
+  → DinaturalTransformation (Φ ∘F (πʳ ∘F πˡ ※ πʳ ∘F πʳ)) P
+  → DinaturalTransformation Φ (endFunctor (P ∘F F-reorder))
+endR {A = A} {Γ = Γ} {Φ = Φ} {P = P} α = dtHelper (record
       { α = λ X → record
         { to = λ pxx → (λ A → α.α (A , X) $ pxx) , λ {Q} {W} f →
-          let open module ZZ = RS (F₀ Z ((Q , X) , W , X)) in
-          begin F₁ Z ((f , Γ.id) , id , Γ.id) $ α.α (W , X) $ pxx ≈⟨ Func.cong (F₁ Z _) (Func.cong (α.α _) (Setoid.sym (F₀ P (X , X)) (Functor.identity P (Setoid.refl (F₀ P (X , X)))))) ⟩
-                F₁ Z ((f , Γ.id) , id , Γ.id) $ α.α (W , X) $ F₁ P (Γ.id , Γ.id) $ pxx ≈⟨ α.op-commute (f , Γ.id) (Setoid.refl (F₀ P _)) ⟩
-                F₁ Z ((id , Γ.id) , f , Γ.id) $ α.α (Q , X) $ F₁ P (Γ.id , Γ.id) $ pxx ≈⟨ Func.cong (F₁ Z _) (Func.cong (α.α _) (Functor.identity P (Setoid.refl (F₀ P (X , X))))) ⟩
-                F₁ Z ((id , Γ.id) , f , Γ.id) $ α.α (Q , X) $ pxx ∎
+          let open module ZZ = RS (F₀ P ((Q , X) , W , X)) in
+          begin F₁ P ((f , Γ.id) , id , Γ.id) $ α.α (W , X) $ pxx ≈⟨ Func.cong (F₁ P _) (Func.cong (α.α _) (Setoid.sym (F₀ Φ (X , X)) (Functor.identity Φ (Setoid.refl (F₀ Φ (X , X)))))) ⟩
+                F₁ P ((f , Γ.id) , id , Γ.id) $ α.α (W , X) $ F₁ Φ (Γ.id , Γ.id) $ pxx ≈⟨ α.op-commute (f , Γ.id) (Setoid.refl (F₀ Φ _)) ⟩
+                F₁ P ((id , Γ.id) , f , Γ.id) $ α.α (Q , X) $ F₁ Φ (Γ.id , Γ.id) $ pxx ≈⟨ Func.cong (F₁ P _) (Func.cong (α.α _) (Functor.identity Φ (Setoid.refl (F₀ Φ (X , X))))) ⟩
+                F₁ P ((id , Γ.id) , f , Γ.id) $ α.α (Q , X) $ pxx ∎
         ; cong = λ eq → Func.cong (α.α _) eq
         }
       ; commute = λ {X} {Y} f eq → α.commute (id , f) eq
@@ -111,21 +111,21 @@ endR {A = A} {Γ = Γ} {P = P} {Z = Z} α = dtHelper (record
 -- The two maps above are isomorphisms (in Set).
 
 endL⨟endR-iso : ∀ {o ℓ e} {A Γ : Category o ℓ e}
-    {P : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
-    {Z : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
-    → (α : DinaturalTransformation P (endFunctor (Z ∘F F-reorder)))
-    → endR {A = A} {Γ = Γ} {P = P} {Z = Z} (endL α) ≃ᵈ α
+    {Φ : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
+    {P : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
+    → (α : DinaturalTransformation Φ (endFunctor (P ∘F F-reorder)))
+    → endR {A = A} {Γ = Γ} {Φ = Φ} {P = P} (endL α) ≃ᵈ α
 endL⨟endR-iso α eq = Func.cong (DinaturalTransformation.α α _) eq
 
 endR⨟endL-iso : ∀ {o ℓ e} {A Γ : Category o ℓ e}
-    {P : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
-    {Z : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
-    → (α : DinaturalTransformation (P ∘F (πʳ ∘F πˡ ※ πʳ ∘F πʳ)) Z)
-    → endL {A = A} {Γ = Γ} {P = P} {Z = Z} (endR α) ≃ᵈ α
+    {Φ : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
+    {P : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
+    → (α : DinaturalTransformation (Φ ∘F (πʳ ∘F πˡ ※ πʳ ∘F πʳ)) P)
+    → endL {A = A} {Γ = Γ} {Φ = Φ} {P = P} (endR α) ≃ᵈ α
 endR⨟endL-iso α eq = Func.cong (DinaturalTransformation.α α _) eq
 
 {-
-  This map exemplifies the fact that $∀x.P(x,¬x,y)$ implies $P(t(y),t(y),y)$, i.e., that universal
+  This map exemplifies the fact that $∀x.Φ(x,¬x,y)$ implies $Φ(t(y),t(y),y)$, i.e., that universal
   quantification implies that the property holds for any concrete term $t(y)$, here represented by difunctors.
   This is derivable with `endR` and the reindexing as in `Dinatural/Reindexing.agda`,
   but we define it here explicitly for convenience.
@@ -134,42 +134,42 @@ endR⨟endL-iso α eq = Func.cong (DinaturalTransformation.α α _) eq
 -}
 {-
 endProjection : ∀ {o ℓ e} {A Γ : Category o ℓ e}
-    {P : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
-    {Z : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
+    {Φ : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
+    {P : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
     (F : Functor (op Γ ⊗ Γ) A)
-  → DinaturalTransformation P (endFunctor (Z ∘F F-reorder))
-  → DinaturalTransformation P (Z ∘F ((Functor.op F ∘F Swap ※ πˡ) ※ F ※ πʳ))
-endProjection {A = A} {Γ = Γ} {P = P} {Z = Z} F α = dtHelper (record
+  → DinaturalTransformation Φ (endFunctor (P ∘F F-reorder))
+  → DinaturalTransformation Φ (P ∘F ((Functor.op F ∘F Swap ※ πˡ) ※ F ※ πʳ))
+endProjection {A = A} {Γ = Γ} {Φ = Φ} {P = P} F α = dtHelper (record
   { α = λ X → record
     { to = λ fxx → proj₁ (α.α X $ fxx) (F₀ F (X , X))
     ; cong = λ eq → Func.cong (α.α X) eq
     }
   ; commute = λ {X} {Y} m {x} {y} eq →
-    let open module ZZ = RS (F₀ Z ((F₀ F (Y , X) , X) , F₀ F (X , Y) , Y)) in
-    begin Z.₁ ((F.₁ (m , Γ.id) , Γ.id) , F.₁ (Γ.id , m) , m) $ proj₁ (α.α X $ P.₁ (m , Γ.id) $ x) (F.₀ (X , X))
-            ≈⟨ [ Z ]-decompose₂ ZS.refl ⟩
-          Z.₁ ((id , Γ.id) , F.₁ (Γ.id , m) , m) $ Z.₁ ((F.₁ (m , Γ.id) , Γ.id) , id , Γ.id) $ proj₁ (α.α X $ P.₁ (m , Γ.id) $ x) (F.₀ (X , X))
-            ≈⟨ Func.cong (F₁ Z _) (proj₂ (α.α X $ P.₁ (m , Γ.id) $ x) _) ⟩
-          Z.₁ ((id , Γ.id) , F.₁ (Γ.id , m) , m) $ Z.₁ ((id , Γ.id) , F.₁ (m , Γ.id) , Γ.id) $ proj₁ (α.α X $ P.₁ (m , Γ.id) $ x) (F.₀ (Y , X))
-            ≈⟨ [ Z ]-resp-square ((Equiv.refl , Γ.refl) , sym-id-1 , Γ.id-swap) ZS.refl ⟩
-          Z.₁ ((id , Γ.id) , F.₁ (Γ.id , m) ∘ F.₁ (m , Γ.id) , Γ.id) $ Z.₁ ((id , Γ.id) , id , m) $ proj₁ (α.α X $ P.₁ (m , Γ.id) $ x) (F.₀ (Y , X))
-            ≈⟨ Func.cong (F₁ Z _) (ZS.sym (α.op-commute m (PS.sym eq))) ⟩
-          Z.₁ ((id , Γ.id) , F.₁ (Γ.id , m) ∘ F.₁ (m , Γ.id) , Γ.id) $ Z.₁ ((id , m) , id , Γ.id) $ proj₁ (α.α Y $ P.₁ (Γ.id , m) $ y) (F.₀ (Y , X))
-            ≈⟨ F-resp-≈ Z ((Equiv.refl , Γ.refl) , [ F ]-commute , Γ.refl) ZS.refl ⟩
-          Z.₁ ((id , Γ.id) , F.₁ (m , Γ.id) ∘ F.₁ (Γ.id , m) , Γ.id) $ Z.₁ ((id , m) , id , Γ.id) $ proj₁ (α.α Y $ P.₁ (Γ.id , m) $ y) (F.₀ (Y , X))
-            ≈⟨ [ Z ]-resp-square ((Equiv.refl , Γ.id-swap) , id-1 , Γ.refl) ZS.refl ⟩
-          Z.₁ ((id , m) , F.₁ (m , Γ.id) , Γ.id) $ Z.₁ ((id , Γ.id) , F.₁ (Γ.id , m) , Γ.id) $ proj₁ (α.α Y $ P.₁ (Γ.id , m) $ y) (F.₀ (Y , X))
-            ≈⟨ Func.cong (F₁ Z _) (ZS.sym (proj₂ (α.α Y $ F₁ P (Γ.id , m) $ y) _)) ⟩
-          Z.₁ ((id , m) , F.₁ (m , Γ.id) , Γ.id) $ Z.₁ ((F.₁ (Γ.id , m) , Γ.id) , id , Γ.id) $ proj₁ (α.α Y $ P.₁ (Γ.id , m) $ y) (F.₀ (Y , Y))
-            ≈⟨ [ Z ]-merge (id-1 , Γ.identityˡ) (id-1 , Γ.id-1) ZS.refl ⟩
-          Z.₁ ((F.₁ (Γ.id , m) , m) , F.₁ (m , Γ.id) , Γ.id) $ proj₁ (α.α Y $ P.₁ (Γ.id , m) $ y) (F.₀ (Y , Y)) ∎
+    let open module ZZ = RS (F₀ P ((F₀ F (Y , X) , X) , F₀ F (X , Y) , Y)) in
+    begin P.₁ ((F.₁ (m , Γ.id) , Γ.id) , F.₁ (Γ.id , m) , m) $ proj₁ (α.α X $ Φ.₁ (m , Γ.id) $ x) (F.₀ (X , X))
+            ≈⟨ [ P ]-decompose₂ PS.refl ⟩
+          P.₁ ((id , Γ.id) , F.₁ (Γ.id , m) , m) $ P.₁ ((F.₁ (m , Γ.id) , Γ.id) , id , Γ.id) $ proj₁ (α.α X $ Φ.₁ (m , Γ.id) $ x) (F.₀ (X , X))
+            ≈⟨ Func.cong (F₁ P _) (proj₂ (α.α X $ Φ.₁ (m , Γ.id) $ x) _) ⟩
+          P.₁ ((id , Γ.id) , F.₁ (Γ.id , m) , m) $ P.₁ ((id , Γ.id) , F.₁ (m , Γ.id) , Γ.id) $ proj₁ (α.α X $ Φ.₁ (m , Γ.id) $ x) (F.₀ (Y , X))
+            ≈⟨ [ P ]-resp-square ((Equiv.refl , Γ.refl) , sym-id-1 , Γ.id-swap) PS.refl ⟩
+          P.₁ ((id , Γ.id) , F.₁ (Γ.id , m) ∘ F.₁ (m , Γ.id) , Γ.id) $ P.₁ ((id , Γ.id) , id , m) $ proj₁ (α.α X $ Φ.₁ (m , Γ.id) $ x) (F.₀ (Y , X))
+            ≈⟨ Func.cong (F₁ P _) (PS.sym (α.op-commute m (ΦS.sym eq))) ⟩
+          P.₁ ((id , Γ.id) , F.₁ (Γ.id , m) ∘ F.₁ (m , Γ.id) , Γ.id) $ P.₁ ((id , m) , id , Γ.id) $ proj₁ (α.α Y $ Φ.₁ (Γ.id , m) $ y) (F.₀ (Y , X))
+            ≈⟨ F-resp-≈ P ((Equiv.refl , Γ.refl) , [ F ]-commute , Γ.refl) PS.refl ⟩
+          P.₁ ((id , Γ.id) , F.₁ (m , Γ.id) ∘ F.₁ (Γ.id , m) , Γ.id) $ P.₁ ((id , m) , id , Γ.id) $ proj₁ (α.α Y $ Φ.₁ (Γ.id , m) $ y) (F.₀ (Y , X))
+            ≈⟨ [ P ]-resp-square ((Equiv.refl , Γ.id-swap) , id-1 , Γ.refl) PS.refl ⟩
+          P.₁ ((id , m) , F.₁ (m , Γ.id) , Γ.id) $ P.₁ ((id , Γ.id) , F.₁ (Γ.id , m) , Γ.id) $ proj₁ (α.α Y $ Φ.₁ (Γ.id , m) $ y) (F.₀ (Y , X))
+            ≈⟨ Func.cong (F₁ P _) (PS.sym (proj₂ (α.α Y $ F₁ Φ (Γ.id , m) $ y) _)) ⟩
+          P.₁ ((id , m) , F.₁ (m , Γ.id) , Γ.id) $ P.₁ ((F.₁ (Γ.id , m) , Γ.id) , id , Γ.id) $ proj₁ (α.α Y $ Φ.₁ (Γ.id , m) $ y) (F.₀ (Y , Y))
+            ≈⟨ [ P ]-merge (id-1 , Γ.identityˡ) (id-1 , Γ.id-1) PS.refl ⟩
+          P.₁ ((F.₁ (Γ.id , m) , m) , F.₁ (m , Γ.id) , Γ.id) $ proj₁ (α.α Y $ Φ.₁ (Γ.id , m) $ y) (F.₀ (Y , Y)) ∎
   }) where
     module α = DinaturalTransformation α
     module Γ = Reason Γ
     module F = Functor F
+    module Φ = Functor Φ
     module P = Functor P
-    module Z = Functor Z
-    module ZS {A} = Setoid (F₀ Z A)
+    module ΦS {A} = Setoid (F₀ Φ A)
     module PS {A} = Setoid (F₀ P A)
     open Reason A
 -}

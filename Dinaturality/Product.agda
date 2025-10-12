@@ -53,8 +53,7 @@ private
 
 private
   variable
-    F G H I J K L : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)
-    F′ G′ H′ I′ J′ K′ L′ : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)
+    Φ P Q : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)
 
 private
   module Set {ℓ} = CartesianClosed (Setoids-CCC ℓ)
@@ -62,12 +61,12 @@ private
   module SetC {ℓ} = Cartesian (Set.cartesian {ℓ})
   module SetA {ℓ} = BinaryProducts (SetC.products {ℓ})
   module SetT {ℓ} = Terminal (SetC.terminal {ℓ})
-  module F-⊤ {o} {ℓ} {e} = Terminal (One-⊤ {o} {ℓ} {e})
 
 pattern * = lift Data.Unit.tt
 
 -- The unique dinatural from any dipresheaf into the dipresheaf constant in the terminal of Set.
-! : DinaturalTransformation F (const SetT.⊤)
+
+! : DinaturalTransformation Φ (const SetT.⊤)
 ! = dtHelper record
   { α = λ X → record
     { to = λ _ → *
@@ -76,10 +75,15 @@ pattern * = lift Data.Unit.tt
   ; commute = λ f _ → *
   }
 
+!-unique : {α : DinaturalTransformation Φ (const SetT.⊤)}
+         → α ≃ᵈ !
+!-unique {α = α} = λ _ → *
+
 -- Product of dinaturals.
-productd : DinaturalTransformation K F
-         → DinaturalTransformation K G
-         → DinaturalTransformation K (SetA.-×- ∘F (F ※ G))
+
+productd : DinaturalTransformation Φ P
+         → DinaturalTransformation Φ Q
+         → DinaturalTransformation Φ (SetA.-×- ∘F (P ※ Q))
 productd α β = dtHelper record
   { α = λ X → < α.α X , β.α X >ₛ
   ; commute = λ _ eq → α.commute _ eq , β.commute _ eq
@@ -89,52 +93,52 @@ productd α β = dtHelper record
 
 -- Postcomposition with projections.
 
-π₁-cutʳ : DinaturalTransformation K (SetA.-×- ∘F (F ※ G))
-        → DinaturalTransformation K F
+π₁-cutʳ : DinaturalTransformation Φ (SetA.-×- ∘F (P ※ Q))
+        → DinaturalTransformation Φ P
 π₁-cutʳ α = dtHelper record
-    { α = λ X → α.α X [⨾] proj₁ₛ
-    ; commute = λ z → proj₁ ⟨∘⟩ α.commute z
-    } where module α = DinaturalTransformation α
+  { α = λ X → α.α X [⨾] proj₁ₛ
+  ; commute = λ z → proj₁ ⟨∘⟩ α.commute z
+  } where module α = DinaturalTransformation α
 
-π₂-cutʳ : DinaturalTransformation K (SetA.-×- ∘F (F ※ G))
-        → DinaturalTransformation K G
+π₂-cutʳ : DinaturalTransformation Φ (SetA.-×- ∘F (P ※ Q))
+        → DinaturalTransformation Φ Q
 π₂-cutʳ α = dtHelper record
-    { α = λ X → α.α X [⨾] proj₂ₛ
-    ; commute = λ z → proj₂ ⟨∘⟩ α.commute z
-    } where module α = DinaturalTransformation α
-
--- Precomposition with projections
-
-π₁-cutˡ : DinaturalTransformation K F
-        → DinaturalTransformation (SetA.-×- ∘F (K ※ G)) F
-π₁-cutˡ α = dtHelper record
-    { α = λ X → proj₁ₛ [⨾] α.α X
-    ; commute = λ z → α.commute z ⟨∘⟩ proj₁
-    } where module α = DinaturalTransformation α
-
-π₂-cutˡ : DinaturalTransformation K F
-        → DinaturalTransformation (SetA.-×- ∘F (G ※ K)) F
-π₂-cutˡ α = dtHelper record
-    { α = λ X → proj₂ₛ [⨾] α.α X
-    ; commute = λ z → α.commute z ⟨∘⟩ proj₂
-    } where module α = DinaturalTransformation α
+  { α = λ X → α.α X [⨾] proj₂ₛ
+  ; commute = λ z → proj₂ ⟨∘⟩ α.commute z
+  } where module α = DinaturalTransformation α
 
 -- The projections in terms of the rules above.
 
 open import Dinaturality.Identity using (idDT)
 
-π₁ : DinaturalTransformation (SetA.-×- ∘F (F ※ G)) F
-π₁ {F = F} {G = G} =
+π₁ : DinaturalTransformation (SetA.-×- ∘F (P ※ Q)) P
+π₁ {P = P} {Q = Q} =
   π₁-cutʳ
-    {K = SetA.-×- ∘F (F ※ G)}
-    {F = F}
-    {G = G}
-    (idDT {F = SetA.-×- ∘F (F ※ G)})
+    {Φ = SetA.-×- ∘F (P ※ Q)}
+    {P = P}
+    {Q = Q}
+    (idDT {F = SetA.-×- ∘F (P ※ Q)})
 
-π₂ : DinaturalTransformation (SetA.-×- ∘F (F ※ G)) G
-π₂ {F = F} {G = G} =
+π₂ : DinaturalTransformation (SetA.-×- ∘F (P ※ Q)) Q
+π₂ {P = P} {Q = Q} =
   π₂-cutʳ
-    {K = SetA.-×- ∘F (F ※ G)}
-    {F = F}
-    {G = G}
-    (idDT {F = SetA.-×- ∘F (F ※ G)})
+    {Φ = SetA.-×- ∘F (P ※ Q)}
+    {P = P}
+    {Q = Q}
+    (idDT {F = SetA.-×- ∘F (P ※ Q)})
+
+-- Isomorphisms.
+
+iso-proj₁ : {α : DinaturalTransformation Φ P}
+          → {β : DinaturalTransformation Φ Q}
+          → π₁-cutʳ {P = P} {Q = Q} (productd {P = P} {Q = Q} α β) ≃ᵈ α
+iso-proj₁ {α = α} = Func.cong (DinaturalTransformation.α α _)
+
+iso-proj₂ : {α : DinaturalTransformation Φ P}
+          → {β : DinaturalTransformation Φ Q}
+          → π₂-cutʳ {P = P} {Q = Q} (productd {P = P} {Q = Q} α β) ≃ᵈ β
+iso-proj₂ {β = β} = Func.cong (DinaturalTransformation.α β _)
+
+iso-eta : {p : DinaturalTransformation Φ (SetA.-×- ∘F (P ※ Q))}
+        → productd {P = P} {Q = Q} (π₁-cutʳ {P = P} {Q = Q} p) (π₂-cutʳ {P = P} {Q = Q} p) ≃ᵈ p
+iso-eta {p = p} = Func.cong (DinaturalTransformation.α p _)

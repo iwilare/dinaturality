@@ -9,7 +9,7 @@
   (but still have signature F, G : Cᵒᵖ ⊗ C → D).
 -}
 
-module Dinaturality.Delta where
+module Dinaturality.DinaturalCollapse where
 
 open import Level using (Level; _⊔_; Lift; lift) renaming (zero to zeroℓ; suc to sucℓ)
 
