@@ -76,7 +76,6 @@ v3 : Functor (Product A (Product B C)) C
 v3 = πʳ ∘F πʳ
 
 cut-din : ∀
-  {D : Category o ℓ e}
   {Φ Q : Functor (op (Δ ⊗ Γ) ⊗ Δ ⊗ Γ) (Setoids ℓ ℓ)}
   {P : Functor (op Δ ⊗ Δ) (Setoids ℓ ℓ)}
   → DinaturalTransformation {C = op Δ ⊗ Δ ⊗ Γ}
@@ -116,7 +115,6 @@ cut-din {Δ = Δ} {Γ = Γ} {Φ = Φ} {Q} {P} α γ = dtHelper record
     open module γ = DinaturalTransformation γ
 
 cut-nat : ∀
-  {D : Category o ℓ e}
   {Φ Q : Functor (op (Δ ⊗ Γ) ⊗ Δ ⊗ Γ) (Setoids ℓ ℓ)}
   {P : Functor (op Δ ⊗ Δ) (Setoids ℓ ℓ)}
   → DinaturalTransformation {C = Δ ⊗ Γ} Φ (P ∘F (v1 ∘F contra ※ v1 ∘F cov))
