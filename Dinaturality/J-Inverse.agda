@@ -108,7 +108,7 @@ J⁻¹ :
       (SetA.-×- ∘F ((Hom[ A ][-,-] ∘F (v1 ∘F pos ※ v2 ∘F pos))
                  ※ (Φ ∘F ((v2 ∘F neg ※ v3 ∘F neg) ※ v1 ∘F neg ※ v3 ∘F pos))))
       (P ∘F ((v1 ∘F pos ※ v3 ∘F neg) ※ v2 ∘F pos ※ v3 ∘F pos))
-  → DinaturalTransformation {Γ = A ⊗ Γ}
+  → DinaturalTransformation {C = A ⊗ Γ}
       Φ
       P
 J⁻¹ {A = A} {Γ = Γ} {Φ = Φ} {P = P} h = dtHelper (record

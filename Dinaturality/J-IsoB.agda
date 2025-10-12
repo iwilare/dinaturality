@@ -38,6 +38,11 @@ import Relation.Binary.Reasoning.Setoid as RS
 
 import Reason
 
+private
+  variable
+    o ℓ e : Level
+    A B C : Category o ℓ e
+
 open import Dinaturality.Product renaming (π₁ to π₁ᵈ)
 
 infixr 5 _⊗_
@@ -46,10 +51,6 @@ infixr 5 _$_
 private
   _⊗_ = Product
   _$_ = _⟨$⟩_
-
-private
-  variable
-    F G H I K L : Functor (op Γᵒᵖ ⊗ Φ) (Setoids ℓ ℓ)
 
 private
   module Set {ℓ} = CartesianClosed (Setoids-CCC ℓ)

@@ -50,10 +50,6 @@ private
   _⊗_ = Product
   _$_ = _⟨$⟩_
 
-private
-  variable
-    F G H I K L : Functor (op Γᵒᵖ ⊗ Φ) (Setoids ℓ ℓ)
-
 open import Dinaturality.J using (J)
 open import Dinaturality.J-Inverse using (J⁻¹)
 
