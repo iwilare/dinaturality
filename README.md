@@ -1,6 +1,4 @@
-# Di- is for Directed: First-Order Directed Type Theory via Dinaturality
-
-This repository contains the Agda formalization for the POPL 2026 paper _"Di- is for Directed: First-Order Directed Type Theory via Dinaturality''_.
+## _Di- is for Directed: First-Order Directed Type Theory via Dinaturality_
 
 The formalization supports the claims made in the paper about the semantics using categories, (di)functors, dipresheaves, and dinatural transformations. We do not formalize the syntax/metatheory of the type theory.
 
@@ -40,7 +38,7 @@ $ xdg-open html/All.html  # Open html/All.html in your browser.
 
 ## Files structure
 
-Each of the theorems in the paper links to a single formalization file, which typically only has a single main definition with secondary definitions given later.
+Each of the theorems in the paper links to a single formalization file, which typically only has a single main definition.
 
 ## Comments
 

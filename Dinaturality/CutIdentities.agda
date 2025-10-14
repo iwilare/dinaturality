@@ -195,7 +195,7 @@ collapse-helper-simple {Δ = Δ} {Γ} {Φ} {P} β = dtHelper record
   let open RS (P.₀ (X , Z)) in
   begin P.₁ (Δ.id , f) $ β.α (X , X , Y) $ Φ.₁ ((f , g) , Δ.id , Γ.id) $ x ≈˘⟨ Func.cong (P.₁ _) (Func.cong (β.α _) ([ Φ ]-merge (Δ.identityʳ , Γ.identityˡ) (Δ.identity² , Γ.identity²) ΦS.refl)) ⟩
         P.₁ (Δ.id , f) $ β.α (X , X , Y) $ Φ.₁ ((Δ.id , g) , Δ.id , Γ.id) $ Φ.₁ ((f , Γ.id) , Δ.id , Γ.id) $ x ≈⟨ β.commute (Δ.id , f , g) ΦS.refl ⟩
-        P.₁ (Δ.id , Δ.id) $ β.α (X , Z , W) $ Φ.₁ ((Δ.id , Γ.id) , f , g) $ Φ.F₁ ((f , Γ.id) , Δ.id , Γ.id) $ x ≈⟨ Func.cong (P.₁ _) (Func.cong (β.α _) ([ Φ ]-resp-square ((Δ.id-swap , Γ.Equiv.refl) , Δ.id-swap , Γ.id-swap) e)) ⟩
+        P.₁ (Δ.id , Δ.id) $ β.α (X , Z , W) $ Φ.₁ ((Δ.id , Γ.id) , f , g) $ Φ.₁ ((f , Γ.id) , Δ.id , Γ.id) $ x ≈⟨ Func.cong (P.₁ _) (Func.cong (β.α _) ([ Φ ]-resp-square (((Δ.id-swap {f = f} , Γ.Equiv.refl) , Δ.id-swap {f = f} , Γ.id-swap {f = g})) e)) ⟩
         P.₁ (Δ.id , Δ.id) $ β.α (X , Z , W) $ Φ.₁ ((f , Γ.id) , Δ.id , Γ.id) $ Φ.₁ ((Δ.id , Γ.id) , f , g) $ y ≈⟨ β.op-commute (f , Δ.id , Γ.id) ΦS.refl ⟩
         P.₁ (f , Δ.id) $ β.α (Z , Z , W) $ Φ.₁ ((Δ.id , Γ.id) , Δ.id , Γ.id) $ Φ.₁ ((Δ.id , Γ.id) , f , g) $ y ≈⟨ Func.cong (P.₁ _) (Func.cong (β.α _) (Φ.identity ΦS.refl)) ⟩
         P.₁ (f , Δ.id) $ β.α (Z , Z , W) $ Φ.₁ ((Δ.id , Γ.id) , f , g) $ y ∎
@@ -235,7 +235,7 @@ helper-product-iso {Δ = Δ} {Γ} {Φ} {P} = ntHelper record
   module P = Functor P
   module Φ = Functor Φ
 
-helper-project-simple : ∀ {Δ Γ : Category o ℓ e}
+helper-project-simple : ∀ {Γ : Category o ℓ e}
     {Φ P Q : Functor Γ (Setoids ℓ ℓ)}
   → NaturalTransformation
       (SetA.-×- ∘F (P ※ SetA.-×- ∘F (Q ※ Φ)))
