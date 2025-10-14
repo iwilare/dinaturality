@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --without-K --lossy-unification #-}
+{-# OPTIONS --safe --without-K #-}
 
 {-
   We define here some helpers with de Bruijn variables in order to
@@ -41,8 +41,8 @@ private
     A B Γ Φ Δ Γ′ Γ″ Γᵒᵖ Δᵒᵖ : Category o ℓ e
 
 -- modifier on a single variable
-cov = πʳ
-ctr = πˡ
+cov = πʳ -- pick a variable from the covariant     side of variables in the signature of a dinatural, e.g., op Γ × Γ → Γ
+ctr = πˡ -- pick a variable from the contravariant side of variables in the signature of a dinatural, e.g., op Γ × Γ → op Γ
 
 -- variables out of 2-tuple
 

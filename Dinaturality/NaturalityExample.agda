@@ -12,7 +12,6 @@
   in particular, the maps for the (J) and (J⁻¹) rules and those for (co)ends have
   particularly long compilation times and extremely high memory consumption, which
   makes even providing a statement for naturality not practical for a fully formal verification.
-  We leave finding a way to feasibly mechanize naturality for the remaining rules as future work.
 
   In particular we show here that the (exp) and (exp⁻¹) rules form a natural isomorphism.
   We choose to focus on this example because the underlying map is the fastest to typecheck,

@@ -4,7 +4,7 @@
   Main rule for the inverse of directed equality introduction.
 
   The isomorphism is split into the module `Dinaturality/J-Iso.agda`
-  because of Agda running out of memory.
+  because of Agda often running out of memory.
 -}
 module Dinaturality.J-Inverse where
 

@@ -2,8 +2,6 @@
 
 {-
   Correspondence between dinaturals into Set and certain natural transformations with $hom$ in the domain.
-
-  (This file takes particularly long to typecheck.)
 -}
 
 module Dinaturality.NaturalDinatural where

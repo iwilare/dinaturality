@@ -21,7 +21,7 @@
           buildPhase = ''
             runHook preBuild
             # Make sure this builds with --safe
-            agda --html --html-dir=$html --highlight-occurrences --safe All.agda +RTS -M32G
+            agda --html --html-dir=$html --highlight-occurrences --safe All.agda +RTS -M16G
             runHook postBuild
           '';
 
