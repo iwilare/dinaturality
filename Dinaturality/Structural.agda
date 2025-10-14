@@ -78,7 +78,7 @@ wkʳ α = dtHelper record
     ; commute = λ z → α.commute z ⟨∘⟩ proj₁
     } where module α = DinaturalTransformation α
 
--- (Propositional) contraction.
+-- (Propositional) ctr ction.
 
 contr : DinaturalTransformation (SetA.-×- ∘F (P ※ (SetA.-×- ∘F (P ※ Φ)))) Q
        → DinaturalTransformation (SetA.-×- ∘F (P ※ Φ)) Q

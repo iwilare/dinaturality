@@ -65,10 +65,10 @@ weaken-helper :  ∀ {Δ Γ : Category o ℓ e}
   {P Q : Functor (op Δ ⊗ Δ) (Setoids ℓ ℓ)}
   → NaturalTransformation
       (SetA.-×- ∘F (Q ∘F (v1 ∘F cov ※ v2 ∘F cov) ※
-        (SetA.-×- ∘F (P ∘F (v1 ∘F contra ※ v1 ∘F cov) ※ Φ)) ∘F
-        ((v2 ∘F contra ※ v3 ∘F contra) ※ v1 ∘F contra ※ v3 ∘F cov)))
+        (SetA.-×- ∘F (P ∘F (v1 ∘F ctr  ※ v1 ∘F cov) ※ Φ)) ∘F
+        ((v2 ∘F ctr  ※ v3 ∘F ctr ) ※ v1 ∘F ctr  ※ v3 ∘F cov)))
       (SetA.-×- ∘F (Q ∘F (v1 ∘F cov ※ v2 ∘F cov) -- v1 and v2 only covariant
-             ※ Φ ∘F ((v2 ∘F contra ※ v3 ∘F contra) ※ v1 ∘F contra ※ v3 ∘F cov))) -- v1 and v2 only contravariant
+             ※ Φ ∘F ((v2 ∘F ctr  ※ v3 ∘F ctr ) ※ v1 ∘F ctr  ※ v3 ∘F cov))) -- v1 and v2 only ctr variant
 weaken-helper {Φ = Φ} {Q = Q} = ntHelper record
   { η = λ X → < proj₁ₛ , proj₂ₛ  [⨾] proj₂ₛ >ₛ
   ; commute = λ { (f , g , h) (x , y , m) → Func.cong (F₁ Q _) x , Func.cong (F₁ Φ _) m }
@@ -85,9 +85,9 @@ collapse-helper : ∀ {Δ Γ : Category o ℓ e}
     {P : Functor (op Δ ⊗ Δ) (Setoids ℓ ℓ)}
   → DinaturalTransformation {C = op Δ ⊗ Δ ⊗ Γ}
                             (SetA.-×- ∘F (P ∘F (v1 ∘F cov ※ v2 ∘F cov) -- v1 and v2 only covariant
-                                       ※ Φ ∘F ((v2 ∘F contra ※ v3 ∘F contra) ※ v1 ∘F contra ※ v3 ∘F cov))) -- v1 and v2 only contravariant
-                            (Q ∘F ((v1 ∘F cov ※ v3 ∘F contra) ※ v2 ∘F cov ※ v3 ∘F cov)) -- v1 and v2 only covariant
-  → DinaturalTransformation (SetA.-×- ∘F (P ∘F (v1 ∘F contra ※ v1 ∘F cov) ※ Φ)) Q
+                                       ※ Φ ∘F ((v2 ∘F ctr  ※ v3 ∘F ctr ) ※ v1 ∘F ctr  ※ v3 ∘F cov))) -- v1 and v2 only ctr variant
+                            (Q ∘F ((v1 ∘F cov ※ v3 ∘F ctr ) ※ v2 ∘F cov ※ v3 ∘F cov)) -- v1 and v2 only covariant
+  → DinaturalTransformation (SetA.-×- ∘F (P ∘F (v1 ∘F ctr  ※ v1 ∘F cov) ※ Φ)) Q
 collapse-helper {Δ = Δ} {Γ} {Φ} {Q} {P} β = dtHelper record
   { α = λ { (D , G) → record { to = λ { (p , k) → β.α (D , D , G) $ (p , k) } ; cong = λ { (e , q) → Func.cong (β.α _) (e , q) } } }
   ; commute = λ { {X , Y} {Z , W} (f , g) {x , y} {z , w} (e , q) → let open RS (Q.₀ ((X , Y) , (Z , W))) in
@@ -117,24 +117,24 @@ collapse-helper : ∀ {Δ Γ : Category o ℓ e}
     {P : Functor (op Δ ⊗ Δ) (Setoids ℓ ℓ)}
   → DinaturalTransformation {C = op Δ ⊗ Δ ⊗ Γ}
                             (SetA.-×- ∘F (P ∘F (v1 ∘F cov ※ v2 ∘F cov) -- v1 and v2 only covariant
-                                       ※ Φ ∘F ((v2 ∘F contra ※ v3 ∘F contra) ※ v1 ∘F contra ※ v3 ∘F cov))) -- v1 and v2 only contravariant
-                            (Q ∘F ((v1 ∘F cov ※ v3 ∘F contra) ※ v2 ∘F cov ※ v3 ∘F cov)) -- v1 and v2 only covariant
+                                       ※ Φ ∘F ((v2 ∘F ctr  ※ v3 ∘F ctr ) ※ v1 ∘F ctr  ※ v3 ∘F cov))) -- v1 and v2 only ctr variant
+                            (Q ∘F ((v1 ∘F cov ※ v3 ∘F ctr ) ※ v2 ∘F cov ※ v3 ∘F cov)) -- v1 and v2 only covariant
   → DinaturalTransformation
       ((SetA.-×- ∘F
         (P ∘F (v1 ∘F cov ※ v2 ∘F cov) ※
-         Φ ∘F ((v2 ∘F contra ※ v3 ∘F contra) ※ v1 ∘F contra ※ v3 ∘F cov)))
+         Φ ∘F ((v2 ∘F ctr  ※ v3 ∘F ctr ) ※ v1 ∘F ctr  ※ v3 ∘F cov)))
        ∘F
-       (Functor.op (va ∘F contra ※ va ∘F cov ※ vb ∘F cov) ∘F Swap ※
-        va ∘F contra ※ va ∘F cov ※ vb ∘F cov))
-      ((Q ∘F ((v1 ∘F cov ※ v3 ∘F contra) ※ v2 ∘F cov ※ v3 ∘F cov)) ∘F
-       (Functor.op (va ∘F contra ※ va ∘F cov ※ vb ∘F cov) ∘F Swap ※
-        va ∘F contra ※ va ∘F cov ※ vb ∘F cov))
-collapse-helper β = reindexing (va ∘F contra ※ va ∘F cov ※ vb ∘F cov) β
+       (Functor.op (va ∘F ctr  ※ va ∘F cov ※ vb ∘F cov) ∘F Swap ※
+        va ∘F ctr  ※ va ∘F cov ※ vb ∘F cov))
+      ((Q ∘F ((v1 ∘F cov ※ v3 ∘F ctr ) ※ v2 ∘F cov ※ v3 ∘F cov)) ∘F
+       (Functor.op (va ∘F ctr  ※ va ∘F cov ※ vb ∘F cov) ∘F Swap ※
+        va ∘F ctr  ※ va ∘F cov ※ vb ∘F cov))
+collapse-helper β = reindexing (va ∘F ctr  ※ va ∘F cov ※ vb ∘F cov) β
 -}
 
 ----------------------------- cut-nat identities ---------------------------
 
--- Precomposing with π : (SetA.-×- ∘F (P ∘F (v1 ∘F contra ※ v1 ∘F cov) ※ Φ)) (P ∘F (v1 ∘F contra ※ v1 ∘F cov))
+-- Precomposing with π : (SetA.-×- ∘F (P ∘F (v1 ∘F ctr  ※ v1 ∘F cov) ※ Φ)) (P ∘F (v1 ∘F ctr  ※ v1 ∘F cov))
 -- is equivalent to simply collapse naturality to dinaturality.
 -- Again, β needs to be weakened to add P as one of the hypotheses (since cuts require the same Φ)
 cut-nat-idˡ : ∀ {Δ Γ : Category o ℓ e}
@@ -142,9 +142,9 @@ cut-nat-idˡ : ∀ {Δ Γ : Category o ℓ e}
   {P : Functor (op Δ ⊗ Δ) (Setoids ℓ ℓ)}
   → {β : DinaturalTransformation {C = op Δ ⊗ Δ ⊗ Γ}
                             (SetA.-×- ∘F (P ∘F (v1 ∘F cov ※ v2 ∘F cov) -- v1 and v2 only covariant
-                                       ※ Φ ∘F ((v2 ∘F contra ※ v3 ∘F contra) ※ v1 ∘F contra ※ v3 ∘F cov))) -- v1 and v2 only contravariant
-                            (Q ∘F ((v1 ∘F cov ※ v3 ∘F contra) ※ v2 ∘F cov ※ v3 ∘F cov))} -- v1 and v2 only covariant
-  → cut-nat {Φ = SetA.-×- ∘F (P ∘F (v1 ∘F contra ※ v1 ∘F cov) ※ Φ)} {Q = Q} {P = P}
+                                       ※ Φ ∘F ((v2 ∘F ctr  ※ v3 ∘F ctr ) ※ v1 ∘F ctr  ※ v3 ∘F cov))) -- v1 and v2 only ctr variant
+                            (Q ∘F ((v1 ∘F cov ※ v3 ∘F ctr ) ※ v2 ∘F cov ※ v3 ∘F cov))} -- v1 and v2 only covariant
+  → cut-nat {Φ = SetA.-×- ∘F (P ∘F (v1 ∘F ctr  ※ v1 ∘F cov) ※ Φ)} {Q = Q} {P = P}
             π₁
             (β ∘> weaken-helper {Φ = Φ} {P = P} {Q = P})
   ≃ᵈ collapse-helper β
@@ -156,7 +156,7 @@ cut-nat-idˡ {Φ = Φ} {Q} {P} {β = β} e = Func.cong (β.α _) e
 iso-helper : ∀ {Δ Γ : Category o ℓ e}
     (P : Functor (op Δ ⊗ Δ) (Setoids ℓ ℓ))
   → NaturalTransformation {C = op (op Δ ⊗ Δ ⊗ Γ) ⊗ op Δ ⊗ Δ ⊗ Γ} (P ∘F (v1 ∘F cov ※ v2 ∘F cov))
-      ((P ∘F (v1 ∘F contra ※ v1 ∘F cov)) ∘F ((v1 ∘F cov ※ v3 ∘F contra) ※ v2 ∘F cov ※ v3 ∘F cov))
+      ((P ∘F (v1 ∘F ctr  ※ v1 ∘F cov)) ∘F ((v1 ∘F cov ※ v3 ∘F ctr ) ※ v2 ∘F cov ※ v3 ∘F cov))
 iso-helper P = ntHelper record
   { η = λ X → record { to = λ x → x ; cong = λ x → x }
   ; commute = λ x e → Func.cong (P.₁ _) e
@@ -166,8 +166,8 @@ iso-helper P = ntHelper record
 cut-nat-idʳ : ∀ {Δ Γ : Category o ℓ e}
     {Φ : Functor (op (Δ ⊗ Γ) ⊗ Δ ⊗ Γ) (Setoids ℓ ℓ)}
     {P : Functor (op Δ ⊗ Δ) (Setoids ℓ ℓ)}
-  → {γ : DinaturalTransformation {C = Δ ⊗ Γ} Φ (P ∘F (v1 ∘F contra ※ v1 ∘F cov))} -- v1 and v2 only covariant
-  → cut-nat {Φ = Φ} {Q = P ∘F (v1 ∘F contra ※ v1 ∘F cov)} {P = P} γ
+  → {γ : DinaturalTransformation {C = Δ ⊗ Γ} Φ (P ∘F (v1 ∘F ctr  ※ v1 ∘F cov))} -- v1 and v2 only covariant
+  → cut-nat {Φ = Φ} {Q = P ∘F (v1 ∘F ctr  ※ v1 ∘F cov)} {P = P} γ
       (iso-helper P <∘ π₁ {P = P ∘F (v1 ∘F cov ※ v2 ∘F cov)})
   ≃ᵈ γ
 cut-nat-idʳ {Φ = Φ} {P} {γ = γ} = Func.cong (γ.α _)
@@ -186,9 +186,9 @@ collapse-helper-simple : ∀ {Δ Γ : Category o ℓ e}
     {Φ : Functor (op (Δ ⊗ Γ) ⊗ Δ ⊗ Γ) (Setoids ℓ ℓ)}
     {P : Functor (op Δ ⊗ Δ) (Setoids ℓ ℓ)}
   → DinaturalTransformation {C = op Δ ⊗ Δ ⊗ Γ}
-                            (Φ ∘F ((v1 ∘F cov ※ v3 ∘F contra) ※ v2 ∘F cov ※ v3 ∘F cov)) -- v1 and v2 only covariant
+                            (Φ ∘F ((v1 ∘F cov ※ v3 ∘F ctr ) ※ v2 ∘F cov ※ v3 ∘F cov)) -- v1 and v2 only covariant
                             (P ∘F (v1 ∘F cov ※ v2 ∘F cov))
-  → DinaturalTransformation {C = Δ ⊗ Γ} Φ (P ∘F (v1 ∘F contra ※ v1 ∘F cov))
+  → DinaturalTransformation {C = Δ ⊗ Γ} Φ (P ∘F (v1 ∘F ctr  ※ v1 ∘F cov))
 collapse-helper-simple {Δ = Δ} {Γ} {Φ} {P} β = dtHelper record
   { α = λ { (D , G) → record { to = λ { v → β.α (D , D , G) $ v } ; cong = λ { v → Func.cong (β.α _) v } } }
   ; commute = λ { {X , Y} {Z , W} (f , g) {x} {y} e →
@@ -213,7 +213,7 @@ cut-din-idʳ : ∀ {Δ Γ : Category o ℓ e}
     {Φ : Functor (op (Δ ⊗ Γ) ⊗ Δ ⊗ Γ) (Setoids ℓ ℓ)}
     {P : Functor (op Δ ⊗ Δ) (Setoids ℓ ℓ)}
   → {α : DinaturalTransformation {C = op Δ ⊗ Δ ⊗ Γ}
-                            (Φ ∘F ((v1 ∘F cov ※ v3 ∘F contra) ※ v2 ∘F cov ※ v3 ∘F cov)) -- v1 and v2 only covariant
+                            (Φ ∘F ((v1 ∘F cov ※ v3 ∘F ctr ) ※ v2 ∘F cov ※ v3 ∘F cov)) -- v1 and v2 only covariant
                             (P ∘F (v1 ∘F cov ※ v2 ∘F cov))} -- v1 and v2 only covariant
   → cut-din {Φ = Φ} {Q = P ∘F (πˡ ∘F πˡ ※ πˡ ∘F πʳ)} α π₁ ≃ᵈ collapse-helper-simple {Φ = Φ} {P = P} α
 cut-din-idʳ {Φ = Φ} {P} {α = α} = Func.cong (α.α _)
@@ -225,9 +225,9 @@ helper-product-iso : ∀ {Δ Γ : Category o ℓ e}
     {Φ : Functor (op (Δ ⊗ Γ) ⊗ Δ ⊗ Γ) (Setoids ℓ ℓ)}
     {P : Functor (op Δ ⊗ Δ) (Setoids ℓ ℓ)}
   → NaturalTransformation {C = op (op Δ ⊗ Δ ⊗ Γ) ⊗ op Δ ⊗ Δ ⊗ Γ}
-      ((SetA.-×- ∘F (P ∘F (v1 ∘F contra ※ v1 ∘F cov) ※ Φ)) ∘F
-       ((v1 ∘F cov ※ v3 ∘F contra) ※ v2 ∘F cov ※ v3 ∘F cov))
-      (SetA.-×- ∘F (P ∘F (v1 ∘F cov ※ v2 ∘F cov) ※ Φ ∘F ((v1 ∘F cov ※ v3 ∘F contra) ※ v2 ∘F cov ※ v3 ∘F cov)))
+      ((SetA.-×- ∘F (P ∘F (v1 ∘F ctr  ※ v1 ∘F cov) ※ Φ)) ∘F
+       ((v1 ∘F cov ※ v3 ∘F ctr ) ※ v2 ∘F cov ※ v3 ∘F cov))
+      (SetA.-×- ∘F (P ∘F (v1 ∘F cov ※ v2 ∘F cov) ※ Φ ∘F ((v1 ∘F cov ※ v3 ∘F ctr ) ※ v2 ∘F cov ※ v3 ∘F cov)))
 helper-product-iso {Δ = Δ} {Γ} {Φ} {P} = ntHelper record
   { η = λ X → record { to = λ x → x ; cong = λ e → e }
   ; commute = λ { x (p , q) → Func.cong (P.₁ _) p , Func.cong (Φ.₁ _) q }
@@ -254,8 +254,8 @@ helper-project-simple {Φ = Φ} {P = P} {Q = Q} = ntHelper record
 cut-din-idˡ : ∀ {Δ Γ : Category o ℓ e}
     {Φ Q : Functor (op (Δ ⊗ Γ) ⊗ Δ ⊗ Γ) (Setoids ℓ ℓ)}
     {P : Functor (op Δ ⊗ Δ) (Setoids ℓ ℓ)}
-  → {γ : DinaturalTransformation {C = Δ ⊗ Γ} (SetA.-×- ∘F (P ∘F (v1 ∘F contra ※ v1 ∘F cov) ※ Φ)) Q}
-  → cut-din {Φ = SetA.-×- ∘F (P ∘F (v1 ∘F contra ※ v1 ∘F cov) ※ Φ)} {Q = Q} {P = P}
+  → {γ : DinaturalTransformation {C = Δ ⊗ Γ} (SetA.-×- ∘F (P ∘F (v1 ∘F ctr  ※ v1 ∘F cov) ※ Φ)) Q}
+  → cut-din {Φ = SetA.-×- ∘F (P ∘F (v1 ∘F ctr  ※ v1 ∘F cov) ※ Φ)} {Q = Q} {P = P}
            (π₁ ∘> helper-product-iso {Φ = Φ} {P = P})
            (γ ∘> helper-project-simple {Φ = Φ} {P = P ∘F (πˡ ∘F πˡ ※ πˡ ∘F πʳ)} {Q = P ∘F (πˡ ∘F πˡ ※ πˡ ∘F πʳ)})
   ≃ᵈ γ

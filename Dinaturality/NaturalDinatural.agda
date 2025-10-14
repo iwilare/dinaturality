@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --without-K #-}
+{-# OPTIONS --safe --without-K --lossy-unification #-}
 
 {-
   Correspondence between dinaturals into Set and certain natural transformations with $hom$ in the domain.
@@ -69,8 +69,8 @@ dinat⇒homnat {A = A} {P = P} {Q = Q} α = ntHelper record
               Q.₁ (id , f2) $ Q.₁ (id , x ∘ f1) $ α.α Y1 $ P.₁ (x ∘ f1 , id) $ P.₁ (f2 , id) $ _
                 ≈⟨ Func.cong (Q.₁ _) (α.commute (x ∘ f1) PS.refl) ⟩
               Q.₁ (id , f2) $ Q.₁ (x ∘ f1 , id) $ α.α X2 $ P.₁ (id , x ∘ f1) $ P.₁ (f2 , id) $ _
-                ≈⟨ [ Q ]-resp-square (assoc ∙ id-2 ∙ rw eq1 , A.refl) (Func.cong (α.α X2)
-                  ([ P ]-resp-square (A.refl , assoc ∙ (id-2 ∙ rw eq1)) PS.refl)) ⟩
+                ≈⟨ [ Q ]-resp-square (assoc ∙ id-2 ∙ rw eq1 , A.refl {x = f2 ∘ id}) (Func.cong (α.α X2)
+                  ([ P ]-resp-square (A.refl {x = f2 ∘ id} , assoc ∙ (id-2 ∙ rw eq1)) PS.refl)) ⟩
               Q.₁ (f1 , f2) $ Q.₁ (y , id) $ α.α X2 $ P.₁ (id , y) $ P.₁ (f2 , f1) $ _
                 ≈⟨ Func.cong (Q.₁ _) (α.op-commute y PS.refl) ⟩
               Q.₁ (f1 , f2) $ Q.₁ (id , y) $ α.α X1 $ P.₁ (y , id) $ P.F₁ (f2 , f1) $ _ ∎ }

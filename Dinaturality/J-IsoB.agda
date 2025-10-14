@@ -44,6 +44,7 @@ private
     A B C : Category o ℓ e
 
 open import Dinaturality.Product renaming (π₁ to π₁ᵈ)
+open import Dinaturality.HelperVariables
 
 infixr 5 _⊗_
 infixr 5 _$_
@@ -56,34 +57,6 @@ private
   module Set {ℓ} = CartesianClosed (Setoids-CCC ℓ)
   module SetC {ℓ} = Cartesian (Set.cartesian {ℓ})
   module SetA {ℓ} = BinaryProducts (SetC.products {ℓ})
-
-{-
-  We define here some helpers with variables in order to
-  improve readibility of the main rule.
--}
-
--- modifier on a single variable
-pos = πʳ
-neg = πˡ
-
--- series of variables
-positives = πʳ
-negatives = πˡ
-
--- variables out of 2-tuple
-
-va = πˡ
-vb = πʳ
-
--- variables out of 3-tuple
-
-v1 = πˡ
-
-v2 : Functor (Product A (Product B C)) B
-v2 = πˡ ∘F πʳ
-
-v3 : Functor (Product A (Product B C)) C
-v3 = πʳ ∘F πʳ
 
 ------------------------------------------------------------------------------------------
 
@@ -101,9 +74,9 @@ J⁻¹⨟J-iso : ∀ {o} {A Γ : Category o ℓ ℓ}
        (let module A = Category A)
        {Φ P : Functor (op (A ⊗ Γ) ⊗ (A ⊗ Γ)) (Setoids ℓ ℓ)}
        (h : DinaturalTransformation {C = A.op ⊗ A ⊗ Γ}
-        (SetA.-×- ∘F ((Hom[ A ][-,-] ∘F (v1 ∘F pos ※ v2 ∘F pos))
-                  ※ (Φ ∘F ((v2 ∘F neg ※ v3 ∘F neg) ※ v1 ∘F neg ※ v3 ∘F pos))))
-        (P ∘F ((v1 ∘F pos ※ v3 ∘F neg) ※ v2 ∘F pos ※ v3 ∘F pos)))
+        (SetA.-×- ∘F ((Hom[ A ][-,-] ∘F (v1 ∘F cov ※ v2 ∘F cov))
+                  ※ (Φ ∘F ((v2 ∘F ctr  ※ v3 ∘F ctr ) ※ v1 ∘F ctr  ※ v3 ∘F cov))))
+        (P ∘F ((v1 ∘F cov ※ v3 ∘F ctr ) ※ v2 ∘F cov ※ v3 ∘F cov)))
      → J {A = A} {Γ = Γ} {Φ = Φ} {P = P} (J⁻¹ {A = A} {Γ = Γ} {Φ = Φ} {P = P} h) ≃ᵈ h
 J⁻¹⨟J-iso {A = A} {Γ = Γ} {Φ = Φ} {P = P} h {a , B , X} {x1 , x2} {y1 , y2} (eq1 , eq2) =
   let open RS (F₀ P ((a , X) , B , X))

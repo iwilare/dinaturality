@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --without-K #-}
+{-# OPTIONS --safe --without-K --lossy-unification #-}
 
 {-
   Main rule for directed equality elimination (and introduction, via its inverse direction).
@@ -42,6 +42,8 @@ import Relation.Binary.Reasoning.Setoid as RS
 
 import Reason
 
+open import Dinaturality.HelperVariables
+
 private
   variable
     o ℓ e : Level
@@ -63,34 +65,6 @@ private
   module SetC {ℓ} = Cartesian (Set.cartesian {ℓ})
   module SetA {ℓ} = BinaryProducts (SetC.products {ℓ})
 
-{-
-  We define here some helpers with variables in order to
-  improve readibility of the main rule.
--}
-
--- modifier on a single variable
-pos = πʳ
-neg = πˡ
-
--- series of variables
-positives = πʳ
-negatives = πˡ
-
--- variables out of 2-tuple
-
-va = πˡ
-vb = πʳ
-
--- variables out of 3-tuple
-
-v1 = πˡ
-
-v2 : Functor (Product A (Product B Γ)) B
-v2 = πˡ ∘F πʳ
-
-v3 : Functor (Product A (Product B Γ)) Γ
-v3 = πʳ ∘F πʳ
-
 ------------------------------------------------------------------------------------------
 
 {-
@@ -108,9 +82,9 @@ J :
       Φ
       P
   → DinaturalTransformation {C = A.op ⊗ A ⊗ Γ}
-      (SetA.-×- ∘F ((Hom[ A ][-,-] ∘F (v1 ∘F pos ※ v2 ∘F pos))
-                 ※ (Φ ∘F ((v2 ∘F neg ※ v3 ∘F neg) ※ v1 ∘F neg ※ v3 ∘F pos))))
-      (P ∘F ((v1 ∘F pos ※ v3 ∘F neg) ※ v2 ∘F pos ※ v3 ∘F pos))
+      (SetA.-×- ∘F ((Hom[ A ][-,-] ∘F (v1 ∘F cov ※ v2 ∘F cov))
+                 ※ (Φ ∘F ((v2 ∘F ctr  ※ v3 ∘F ctr ) ※ v1 ∘F ctr  ※ v3 ∘F cov))))
+      (P ∘F ((v1 ∘F cov ※ v3 ∘F ctr ) ※ v2 ∘F cov ※ v3 ∘F cov))
 J {A = A} {Γ = Γ} {Φ = Φ} {P = P} h = dtHelper (record
   { α = λ { (A , B , X) → record
     -- Definition of the main map.

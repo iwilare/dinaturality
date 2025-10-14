@@ -5,7 +5,7 @@
   restricts to a dinatural transformation Δ : F(x,¬x,x,¬x) → G(x,¬x,x,¬x), where naturality in both variables
   is collapsed to a single variable. This is a special case of the reindexing operation
   given in (Dinaturality/Reindexing) for F = Swap. The case of having a natural as input
-  is obtained by selecting F and G to be mute in their contravariant variables
+  is obtained by selecting F and G to be mute in their ctr variant variables
   (but still have signature F, G : Cᵒᵖ ⊗ C → D).
 -}
 

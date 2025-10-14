@@ -58,7 +58,7 @@ private
 
 -- modifier on a single variable
 cov = πʳ
-contra = πˡ
+ctr  = πˡ
 
 -- variables out of 2-tuple
 
@@ -79,9 +79,9 @@ cut-din : ∀
   {Φ Q : Functor (op (Δ ⊗ Γ) ⊗ Δ ⊗ Γ) (Setoids ℓ ℓ)}
   {P : Functor (op Δ ⊗ Δ) (Setoids ℓ ℓ)}
   → DinaturalTransformation {C = op Δ ⊗ Δ ⊗ Γ}
-                            (Φ ∘F ((v1 ∘F cov ※ v3 ∘F contra) ※ v2 ∘F cov ※ v3 ∘F cov)) -- v1 and v2 only covariant
+                            (Φ ∘F ((v1 ∘F cov ※ v3 ∘F ctr ) ※ v2 ∘F cov ※ v3 ∘F cov)) -- v1 and v2 only covariant
                             (P ∘F (v1 ∘F cov ※ v2 ∘F cov)) -- v1 and v2 only covariant
-  → DinaturalTransformation {C = Δ ⊗ Γ} (SetA.-×- ∘F (P ∘F (v1 ∘F contra ※ v1 ∘F cov) ※ Φ)) Q
+  → DinaturalTransformation {C = Δ ⊗ Γ} (SetA.-×- ∘F (P ∘F (v1 ∘F ctr  ※ v1 ∘F cov) ※ Φ)) Q
   → DinaturalTransformation Φ Q
 cut-din {Δ = Δ} {Γ = Γ} {Φ = Φ} {Q} {P} α γ = dtHelper record
   { α = λ { (X , Z) → record
@@ -117,11 +117,11 @@ cut-din {Δ = Δ} {Γ = Γ} {Φ = Φ} {Q} {P} α γ = dtHelper record
 cut-nat : ∀
   {Φ Q : Functor (op (Δ ⊗ Γ) ⊗ Δ ⊗ Γ) (Setoids ℓ ℓ)}
   {P : Functor (op Δ ⊗ Δ) (Setoids ℓ ℓ)}
-  → DinaturalTransformation {C = Δ ⊗ Γ} Φ (P ∘F (v1 ∘F contra ※ v1 ∘F cov))
+  → DinaturalTransformation {C = Δ ⊗ Γ} Φ (P ∘F (v1 ∘F ctr  ※ v1 ∘F cov))
   → DinaturalTransformation {C = op Δ ⊗ Δ ⊗ Γ}
                             (SetA.-×- ∘F (P ∘F (v1 ∘F cov ※ v2 ∘F cov) -- v1 and v2 only covariant
-                                       ※ Φ ∘F ((v2 ∘F contra ※ v3 ∘F contra) ※ v1 ∘F contra ※ v3 ∘F cov))) -- v1 and v2 only contravariant
-                            (Q ∘F ((v1 ∘F cov ※ v3 ∘F contra) ※ v2 ∘F cov ※ v3 ∘F cov)) -- v1 and v2 only covariant
+                                       ※ Φ ∘F ((v2 ∘F ctr  ※ v3 ∘F ctr ) ※ v1 ∘F ctr  ※ v3 ∘F cov))) -- v1 and v2 only ctr variant
+                            (Q ∘F ((v1 ∘F cov ※ v3 ∘F ctr ) ※ v2 ∘F cov ※ v3 ∘F cov)) -- v1 and v2 only covariant
   → DinaturalTransformation Φ Q
 cut-nat {Δ = Δ} {Γ = Γ} {Φ = Φ} {Q} {P} γ α = dtHelper (record
   { α = λ { (X , Z) → record

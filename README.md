@@ -27,7 +27,7 @@ $ agda --safe ./All.agda +RTS -M16G  # Recommended flags for Agda.
 
 > [!WARNING]
 > Most of the files contained here are particularly slow to typecheck and require considerable memory, and might run out of memory even with >8 GB allocated.
-> The recommended flags for Agda under which this formalization has been tested are `+RTS -M16G`, which should ensure that eventually every file compiles.
+> The recommended flags for Agda under which this formalization has been tested are at least `+RTS -M16G`, which should ensure that eventually every file compiles.
 
 The flake output `agda-html` can be used to typecheck and build the HTML for the `All.agda` file (the above flags are already active):
 

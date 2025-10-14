@@ -40,7 +40,7 @@
   ∙ x ∙ the functor computing the pointwise product of presheaves, with ∙ ⇒ ∙
   the functor computing the pointwise exponential is the pointwise exponential of presheaves,
   and ᵒᵖ is the operation sending a functor to its opposite *seen as a functor*.
-  Note that this isomorphism is contravariant in the first two arguments (since they appear
+  Note that this isomorphism is ctr variant in the first two arguments (since they appear
   on the left of the dinaturality functor) and covariant in the last.
 -}
 
@@ -151,7 +151,7 @@ module _ {ℓ} (Γ : Category ℓ ℓ ℓ) where
 
   -- The next implicit arguments to Dinat are needed because of --lossy-unification.
 
-  -- The functor given by (A, B, Φ) ↦ Dinat(A × B, Φ), contravariant in A, B, and covariant in Φ.
+  -- The functor given by (A, B, Φ) ↦ Dinat(A × B, Φ), ctr variant in A, B, and covariant in Φ.
   -- Crucially, we use here the `PBP.-×-` which, as a whole, is the pointwise product of presheaves.
   -- The signature of `PBP.-×-` is `Functor (C ⊗ C) C` where C := Functors (op Γ ⊗ Γ) (Setoids ℓ ℓ).
   functor-↑ : Functor ((op (Functors (op Γ ⊗ Γ) (Setoids ℓ ℓ))
@@ -160,7 +160,7 @@ module _ {ℓ} (Γ : Category ℓ ℓ ℓ) where
                   (Setoids (sucℓ ℓ) ℓ)
   functor-↑ = Dinats {Γ = Γ} {Δ = Setoids ℓ ℓ} ∘F (Functor.op PBP.-×- ∘F πˡ ※ πʳ)
 
-  -- The functor given by (A, B, Φ) ↦ Dinat(B, Fᵒᵖ ⇒ Φ), contravariant in A, B, and covariant in Φ.
+  -- The functor given by (A, B, Φ) ↦ Dinat(B, Fᵒᵖ ⇒ Φ), ctr variant in A, B, and covariant in Φ.
   functor-↓ : Functor ((op (Functors (op Γ ⊗ Γ) (Setoids ℓ ℓ))
                      ⊗ op (Functors (op Γ ⊗ Γ) (Setoids ℓ ℓ)))
                      ⊗    Functors (op Γ ⊗ Γ) (Setoids ℓ ℓ))

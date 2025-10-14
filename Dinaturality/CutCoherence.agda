@@ -88,8 +88,8 @@ helper-coherence-prop-weaken : ∀ {Δ Γ : Category o ℓ e}
     {Φ : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
     {P Q : Functor Δ (Setoids ℓ ℓ)}
   → NaturalTransformation {C = op (Δ ⊗ Γ) ⊗ Δ ⊗ Γ}
-    (SetA.-×- ∘F ((Q ∘F cov) ∘F (v1 ∘F contra ※ v1 ∘F cov) ※ SetA.-×- ∘F (P ∘F va ∘F cov ※ Φ ∘F (vb ∘F contra ※ vb ∘F cov))))
-    (SetA.-×- ∘F (Q ∘F va ∘F cov ※ Φ ∘F (vb ∘F contra ※ vb ∘F cov)))
+    (SetA.-×- ∘F ((Q ∘F cov) ∘F (v1 ∘F ctr  ※ v1 ∘F cov) ※ SetA.-×- ∘F (P ∘F va ∘F cov ※ Φ ∘F (vb ∘F ctr  ※ vb ∘F cov))))
+    (SetA.-×- ∘F (Q ∘F va ∘F cov ※ Φ ∘F (vb ∘F ctr  ※ vb ∘F cov)))
 helper-coherence-prop-weaken {Φ = Φ} {P = P} {Q = Q} = ntHelper record
   { η = λ X → record
     { to = λ { (q , p , f) → (q , f) }
@@ -110,11 +110,11 @@ helper-coherence-ctx-weaken-left-side : ∀ {Δ Γ : Category o ℓ e}
     {Φ : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
     {P Q : Functor Δ (Setoids ℓ ℓ)}
   → DinaturalTransformation {C = Δ ⊗ Γ}
-    (SetA.-×- ∘F (P ∘F va ∘F cov ※ Φ ∘F (vb ∘F contra ※ vb ∘F cov)))
+    (SetA.-×- ∘F (P ∘F va ∘F cov ※ Φ ∘F (vb ∘F ctr  ※ vb ∘F cov)))
       (Q ∘F va ∘F cov)
   → DinaturalTransformation {C = op Δ ⊗ Δ ⊗ Γ}
-      ((SetA.-×- ∘F (P ∘F va ∘F cov ※ Φ ∘F (vb ∘F contra ※ vb ∘F cov)))
-                 ∘F ((v1 ∘F cov ※ v3 ∘F contra) ※ v2 ∘F cov ※ v3 ∘F cov))
+      ((SetA.-×- ∘F (P ∘F va ∘F cov ※ Φ ∘F (vb ∘F ctr  ※ vb ∘F cov)))
+                 ∘F ((v1 ∘F cov ※ v3 ∘F ctr ) ※ v2 ∘F cov ※ v3 ∘F cov))
       ((Q ∘F cov) ∘F (v1 ∘F cov ※ v2 ∘F cov))
 helper-coherence-ctx-weaken-left-side {Φ = Φ} {P = P} {Q = Q} α = dtHelper record
   { α = λ { (X , Y , Z) → record { to = λ x → α.α (Y , Z) $ x ; cong = Func.cong (α.α _) } }
@@ -129,7 +129,7 @@ helper-coherence-ctx-weaken-left-side {Φ = Φ} {P = P} {Q = Q} α = dtHelper re
 -- Could be implemented directly using combinators, kept here for readibility.
 helper-coherence-simple-cov-iso : ∀ {Δ Γ : Category o ℓ e}
     {Q : Functor Δ (Setoids ℓ ℓ)}
-  → NaturalTransformation {C = op (Δ ⊗ Γ) ⊗ Δ ⊗ Γ} (Q ∘F va ∘F cov) ((Q ∘F cov) ∘F (v1 ∘F contra ※ v1 ∘F cov))
+  → NaturalTransformation {C = op (Δ ⊗ Γ) ⊗ Δ ⊗ Γ} (Q ∘F va ∘F cov) ((Q ∘F cov) ∘F (v1 ∘F ctr  ※ v1 ∘F cov))
 helper-coherence-simple-cov-iso {Q = Q} = ntHelper record
   { η = λ X → record { to = λ x → x ; cong = λ e → e }
   ; commute = λ { (f , g) x → Func.cong (Q.₁ _) x }
@@ -142,12 +142,12 @@ helper-coherence-simple-cov-iso {Q = Q} = ntHelper record
 helper-coherence-ctx-prop-weaken-right-side : ∀ {Δ Γ : Category o ℓ e}
     {Φ : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
     {P Q R : Functor Δ (Setoids ℓ ℓ)}
-  → DinaturalTransformation {C = Δ ⊗ Γ} (SetA.-×- ∘F (Q ∘F va ∘F cov ※ Φ ∘F (vb ∘F contra ※ vb ∘F cov))) (R ∘F va ∘F cov)
+  → DinaturalTransformation {C = Δ ⊗ Γ} (SetA.-×- ∘F (Q ∘F va ∘F cov ※ Φ ∘F (vb ∘F ctr  ※ vb ∘F cov))) (R ∘F va ∘F cov)
   → DinaturalTransformation {C = op Δ ⊗ Δ ⊗ Γ}
       (SetA.-×- ∘F ((Q ∘F cov) ∘F (v1 ∘F cov ※ v2 ∘F cov) ※
-      (SetA.-×- ∘F (P ∘F va ∘F cov ※ Φ ∘F (vb ∘F contra ※ vb ∘F cov)))
-         ∘F ((v2 ∘F contra ※ v3 ∘F contra) ※ v1 ∘F contra ※ v3 ∘F cov)))
-      ((R ∘F va ∘F cov) ∘F ((v1 ∘F cov ※ v3 ∘F contra) ※ v2 ∘F cov ※ v3 ∘F cov))
+      (SetA.-×- ∘F (P ∘F va ∘F cov ※ Φ ∘F (vb ∘F ctr  ※ vb ∘F cov)))
+         ∘F ((v2 ∘F ctr  ※ v3 ∘F ctr ) ※ v1 ∘F ctr  ※ v3 ∘F cov)))
+      ((R ∘F va ∘F cov) ∘F ((v1 ∘F cov ※ v3 ∘F ctr ) ※ v2 ∘F cov ※ v3 ∘F cov))
 helper-coherence-ctx-prop-weaken-right-side {Φ = Φ} {P = P} {Q = Q} {R = R} β = dtHelper record
   { α = λ { (X , Y , Z) → record
     { to = λ { (p , q , r) → β.α (Y , Z) $ (p , r) }
@@ -168,13 +168,13 @@ helper-coherence-ctx-prop-weaken-right-side {Φ = Φ} {P = P} {Q = Q} {R = R} β
 cut-coherence : ∀ {Δ Γ : Category o ℓ e}
     {Φ : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
     {P Q R : Functor Δ (Setoids ℓ ℓ)}
-  → {α : DinaturalTransformation {C = Δ ⊗ Γ} (SetA.-×- ∘F (P ∘F va ∘F cov ※ Φ ∘F (vb ∘F contra ※ vb ∘F cov))) (Q ∘F va ∘F cov)}
-  → {β : DinaturalTransformation {C = Δ ⊗ Γ} (SetA.-×- ∘F (Q ∘F va ∘F cov ※ Φ ∘F (vb ∘F contra ※ vb ∘F cov))) (R ∘F va ∘F cov)}
-  → cut-din {Φ = SetA.-×- ∘F (P ∘F va ∘F cov ※ Φ ∘F (vb ∘F contra ※ vb ∘F cov))} {Q = R ∘F va ∘F cov} {P = Q ∘F cov}
+  → {α : DinaturalTransformation {C = Δ ⊗ Γ} (SetA.-×- ∘F (P ∘F va ∘F cov ※ Φ ∘F (vb ∘F ctr  ※ vb ∘F cov))) (Q ∘F va ∘F cov)}
+  → {β : DinaturalTransformation {C = Δ ⊗ Γ} (SetA.-×- ∘F (Q ∘F va ∘F cov ※ Φ ∘F (vb ∘F ctr  ※ vb ∘F cov))) (R ∘F va ∘F cov)}
+  → cut-din {Φ = SetA.-×- ∘F (P ∘F va ∘F cov ※ Φ ∘F (vb ∘F ctr  ※ vb ∘F cov))} {Q = R ∘F va ∘F cov} {P = Q ∘F cov}
          (helper-coherence-ctx-weaken-left-side {Φ = Φ} {P = P} {Q = Q} α)
          (β ∘> helper-coherence-prop-weaken {Φ = Φ} {P = P} {Q = Q})
           ≃ᵈ
-    cut-nat {Φ = SetA.-×- ∘F (P ∘F va ∘F cov ※ Φ ∘F (vb ∘F contra ※ vb ∘F cov))} {Q = R ∘F va ∘F cov} {P = Q ∘F cov}
+    cut-nat {Φ = SetA.-×- ∘F (P ∘F va ∘F cov ※ Φ ∘F (vb ∘F ctr  ※ vb ∘F cov))} {Q = R ∘F va ∘F cov} {P = Q ∘F cov}
          (helper-coherence-simple-cov-iso {Q = Q} <∘ α)
          (helper-coherence-ctx-prop-weaken-right-side {Φ = Φ} {P = P} {Q = Q} {R = R} β)
 cut-coherence {Δ = Δ} {Γ = Γ} {Φ = Φ} {P} {Q} {R} {α = α} {β = β} (p , q) = Func.cong (β.α _) (Func.cong (α.α _) (p , q) , q)
