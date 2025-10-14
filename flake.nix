@@ -14,14 +14,13 @@
           src = builtins.path { path = ./.; name = "dinaturality"; };
           everythingFile = ./All.agda;
           buildInputs = agdaDependencies;
-          outputs = [ "out" "html" ];
 
           installPhase = '''';
 
           buildPhase = ''
             runHook preBuild
             # Make sure this builds with --safe
-            agda --html --html-dir=$html --highlight-occurrences --safe All.agda +RTS -M16G
+            agda --html --html-dir=$out --highlight-occurrences --safe All.agda +RTS -M32G
             runHook postBuild
           '';
 

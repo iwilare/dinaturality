@@ -9,7 +9,7 @@ This Agda formalization supports the claims made in the paper about the semantic
 
 # List of claims
 
-1. The semantics for all the rules in Figure 11 is formalized in Agda. A list of each rule and where it can be found is given in `All.agda`.
+1. The semantics for all the rules in Figure 11 is formalized in Agda. A list of rules contained in each file is given in `All.agda`.
 2. Theorem 4.5 is formalized in [Dinaturality.GroupoidCompose](Dinaturality/GroupoidCompose.agda).
 3. Theorem 4.6 is formalized in [Dinaturality.NaturalDinatural](Dinaturality/NaturalDinatural.agda).
 4. Each component of Theorem 5.1, describing the semantics of each rule, is formalized in Agda with each rule in its appropriate module, **except for the rules related to naturality in the equational theory** which are **not** formalized.
@@ -30,8 +30,9 @@ To save on typechecking time and effort, we do not use combinators which are def
 1. Install [Nix](https://nixos.org/download/), and enable [flakes](https://nixos.wiki/wiki/Flakes). Tested with Nix 2.29.0.
 2. Run `nix develop`. This puts you in a `bash` shell with a working Agda installation with all libraries installed.
 3. Run `nix build`. This `--safe`ly typechecks the entire formalization and builds browsable HTML files.
+4. The build is successful if the above command successfuly terminates. The formalization files can be browsed interactively in the `html/` folder, starting from the `All.agda` file.
 
-Using Nix ensures that all dependencies are pinned to their correct versions by `flake.lock`.
+Using Nix ensures that all dependencies are pinned by `flake.lock` to their correct versions.
 
 ### Option 2
 
@@ -39,7 +40,7 @@ Using Nix ensures that all dependencies are pinned to their correct versions by 
 2. Install the [`agda-categories`](https://github.com/agda/agda-categories) library `v0.2.0`.
 3. Install the [`agda-stdlib`](https://github.com/agda/agda-stdlib) library `v2.0`.
 4. Run `agda --html --html-dir=html/ --highlight-occurrences --safe All.agda +RTS -M16G`.
-5. Browse the formalization, starting from the `All.agda` file.
+5. The build is successful if the above command successfuly terminates. The formalization files can be browsed interactively in the `html/` folder, starting from the `All.agda` file.
 
 # Description
 
