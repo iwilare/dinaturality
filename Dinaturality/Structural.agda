@@ -53,7 +53,7 @@ private
 
 private
   variable
-    Φ Q P R : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)
+    Φ P Q R : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)
 
 private
   module Set {ℓ} = CartesianClosed (Setoids-CCC ℓ)
@@ -64,34 +64,34 @@ pattern * = lift Data.Unit.tt
 
 -- Weakening, i.e., precomposition with projections.
 
-π₁-cutˡ : DinaturalTransformation Φ P
-        → DinaturalTransformation (SetA.-×- ∘F (Φ ※ Q)) P
-π₁-cutˡ α = dtHelper record
-    { α = λ X → proj₁ₛ [⨾] α.α X
-    ; commute = λ z → α.commute z ⟨∘⟩ proj₁
-    } where module α = DinaturalTransformation α
-
-π₂-cutˡ : DinaturalTransformation Φ P
-        → DinaturalTransformation (SetA.-×- ∘F (Q ※ Φ)) P
-π₂-cutˡ α = dtHelper record
+wk : DinaturalTransformation Φ Q
+        → DinaturalTransformation (SetA.-×- ∘F (P ※ Φ)) Q
+wk α = dtHelper record
     { α = λ X → proj₂ₛ [⨾] α.α X
     ; commute = λ z → α.commute z ⟨∘⟩ proj₂
     } where module α = DinaturalTransformation α
 
+wkʳ : DinaturalTransformation Φ Q
+        → DinaturalTransformation (SetA.-×- ∘F (Φ ※ P)) Q
+wkʳ α = dtHelper record
+    { α = λ X → proj₁ₛ [⨾] α.α X
+    ; commute = λ z → α.commute z ⟨∘⟩ proj₁
+    } where module α = DinaturalTransformation α
+
 -- (Propositional) contraction.
 
-Δ-cutˡ : DinaturalTransformation (SetA.-×- ∘F (Q ※ (SetA.-×- ∘F (Q ※ Φ)))) P
-       → DinaturalTransformation (SetA.-×- ∘F (Q ※ Φ)) P
-Δ-cutˡ α = dtHelper record
+contr : DinaturalTransformation (SetA.-×- ∘F (P ※ (SetA.-×- ∘F (P ※ Φ)))) Q
+       → DinaturalTransformation (SetA.-×- ∘F (P ※ Φ)) Q
+contr α = dtHelper record
   { α = λ X → < proj₁ₛ , < proj₁ₛ , proj₂ₛ >ₛ >ₛ [⨾] α.α X
   ; commute = λ z → α.commute z ⟨∘⟩ λ { (a , b) → (a , a , b) }
   } where module α = DinaturalTransformation α
 
 -- Swapping.
 
-swap-cut : DinaturalTransformation (SetA.-×- ∘F (Q ※ (SetA.-×- ∘F (R ※ Φ)))) P
-         → DinaturalTransformation (SetA.-×- ∘F (R ※ (SetA.-×- ∘F (Q ※ Φ)))) P
-swap-cut α = dtHelper record
+swap : DinaturalTransformation (SetA.-×- ∘F (P ※ (SetA.-×- ∘F (R ※ Φ)))) Q
+     → DinaturalTransformation (SetA.-×- ∘F (R ※ (SetA.-×- ∘F (P ※ Φ)))) Q
+swap α = dtHelper record
   { α = λ X → < proj₂ₛ [⨾] proj₁ₛ , < proj₁ₛ , proj₂ₛ [⨾] proj₂ₛ >ₛ >ₛ [⨾] α.α X
   ; commute = λ z → α.commute z ⟨∘⟩ λ { (a , b , c) → (b , a , c) }
   } where module α = DinaturalTransformation α
