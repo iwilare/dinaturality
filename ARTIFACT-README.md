@@ -27,9 +27,9 @@ To save on typechecking time and effort, we do not use combinators which are def
 
 ### Option 1 (Recommended)
 
-1. Install [Nix](https://nixos.org/download/), and enable [flakes](https://nixos.wiki/wiki/Flakes).
-2. Run `nix develop` to have a working Agda installation with all libraries installed.
-3. Run `nix build` to `--safe`ly typecheck the entire formalization and build browsable HTML files.
+1. Install [Nix](https://nixos.org/download/), and enable [flakes](https://nixos.wiki/wiki/Flakes). Tested with Nix 2.29.0.
+2. Run `nix develop`. This puts you in a `bash` shell with a working Agda installation with all libraries installed.
+3. Run `nix build`. This `--safe`ly typechecks the entire formalization and builds browsable HTML files.
 
 Using Nix ensures that all dependencies are pinned to their correct versions by `flake.lock`.
 
@@ -69,6 +69,7 @@ Running `agda --safe ./All.agda +RTS -M16G` on an AMD Ryzen 7 5800X (16) @ 3.792
 
 ## Requirements
 
+- `nix` 2.29.0 (Optional)
 - `agda` 2.6.4.1
 - `agda-categories` 0.2.0
 - `agda-stdlib` 2.0

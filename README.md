@@ -6,9 +6,9 @@ The formalization supports the claims made in the paper about the semantics usin
 
 ### Option 1
 
-1. Install [Nix](https://nixos.org/download/), and enable [flakes](https://nixos.wiki/wiki/Flakes).
-2. Run `nix develop` to have a working Agda installation.
-3. Run `nix build` to `--safe`ly typecheck the entire formalization and build browsable HTML files.
+1. Install [Nix](https://nixos.org/download/), and enable [flakes](https://nixos.wiki/wiki/Flakes). Tested with Nix 2.29.0.
+2. Run `nix develop`. This puts you in a `bash` shell with a working Agda installation with all libraries installed.
+3. Run `nix build`. This `--safe`ly typechecks the entire formalization and builds browsable HTML files.
 
 ### Option 2
 
