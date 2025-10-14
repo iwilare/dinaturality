@@ -1,8 +1,26 @@
-# Directed equality for (co)end calculus
+# Di- is for Directed: First-Order Directed Type Theory via Dinaturality
+
+This repository contains the Agda formalization for the POPL 2026 paper _"Di- is for Directed: First-Order Directed Type Theory via Dinaturality''_.
+
+The formalization supports the claims made in the paper about the semantics using categories, (di)functors, dipresheaves, and dinatural transformations. We do not formalize the syntax/metatheory of the type theory.
 
 ## How to run this
 
-Install [Nix](https://nixos.org/download/) [with flakes](https://nixos.wiki/wiki/Flakes) enabled, then run `nix develop` to have a working Agda installation. Alternatively, install the correct [Agda](https://agda.readthedocs.io/en/latest/getting-started/installation.html) version manually.
+### Option 1
+
+1. Install [Nix](https://nixos.org/download/), and enable [flakes](https://nixos.wiki/wiki/Flakes).
+2. Run `nix develop` to have a working Agda installation.
+3. Run `nix build` to `--safe`ly typecheck the entire formalization and build browsable HTML files.
+
+### Option 2
+
+1. Install [Agda](https://agda.readthedocs.io/en/latest/getting-started/installation.html) `v2.6.4.1` manually.
+2. Install the [`agda-categories`](https://github.com/agda/agda-categories) library `v0.2.0`.
+3. Install the [`agda-stdlib`](https://github.com/agda/agda-stdlib) library `v2.0`.
+4. Run `agda --html --html-dir=html/ --highlight-occurrences --safe All.agda +RTS -M16G`.
+5. Browse the formalization, starting from the `All.agda` file.
+
+# Description
 
 The file `All.agda` groups all formalization files for batch typechecking/inspection. Typecheck the code by running Agda in Safe Mode:
 ```bash
@@ -30,10 +48,6 @@ Naturality of the rules is only shown for the case of exponentials in [Dinatural
 Finding a workaround to fully formalize naturality for every rule is left for future work.
 
 Every file which typechecks is contained in the [All](All.agda) file.
-
-The formalization for the left relative adjunction in [Dinaturality/Sketch/HomRelativeAdjunction](Dinaturality/Sketch/HomRelativeAdjunction.agda) contains only a minimal formalization sketch. See the description at the top of the file.
-
-Files in the folder [Failure/](Dinaturality/Failure/) do not typecheck (on purpose), and they are not included in the [All](All.agda) file. They are just sanity checks to verify that something is not provable.
 
 ## Typechecking time
 

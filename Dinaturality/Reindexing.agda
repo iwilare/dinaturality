@@ -41,13 +41,13 @@ private
   _$_ = _⟨$⟩_
 
 -- Reindexing a dinatural with a difunctor F.
-reindexing : ∀ {o} {A Γ Δ : Category o ℓ ℓ}
+reindexing : ∀ {o} {Γ Δ : Category o ℓ e}
     {Φ : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
     {P : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
     (F : Functor (op Δ ⊗ Δ) Γ)
   → DinaturalTransformation Φ P
   → DinaturalTransformation (Φ ∘F ((Functor.op F ∘F Swap) ※ F)) (P ∘F ((Functor.op F ∘F Swap) ※ F))
-reindexing {A = A} {Γ = Γ} {Δ = Δ} {Φ = Φ} {P = P} F α = dtHelper (record
+reindexing {Γ = Γ} {Δ = Δ} {Φ = Φ} {P = P} F α = dtHelper (record
   { α = λ X → record { to = λ p → α.α (F.₀ (X , X)) $ p ; cong = Func.cong (α.α (F.₀ (X , X))) }
   ; commute = λ { {X} {Y} f {x} {y} eq →
     let open RS (P.₀ (F.₀ (Y , X) , F.₀ (X , Y))) in begin
@@ -71,7 +71,6 @@ reindexing {A = A} {Γ = Γ} {Δ = Δ} {Φ = Φ} {P = P} F α = dtHelper (record
     module Φ = Functor Φ
     module P = Functor P
     module ΦS {A} = Setoid (F₀ Φ A)
-    open Reason A
 
 -- Special case of reindexing combined with weakening.
 reindexing+weakening : ∀ {o} {A Γ : Category o ℓ ℓ}

@@ -1,5 +1,9 @@
 open import Dinaturality.Coend
 open import Dinaturality.CoendFunctor
+open import Dinaturality.Cut
+open import Dinaturality.CutAssociativity
+open import Dinaturality.CutCoherence
+open import Dinaturality.CutIdentities
 open import Dinaturality.DinaturalsFunctor
 open import Dinaturality.End
 open import Dinaturality.EndFunctor
