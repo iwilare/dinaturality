@@ -1,4 +1,4 @@
-{-# OPTIONS --safe --without-K --lossy-unification #-}
+{-# OPTIONS --safe --without-K #-}
 
 {-
   Main rule for directed equality elimination (and introduction, via its inverse direction).
