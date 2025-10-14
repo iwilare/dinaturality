@@ -1,4 +1,4 @@
-## _Di- is for Directed: First-Order Directed Type Theory via Dinaturality_
+## Di- is for Directed: First-Order Directed Type Theory via Dinaturality
 
 The formalization supports the claims made in the paper about the semantics using categories, (di)functors, dipresheaves, and dinatural transformations. We do not formalize the syntax/metatheory of the type theory.
 
