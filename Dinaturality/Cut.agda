@@ -2,6 +2,8 @@
 
 {-
   Composition between naturals and dinaturals.
+
+  Properties of these maps are defined in CutAssociativity, CutCoherence, CutIdentities.
 -}
 
 module Dinaturality.Cut where
@@ -34,6 +36,8 @@ import Relation.Binary.Reasoning.Setoid as RS
 
 import Reason
 
+open import Dinaturality.HelperVariables
+
 private
   variable
     o ℓ e : Level
@@ -55,25 +59,6 @@ private
   We define here some helpers with variables in order to
   improve readibility for the variables used in the entailments.
 -}
-
--- modifier on a single variable
-cov = πʳ
-ctr  = πˡ
-
--- variables out of 2-tuple
-
-va = πˡ
-vb = πʳ
-
--- variables out of 3-tuple
-
-v1 = πˡ
-
-v2 : Functor (Product A (Product B C)) B
-v2 = πˡ ∘F πʳ
-
-v3 : Functor (Product A (Product B C)) C
-v3 = πʳ ∘F πʳ
 
 cut-din : ∀
   {Φ Q : Functor (op (Δ ⊗ Γ) ⊗ Δ ⊗ Γ) (Setoids ℓ ℓ)}

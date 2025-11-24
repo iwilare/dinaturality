@@ -83,7 +83,7 @@ J :
       P
   → DinaturalTransformation {C = A.op ⊗ A ⊗ Γ}
       (SetA.-×- ∘F ((Hom[ A ][-,-] ∘F (v1 ∘F cov ※ v2 ∘F cov))
-                 ※ (Φ ∘F ((v2 ∘F ctr  ※ v3 ∘F ctr ) ※ v1 ∘F ctr  ※ v3 ∘F cov))))
+                 ※ (Φ ∘F ((v2 ∘F ctr ※ v3 ∘F ctr) ※ v1 ∘F ctr ※ v3 ∘F cov))))
       (P ∘F ((v1 ∘F cov ※ v3 ∘F ctr ) ※ v2 ∘F cov ※ v3 ∘F cov))
 J {A = A} {Γ = Γ} {Φ = Φ} {P = P} h = dtHelper (record
   { α = λ { (A , B , X) → record

@@ -7,9 +7,9 @@
 -- Helper library to quickly reason in agda-categories.
 open import Reason
 
--- Definition of ends and coends.
-open import Dinaturality.CoendFunctor
+-- Definition of parametric (co)ends.
 open import Dinaturality.EndFunctor
+open import Dinaturality.CoendFunctor
 
 -- Definition of functor of dinaturals, used in the example for naturality.
 open import Dinaturality.DinaturalsFunctor
@@ -24,17 +24,20 @@ open import Dinaturality.GroupoidCompose
 
 --------------------- Rules ------------------------
 
--- Naturality example using the functor of dinaturals. [Rules: (exp)]
+-- Naturality example using the functor of dinaturals, focusing on rule (exp).
 open import Dinaturality.NaturalityExample
 
 -- Identity dinatural transformation. [Rules: (var)]
+-- (Semantically, this captures the situation in which the context
+-- has a single hypothesis. In practice, the variable case is modeled using
+-- projections in Dinaturality.Product, since we work with propositional contexts
+-- which have a list of hypotheses and the var case simply projects away the correct one.)
 open import Dinaturality.Identity
 
--- Rules for coends. [Rules: (coend)]
-open import Dinaturality.Coend
-
--- Rules for ends. [Rules: (end)]
+-- Rules for ends and coends. [Rules: (coend), (end)]
 open import Dinaturality.End
+open import Dinaturality.Coend
+open import Dinaturality.Quantifiers
 
 -- Rules for cuts. [Rules: (cut-din), (cut-nat)]
 open import Dinaturality.Cut
@@ -59,8 +62,8 @@ open import Dinaturality.Refl
 
 ------ Propositional rules ------
 
--- Rules for exponentials. [Rules: (exp)]
-open import Dinaturality.Exponential
+-- Rules for polarized implication. [Rules: (exp)]
+open import Dinaturality.Implication
 
 -- Rules for conjunction and terminal. [Rules: (prod), (⊤)]
 open import Dinaturality.Product

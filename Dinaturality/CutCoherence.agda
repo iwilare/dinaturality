@@ -40,6 +40,7 @@ import Reason
 open import Dinaturality.Cut
 open import Dinaturality.Product using (π₁; π₂)
 open import Dinaturality.Reindexing using (reindexing)
+open import Dinaturality.HelperVariables
 
 private
   variable

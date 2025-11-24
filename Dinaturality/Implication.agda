@@ -1,12 +1,12 @@
 {-# OPTIONS --safe --without-K --lossy-unification #-}
 
 {-
-  We define the rules for exponentials and prove that they are isomorphisms.
+  We define the rules for implication and prove that they are isomorphisms.
 
   Naturality of this isomorphism is contained in `Dinaturality/NaturalityExample.agda`.
 -}
 
-module Dinaturality.Exponential where
+module Dinaturality.Implication where
 
 open import Level using (Level; _⊔_; Lift; lift) renaming (zero to zeroℓ; suc to sucℓ)
 
@@ -52,7 +52,7 @@ private
   module SetC {ℓ} = Cartesian (Set.cartesian {ℓ})
   module SetA {ℓ} = BinaryProducts (SetC.products {ℓ})
 
--- Bidirectional rules for exponentials.
+-- Bidirectional rules for implications.
 module _ {ℓ} {Γ : Category ℓ ℓ ℓ} where
 
   open import Categories.Category.Construction.Properties.Presheaves.CartesianClosed
@@ -66,7 +66,7 @@ module _ {ℓ} {Γ : Category ℓ ℓ ℓ} where
 
   -- We use this complicated formulation with the PBP module, containing the pointwise
   -- product of presheaves, in order to be able to later prove the naturality
-  -- of the maps in `Dinaturality/ExponentialNatural.agda`, which needs to use this functor.
+  -- of the maps in `Dinaturality/NaturalityExample.agda`, which needs to use this functor.
   -- The alternative, more direct, formulation would have been `SetA.-×- ∘F (A ※ Φ)`,
   -- postcomposing with the bifunctor taking the product of sets directly.
   lambda : {A B Φ : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
@@ -107,7 +107,7 @@ module _ {ℓ} {Γ : Category ℓ ℓ ℓ} where
           → lambda⁻¹ {A = A} {B = B} {Φ = Φ} (lambda {A = A} {B = B} {Φ = Φ} α) ≃ᵈ α
   lambda⨟lambda⁻¹-iso α (eq₁ , eq₂) = Func.cong (DinaturalTransformation.α α _) (eq₁ , eq₂)
 
-  -- Exponentials are functorial for dinaturals.
+  -- Implications are functorial for dinaturals. (This is not used in the main development.)
   ⇨-functor-dinat : ∀ {ℓ} {Γ : Category ℓ ℓ ℓ} {A Φ F′ G′ : Functor (op Γ ⊗ Γ) (Setoids ℓ ℓ)}
     → DinaturalTransformation F′ A
     → DinaturalTransformation Φ G′

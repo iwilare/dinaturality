@@ -4,7 +4,7 @@
   We show here an example of naturality for rule isomorphisms.
 
   In our formalization, we only formally prove naturality (in the dipresheaves)
-  for the rules for exponentials (exp) and (exp⁻¹).
+  for the rules for implications (exp) and (exp⁻¹).
 
   Naturality for other rules is particularly easy to verify on paper, (all rules
   defined here are defined parametrically in each of the dipresheaves given),
@@ -145,8 +145,8 @@ module _ {ℓ} (Γ : Category ℓ ℓ ℓ) where
   -}
   open import Dinaturality.DinaturalsFunctor using (Dinats)
 
-  -- Rules for exponentials and the proof that they are isomorphisms.
-  open import Dinaturality.Exponential using (lambda; lambda⁻¹; lambda⁻¹⨟lambda-iso; lambda⨟lambda⁻¹-iso)
+  -- Rules for implication and the proof that they are isomorphisms.
+  open import Dinaturality.Implication using (lambda; lambda⁻¹; lambda⁻¹⨟lambda-iso; lambda⨟lambda⁻¹-iso)
 
   -- The next implicit arguments to Dinat are needed because of --lossy-unification.
 

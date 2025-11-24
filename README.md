@@ -1,4 +1,4 @@
-## Di- is for Directed: First-Order Directed Type Theory via Dinaturality
+# Di- is for Directed: First-Order Directed Type Theory via Dinaturality
 
 The formalization supports the claims made in the paper about the semantics using categories, (di)functors, dipresheaves, and dinatural transformations. We do not formalize the syntax/metatheory of the type theory.
 
@@ -18,7 +18,7 @@ The formalization supports the claims made in the paper about the semantics usin
 4. Run `agda --html --html-dir=html/ --highlight-occurrences --safe All.agda +RTS -M16G`.
 5. Browse the formalization, starting from the `All.agda` file.
 
-# Description
+## Description
 
 The file `All.agda` groups all formalization files for batch typechecking/inspection. Typecheck the code by running Agda in Safe Mode:
 ```bash

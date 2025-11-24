@@ -1,7 +1,7 @@
 {-# OPTIONS --safe --without-K #-}
 
 {-
-  Rules for products and terminals for dinaturals.
+  Structural rules of the type theory, for weakening, contraction, swap.
 -}
 
 module Dinaturality.Structural where
@@ -65,23 +65,23 @@ pattern * = lift Data.Unit.tt
 -- Weakening, i.e., precomposition with projections.
 
 wk : DinaturalTransformation Φ Q
-        → DinaturalTransformation (SetA.-×- ∘F (P ※ Φ)) Q
+   → DinaturalTransformation (SetA.-×- ∘F (P ※ Φ)) Q
 wk α = dtHelper record
     { α = λ X → proj₂ₛ [⨾] α.α X
     ; commute = λ z → α.commute z ⟨∘⟩ proj₂
     } where module α = DinaturalTransformation α
 
 wkʳ : DinaturalTransformation Φ Q
-        → DinaturalTransformation (SetA.-×- ∘F (Φ ※ P)) Q
+    → DinaturalTransformation (SetA.-×- ∘F (Φ ※ P)) Q
 wkʳ α = dtHelper record
     { α = λ X → proj₁ₛ [⨾] α.α X
     ; commute = λ z → α.commute z ⟨∘⟩ proj₁
     } where module α = DinaturalTransformation α
 
--- (Propositional) ctr ction.
+-- (Propositional) contraction.
 
 contr : DinaturalTransformation (SetA.-×- ∘F (P ※ (SetA.-×- ∘F (P ※ Φ)))) Q
-       → DinaturalTransformation (SetA.-×- ∘F (P ※ Φ)) Q
+      → DinaturalTransformation (SetA.-×- ∘F (P ※ Φ)) Q
 contr α = dtHelper record
   { α = λ X → < proj₁ₛ , < proj₁ₛ , proj₂ₛ >ₛ >ₛ [⨾] α.α X
   ; commute = λ z → α.commute z ⟨∘⟩ λ { (a , b) → (a , a , b) }

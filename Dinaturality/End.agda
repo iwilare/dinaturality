@@ -33,6 +33,7 @@ import Relation.Binary.Reasoning.Setoid as RS
 
 import Reason
 
+open import Dinaturality.HelperVariables
 open import Dinaturality.EndFunctor using (endFunctor)
 
 private
@@ -63,7 +64,7 @@ endL : ∀ {o ℓ e} {A Γ : Category o ℓ e}
   {Φ : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
   {P : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
   → DinaturalTransformation Φ (endFunctor (P ∘F F-reorder))
-  → DinaturalTransformation (Φ ∘F (πʳ ∘F πˡ ※ πʳ ∘F πʳ)) P
+  → DinaturalTransformation (Φ ∘F (vb ∘F ctr ※ vb ∘F cov)) P
 endL {A = A} {Γ = Γ} {Φ = Φ} {P = P} α = dtHelper (record
       { α = λ { (X , G) → record
         { to = λ pxx → proj₁ (α.α G $ pxx) X
@@ -89,7 +90,7 @@ endL {A = A} {Γ = Γ} {Φ = Φ} {P = P} α = dtHelper (record
 endR : ∀ {o ℓ e} {A Γ : Category o ℓ e}
   {Φ : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
   {P : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
-  → DinaturalTransformation (Φ ∘F (πʳ ∘F πˡ ※ πʳ ∘F πʳ)) P
+  → DinaturalTransformation (Φ ∘F (vb ∘F ctr ※ vb ∘F cov)) P
   → DinaturalTransformation Φ (endFunctor (P ∘F F-reorder))
 endR {A = A} {Γ = Γ} {Φ = Φ} {P = P} α = dtHelper (record
       { α = λ X → record
@@ -120,7 +121,7 @@ endL⨟endR-iso α eq = Func.cong (DinaturalTransformation.α α _) eq
 endR⨟endL-iso : ∀ {o ℓ e} {A Γ : Category o ℓ e}
     {Φ : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
     {P : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
-    → (α : DinaturalTransformation (Φ ∘F (πʳ ∘F πˡ ※ πʳ ∘F πʳ)) P)
+    → (α : DinaturalTransformation (Φ ∘F (vb ∘F ctr ※ vb ∘F cov)) P)
     → endL {A = A} {Γ = Γ} {Φ = Φ} {P = P} (endR α) ≃ᵈ α
 endR⨟endL-iso α eq = Func.cong (DinaturalTransformation.α α _) eq
 

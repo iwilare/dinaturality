@@ -26,6 +26,8 @@ open Category using (op)
 import Categories.Morphism.Reasoning as MR
 import Relation.Binary.Reasoning.Setoid as RS
 
+open import Dinaturality.Identity
+
 import Reason
 
 private
@@ -59,6 +61,47 @@ groupoid-dinaturals-compose {A = A} {B = B} {F = F} {G = G} {H = H} g α β = dt
     module β = DinaturalTransformation β
     module G = Functor G
     module F = Functor F
+    module H = Functor H
+    module g = IsGroupoid g
+    module A = Reason A
+    open module B = Reason B
+
+groupoid-dinaturals-compose-idᵣ : ∀ {o} {A B : Category o ℓ ℓ} {F G : Functor (Product (op A) A) B}
+  → {g : IsGroupoid A}
+  → {α : DinaturalTransformation F G}
+  → groupoid-dinaturals-compose g α idDT ≃ᵈ α
+groupoid-dinaturals-compose-idᵣ {A = A} {B = B} {F = F} {G = G} {g} {α} = identityˡ where
+    module α = DinaturalTransformation α
+    module F = Functor F
+    module G = Functor G
+    module g = IsGroupoid g
+    module A = Reason A
+    open module B = Reason B
+
+groupoid-dinaturals-compose-idₗ : ∀ {o} {A B : Category o ℓ ℓ} {G H : Functor (Product (op A) A) B}
+  → {g : IsGroupoid A}
+  → {β : DinaturalTransformation G H}
+  → groupoid-dinaturals-compose g idDT β ≃ᵈ β
+groupoid-dinaturals-compose-idₗ {A = A} {B = B} {G = G} {H = H} {g} {β} = identityʳ where
+    module β = DinaturalTransformation β
+    module G = Functor G
+    module H = Functor H
+    module g = IsGroupoid g
+    module A = Reason A
+    open module B = Reason B
+
+groupoid-dinaturals-compose-assoc : ∀ {o} {A B : Category o ℓ ℓ} {F G H I : Functor (Product (op A) A) B}
+  → {g : IsGroupoid A}
+  → {α : DinaturalTransformation F G}
+  → {β : DinaturalTransformation G H}
+  → {γ : DinaturalTransformation H I}
+  → groupoid-dinaturals-compose g α (groupoid-dinaturals-compose g β γ)
+  ≃ᵈ groupoid-dinaturals-compose g (groupoid-dinaturals-compose g α β) γ
+groupoid-dinaturals-compose-assoc {A = A} {B = B} {F = F} {G = G} {H = H} {I = I} {g} {α} {β} {γ} = assoc where
+    module α = DinaturalTransformation α
+    module β = DinaturalTransformation β
+    module F = Functor F
+    module G = Functor G
     module H = Functor H
     module g = IsGroupoid g
     module A = Reason A

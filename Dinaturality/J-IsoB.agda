@@ -75,8 +75,8 @@ J⁻¹⨟J-iso : ∀ {o} {A Γ : Category o ℓ ℓ}
        {Φ P : Functor (op (A ⊗ Γ) ⊗ (A ⊗ Γ)) (Setoids ℓ ℓ)}
        (h : DinaturalTransformation {C = A.op ⊗ A ⊗ Γ}
         (SetA.-×- ∘F ((Hom[ A ][-,-] ∘F (v1 ∘F cov ※ v2 ∘F cov))
-                  ※ (Φ ∘F ((v2 ∘F ctr  ※ v3 ∘F ctr ) ※ v1 ∘F ctr  ※ v3 ∘F cov))))
-        (P ∘F ((v1 ∘F cov ※ v3 ∘F ctr ) ※ v2 ∘F cov ※ v3 ∘F cov)))
+                  ※ (Φ ∘F ((v2 ∘F ctr  ※ v3 ∘F ctr) ※ v1 ∘F ctr ※ v3 ∘F cov))))
+        (P ∘F ((v1 ∘F cov ※ v3 ∘F ctr) ※ v2 ∘F cov ※ v3 ∘F cov)))
      → J {A = A} {Γ = Γ} {Φ = Φ} {P = P} (J⁻¹ {A = A} {Γ = Γ} {Φ = Φ} {P = P} h) ≃ᵈ h
 J⁻¹⨟J-iso {A = A} {Γ = Γ} {Φ = Φ} {P = P} h {a , B , X} {x1 , x2} {y1 , y2} (eq1 , eq2) =
   let open RS (F₀ P ((a , X) , B , X))

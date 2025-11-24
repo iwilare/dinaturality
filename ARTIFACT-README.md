@@ -7,7 +7,7 @@ This Agda formalization supports the claims made in the paper about the semantic
 - All of the rules of the type theory have a corresponding semantic claim in Agda **except for the rules related to naturality in the equational theory**. We only provide an example for these in [Dinaturality.NaturalExample](Dinaturality/NaturalityExample.agda) for the case of exponentials and the rule _(exp)_. This is both because formalizing naturality for all rules is somewhat a high formalization effort/low reward situation, and because, even without taking naturality into account, many of the rules in the formalization suffer from running out of memory very quickly. Finding a workaround to fully formalize naturality for every rule is a non-trivial endeavour, which is however easily justified in pen-and-paper proofs by appeal to a "parametricity"-like metatheorem, which our proofs satisfy.
 - All files typecheck without postulates or unsolved metas.
 
-# List of claims
+## List of claims
 
 1. The semantics for all the rules in Figure 11 is formalized in Agda. A list of rules contained in each file is given in `All.agda`.
 2. Theorem 4.5 is formalized in [Dinaturality.GroupoidCompose](Dinaturality/GroupoidCompose.agda).
@@ -15,7 +15,7 @@ This Agda formalization supports the claims made in the paper about the semantic
 4. Each component of Theorem 5.1, describing the semantics of each rule, is formalized in Agda with each rule in its appropriate module, **except for the rules related to naturality in the equational theory** which are **not** formalized.
 5. The remark in Section 6 links to the formalization for the naturality of the (exp) rule as example of what is meant by naturality of each rule. These are captured formally in Appendix B and Appendix E, which are **not** formalized in Agda.
 
-# Comments
+## Comments
 
 The advantage of not formalizing the syntax/metatheory of the type theory is that we can take some liberties in how we formalize certain aspects of the rule: for example, we take context concatenation to directly correspond to the product of contexts, rather than relying on the more precise inductive definition of contexts as lists of which one would take the product over.
 
@@ -42,7 +42,7 @@ Using Nix ensures that all dependencies are pinned by `flake.lock` to their corr
 4. Run `agda --html --html-dir=html/ --highlight-occurrences --safe All.agda +RTS -M16G`.
 5. The build is successful if the above command successfuly terminates. The formalization files can be browsed interactively in the `html/` folder, starting from the `All.agda` file.
 
-# Description
+## Description
 
 The file `All.agda` groups all formalization files for batch typechecking/inspection. Typecheck the code by running Agda in Safe Mode:
 ```bash

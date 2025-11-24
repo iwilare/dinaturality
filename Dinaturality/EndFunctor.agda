@@ -1,7 +1,7 @@
 {-# OPTIONS --safe --without-K #-}
 
 {-
-  We define the parametric coend of a functor F : A × Aᵒᵖ × Γ → Set, taking the coend in A.
+  We define the parametric end of a functor F : A × Aᵒᵖ × Γ → Set, taking the end in A.
 
   The action on morphisms (i.e., on natural transformations) is not required in the rest of the formalization.
 -}

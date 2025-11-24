@@ -34,6 +34,7 @@ import Relation.Binary.Reasoning.Setoid as RS
 
 import Reason
 
+open import Dinaturality.HelperVariables
 open import Dinaturality.CoendFunctor using (coendFunctor; Dinaturality; convert)
 
 private
@@ -61,7 +62,7 @@ private
 coendL : ∀ {o ℓ e} {A Γ : Category o ℓ e}
     {Φ : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
     {P : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
-    → DinaturalTransformation Φ (P ∘F (Functor.op πʳ ∘F πˡ ※ πʳ ∘F πʳ))
+    → DinaturalTransformation Φ (P ∘F (vb ∘F ctr ※ vb ∘F cov))
     → DinaturalTransformation (coendFunctor (Φ ∘F F-reorder)) P
 coendL {A = A} {Γ = Γ} {Φ = Φ} {P = P} α = dtHelper (record
       { α = λ X → record
@@ -116,7 +117,7 @@ coendR : ∀ {o ℓ e} {A Γ : Category o ℓ e}
     {Φ : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
     {P : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
     → DinaturalTransformation (coendFunctor (Φ ∘F F-reorder)) P
-    → DinaturalTransformation Φ (P ∘F (Functor.op πʳ ∘F πˡ ※ πʳ ∘F πʳ))
+    → DinaturalTransformation Φ (P ∘F (vb ∘F ctr ※ vb ∘F cov))
 coendR {A = A} {Γ = Γ} {Φ = Φ} {P = P} α = dtHelper (record
       { α = λ { (X , G) → record
         { to = λ { p → α.α G $ (X , p) }
@@ -146,7 +147,7 @@ coendR {A = A} {Γ = Γ} {Φ = Φ} {P = P} α = dtHelper (record
 coendL⨟coendR-iso : ∀ {o ℓ e} {A Γ : Category o ℓ e}
     {Φ : Functor ((op (A ⊗ Γ)) ⊗ (A ⊗ Γ)) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
     {P : Functor (op Γ ⊗ Γ) (Setoids (o ⊔ ℓ) (o ⊔ ℓ))}
-    → (α : DinaturalTransformation Φ (P ∘F (Functor.op πʳ ∘F πˡ ※ πʳ ∘F πʳ)))
+    → (α : DinaturalTransformation Φ (P ∘F (vb ∘F ctr ※ vb ∘F cov)))
     → coendR {A = A} {Γ = Γ} {Φ = Φ} {P = P} (coendL α) ≃ᵈ α
 coendL⨟coendR-iso α eq = Func.cong (DinaturalTransformation.α α _) eq
 

@@ -41,8 +41,9 @@ private
     A B Γ Φ Δ Γ′ Γ″ Γᵒᵖ Δᵒᵖ : Category o ℓ e
 
 -- modifier on a single variable
-cov = πʳ -- pick a variable from the covariant     side of variables in the signature of a dinatural, e.g., op Γ × Γ → Γ
+
 ctr = πˡ -- pick a variable from the contravariant side of variables in the signature of a dinatural, e.g., op Γ × Γ → op Γ
+cov = πʳ -- pick a variable from the covariant     side of variables in the signature of a dinatural, e.g., op Γ × Γ → Γ
 
 -- variables out of 2-tuple
 
